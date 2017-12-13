@@ -35,6 +35,12 @@
                             <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
                         </a>
                     </li>
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
+                        <a class="nav-link" href="search.php">
+                            <i class="fa fa-search"></i>
+                            <span class="nav-link-text">Search documents</span>
+                        </a>
+                    </li>
                     <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
                         <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
                             <i class="fa fa-fw fa-wrench"></i>
@@ -42,7 +48,7 @@
                         </a>
                         <ul class="sidenav-second-level collapse" id="collapseComponents">
                             <li>
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="addDoc.php">
                                     <i class="fa fa-plus"></i>
                                     <span class="nav-link-text">Add document</span>
                                 </a>
@@ -166,18 +172,6 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item small" href="#">View all alerts</a>
                         </div>
-                    </li>
-                    <li class="nav-item">
-                        <form class="form-inline my-2 my-lg-0 mr-lg-2">
-                            <div class="input-group">
-                                <input class="form-control" type="text" placeholder="Search for documents">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-primary" type="button">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </span>
-                            </div>
-                        </form>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
