@@ -14,7 +14,11 @@ if (isset($_POST['submit'])) {
     if ($en_pwd == $result['password']) {
         $_SESSION['id'] = $result['id'];
         $_SESSION['email'] = $result['email'];
-        redirect_to("index.php");
+        if($result['role'] == 'admin'){
+            redirect_to("adminPanel.php");
+        }  else {
+            redirect_to("index.php");
+        }
     } else {
         $_SESSION['message'] = "Login Failed!";
     }
