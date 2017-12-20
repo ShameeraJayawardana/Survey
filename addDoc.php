@@ -195,8 +195,18 @@
                     </div><br><br>
                     <form action="addDoc.php" method="post" id="form">
                         <div class="form-group">
-                            <select class="form-control">
-                                <option>Document Type</option>
+                            <label>Document Type</label>
+                            <select class="form-control" onchange="if (this.value=='EDM.R'){this.form['sup'].style.visibility='visible'}else {this.form['sup'].style.visibility='hidden'};">
+                                <option value="">Select...</option>
+                                <option value="EDM.R">EDM.R</option>
+                                <option value="FB">FB</option>
+                                <option value="FB.R">FB.R</option>
+                                <option value="FVP">FVP</option>
+                                <option value="FVP Supliment">FVP Supliment</option>
+                                <option value="Old Field Sheet">Old Field Sheet</option>
+                                <option value="FVP Field sheet">FVP Field sheet</option>
+                                <option value="FCP">FCP</option>
+                                <option value="FTP">FTP</option>
                             </select>
                         </div>
                         <div class="form-group" id="border">
@@ -204,6 +214,20 @@
                                 <div class="col-md-12">
                                     <label>Number</label>
                                     <input type="text" class="form-control" placeholder="Document Number" name="number" />
+                                </div>
+                            </div><br>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Sup Number</label>
+                                    <input type="text" class="form-control" placeholder="Sup No" name="sup" style="visibility:hidden;"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Insert Number</label>
+                                    <input type="text" class="form-control" placeholder="Insert Number" name="insert" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Sheet Number</label>
+                                    <input type="text" class="form-control" placeholder="Sheet Number" name="sheet" />
                                 </div>
                             </div><br>
                             <div class="row">
