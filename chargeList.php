@@ -13,7 +13,7 @@ $result_set = mysqli_query($conn, $sql);
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>Request Documents</title>
+        <title>Chargeable Documents</title>
         <!-- Bootstrap core CSS-->
         <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <!-- Custom fonts for this template-->
@@ -22,7 +22,7 @@ $result_set = mysqli_query($conn, $sql);
         <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
         <!-- Custom styles for this template-->
         <link href="css/sb-admin.css" rel="stylesheet">
-        <link href="css/addDoc.css" rel="stylesheet">
+        <link href="css/chargeList.css" rel="stylesheet">
     </head>
 
     <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -46,7 +46,7 @@ $result_set = mysqli_query($conn, $sql);
                             <span class="nav-link-text">Search documents</span>
                         </a>
                     </li>
-                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Home">
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
                         <a class="nav-link" href="requestDoc.php">
                             <i class="fa fa-exclamation"></i>
                             <span class="nav-link-text">Request documents</span>
@@ -58,7 +58,7 @@ $result_set = mysqli_query($conn, $sql);
                             <span class="nav-link-text">Return documents</span>
                         </a>
                     </li>
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
+                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Link">
                         <a class="nav-link" href="chargeList.php">
                             <i class="fa fa-list"></i>
                             <span class="nav-link-text">Chargeable list</span>
@@ -166,45 +166,59 @@ $result_set = mysqli_query($conn, $sql);
                 <div class="col-md-8">
                     <div class="row">
                         <div class="col-md-12">
-                            <h3>Request Document</h3>
+                            <h3>Chargeable list of documents</h3>
                         </div>
                     </div><br><br>
-                    <form action="addDoc.php" method="post" id="form">
-                        <div class="form-group">
-                            <label>Document Type</label>
-                            <select class="form-control">
-                                <option value="">Select...</option>
-                                <?php while ($result = mysqli_fetch_assoc($result_set)) { ?>
-                                    <option value="<?php echo $result['type']; ?>"><?php echo $result['type']; ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-                        <div class="form-group" id="border">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <label>Number</label>
-                                    <input type="text" class="form-control" placeholder="Document Number" name="number" />
-                                </div>
-                            </div><br>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <label>ID</label>
-                                    <input type="text" class="form-control" placeholder="Document ID" name="id" />
-                                </div>
-                            </div><br><br><br><br>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <button type="submit" name="cart" id="cart">
-                                        <i class="fa fa-cart-plus" id="cartIcon"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <input type="submit" name="submit" value="APPROVE" class="btn btn-light" id="submit"/>
-                    </form>
+                    <table class="table table-responsive-lg table-hover">
+                        <tr>
+                            <th>
+                                No
+                            </th>
+                            <th>
+                                Document ID
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                FVP
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                2
+                            </td>
+                            <td>
+                                CM
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                3
+                            </td>
+                            <td>
+                                EDM
+                            </td>
+                        </tr>
+                    </table>
                 </div>
                 <div class="col-md-2">
 
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+
+                </div>
+                <div class="col-md-4">
+
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-light"type="submit" id="print">
+                        <i class="fa fa-print" id="printIcon"></i>
+                    </button>
                 </div>
             </div>
             <!-- /.container-fluid-->
@@ -252,5 +266,6 @@ $result_set = mysqli_query($conn, $sql);
     </body>
 
 </html>
+
 
 

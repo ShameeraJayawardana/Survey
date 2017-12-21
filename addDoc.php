@@ -2,6 +2,10 @@
 <?php include 'src/components/sessions.php'; ?>
 <?php include 'src/components/functions.php'; ?>
 <?php confirm_logged_in(); ?>
+<?php
+$sql = "SELECT * FROM docTypes";
+$result_set = mysqli_query($conn, $sql);
+?>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -55,7 +59,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="updateDoc.php">
                                     <i class="fa fa-pencil-square-o"></i>
                                     <span class="nav-link-text">Update document</span>
                                 </a>
@@ -196,17 +200,29 @@
                     <form action="addDoc.php" method="post" id="form">
                         <div class="form-group">
                             <label>Document Type</label>
-                            <select class="form-control" onchange="if (this.value=='EDM.R'){this.form['sup'].style.visibility='visible'}else {this.form['sup'].style.visibility='hidden'};">
+                            <select class="form-control" onchange="if (this.value == 'EDM') {
+                                        //this.form['sup'].style.visibility = 'visible';
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'visible';
+                                        document.getElementById('sheet').style.visibility = 'hidden';
+                                    } else if(this.value == 'Topo. PP'){
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'visible';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                    } else if(this.value == 'FB'){
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'visible';
+                                        document.getElementById('sheet').style.visibility = 'hidden';
+                                    } else if(this.value == 'FVP suplement'){
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                    }  
+                                    ;">
                                 <option value="">Select...</option>
-                                <option value="EDM.R">EDM.R</option>
-                                <option value="FB">FB</option>
-                                <option value="FB.R">FB.R</option>
-                                <option value="FVP">FVP</option>
-                                <option value="FVP Supliment">FVP Supliment</option>
-                                <option value="Old Field Sheet">Old Field Sheet</option>
-                                <option value="FVP Field sheet">FVP Field sheet</option>
-                                <option value="FCP">FCP</option>
-                                <option value="FTP">FTP</option>
+                                <?php while ($result = mysqli_fetch_assoc($result_set)) { ?>
+                                    <option value="<?php echo $result['type']; ?>"><?php echo $result['type']; ?></option>
+                                <?php } ?>
                             </select>
                         </div>
                         <div class="form-group" id="border">
@@ -217,15 +233,15 @@
                                 </div>
                             </div><br>
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-4" id="sup" style="visibility:hidden;">
                                     <label>Sup Number</label>
-                                    <input type="text" class="form-control" placeholder="Sup No" name="sup" style="visibility:hidden;"/>
+                                    <input type="text" class="form-control" placeholder="Sup No" name="sup"/>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4" id="insert" style="visibility:hidden;">
                                     <label>Insert Number</label>
                                     <input type="text" class="form-control" placeholder="Insert Number" name="insert" />
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4" id="sheet" style="visibility:hidden;">
                                     <label>Sheet Number</label>
                                     <input type="text" class="form-control" placeholder="Sheet Number" name="sheet" />
                                 </div>

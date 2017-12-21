@@ -30,7 +30,7 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
                     <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
-                        <a class="nav-link" href="index.php">
+                        <a class="nav-link" href="adminPanel.php">
                             <i class="fa fa-user-circle"></i>
                             <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
                         </a>
@@ -48,13 +48,13 @@
                         </a>
                     </li>
                     <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
-                        <a class="nav-link" href="search.php">
+                        <a class="nav-link" href="returnDoc.php">
                             <i class="fa fa-undo"></i>
                             <span class="nav-link-text">Return documents</span>
                         </a>
                     </li>
                     <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="chargeList.php">
                             <i class="fa fa-list"></i>
                             <span class="nav-link-text">Chargeable list</span>
                         </a>

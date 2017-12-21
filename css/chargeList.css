@@ -1,0 +1,15 @@
+#print{
+    border: none;
+    background: none;
+    bottom: 0;
+    right: 0;
+}
+
+#printIcon{
+    font-size: 60pt;
+}
+
+#printIcon:hover {
+    color: #072560;
+}
+
