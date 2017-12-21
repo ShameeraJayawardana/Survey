@@ -54,7 +54,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="updateDoc.php">
                                     <i class="fa fa-pencil-square-o"></i>
                                     <span class="nav-link-text">Update document</span>
                                 </a>
