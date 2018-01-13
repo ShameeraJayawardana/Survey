@@ -1,10 +1,59 @@
 <?php include 'src/components/db.php'; ?>
+<?php unset($_SESSION); ?>
 <?php include 'src/components/sessions.php'; ?>
 <?php include 'src/components/functions.php'; ?>
 <?php confirm_logged_in(); ?>
 <?php
-$sql = "SELECT * FROM docTypes";
-$result_set = mysqli_query($conn, $sql);
+if (isset($_POST['cart'])) {
+    if (isset($_SESSION['cart'])) {
+        $item_array_id = array_column($_SESSION['cart'], 'item_id');
+        if (!in_array($_GET['id'], $item_array_id)) {
+            $count = count($_SESSION['cart']);
+            $item_array = array(
+                'item_id' => $_GET['id'],
+                'item_type' => $_POST['type'],
+                'item_number' => $_POST['number'],
+                'item_sup' => $_POST['sup'],
+                'item_insert' => $_POST['insert'],
+                'item_sheet' => $_POST['sheet'],
+                'item_block' => $_POST['block'],
+                'item_doc' => $_POST['doc_id'],
+                'item_remark' => $_POST['remark'],
+            );
+            $_SESSION['cart'][$count] = $item_array;
+        } else {
+            echo '<script>alert("Item already added!")</script>';
+            //header("Location: addDoc.php");
+            echo '<script>window.lacation="addDoc.php"</script>';
+        }
+    } else {
+        $item_array = array(
+            'item_id' => $_GET['id'],
+            'item_type' => $_POST['type'],
+            'item_number' => $_POST['number'],
+            'item_sup' => $_POST['sup'],
+            'item_insert' => $_POST['insert'],
+            'item_sheet' => $_POST['sheet'],
+            'item_block' => $_POST['block'],
+            'item_doc' => $_POST['doc_id'],
+            'item_remark' => $_POST['remark'],
+        );
+        $_SESSION['cart'][0] = $item_array;
+    }
+}
+
+if (isset($_GET['action'])) {
+    if ($_GET['action'] == 'delete') {
+        foreach ($_SESSION['cart'] as $keys => $values) {
+            if ($values['item_id'] == $_GET['id']) {
+                unset($_SESSION['cart'][$keys]);
+                echo '<script>alert("Item Removed")</script>';
+                //header("Location: addDoc.php");
+                echo '<script>window.lacation="addDoc.php"</script>';
+            }
+        }
+    }
+}
 ?>
 <html lang="en">
     <head>
@@ -197,27 +246,32 @@ $result_set = mysqli_query($conn, $sql);
                             <h3>Add Document</h3>
                         </div>
                     </div><br><br>
-                    <form action="addDoc.php" method="post" id="form">
+                    <?php
+                    $sql = "SELECT * FROM docTypes";
+                    $result_set = mysqli_query($conn, $sql);
+                    $result = mysqli_fetch_assoc($result_set);
+                    ?>
+                    <form action="addDoc.php?action=add&id=<?php echo $result['id']; ?>" method="post" id="form">
                         <div class="form-group">
                             <label>Document Type</label>
-                            <select class="form-control" onchange="if (this.value == 'EDM') {
+                            <select class="form-control" name="type" onchange="if (this.value == 'EDM') {
                                         //this.form['sup'].style.visibility = 'visible';
                                         document.getElementById('sup').style.visibility = 'visible';
                                         document.getElementById('insert').style.visibility = 'visible';
                                         document.getElementById('sheet').style.visibility = 'hidden';
-                                    } else if(this.value == 'Topo. PP'){
+                                    } else if (this.value == 'Topo. PP') {
                                         document.getElementById('sup').style.visibility = 'visible';
                                         document.getElementById('insert').style.visibility = 'visible';
                                         document.getElementById('sheet').style.visibility = 'visible';
-                                    } else if(this.value == 'FB'){
+                                    } else if (this.value == 'FB') {
                                         document.getElementById('sup').style.visibility = 'visible';
                                         document.getElementById('insert').style.visibility = 'visible';
                                         document.getElementById('sheet').style.visibility = 'hidden';
-                                    } else if(this.value == 'FVP suplement'){
+                                    } else if (this.value == 'FVP suplement') {
                                         document.getElementById('sup').style.visibility = 'visible';
                                         document.getElementById('insert').style.visibility = 'hidden';
                                         document.getElementById('sheet').style.visibility = 'visible';
-                                    }  
+                                    }
                                     ;">
                                 <option value="">Select...</option>
                                 <?php while ($result = mysqli_fetch_assoc($result_set)) { ?>
@@ -233,23 +287,27 @@ $result_set = mysqli_query($conn, $sql);
                                 </div>
                             </div><br>
                             <div class="row">
-                                <div class="col-md-4" id="sup" style="visibility:hidden;">
+                                <div class="col-md-3" id="sup" style="visibility:hidden;">
                                     <label>Sup Number</label>
                                     <input type="text" class="form-control" placeholder="Sup No" name="sup"/>
                                 </div>
-                                <div class="col-md-4" id="insert" style="visibility:hidden;">
+                                <div class="col-md-3" id="insert" style="visibility:hidden;">
                                     <label>Insert Number</label>
                                     <input type="text" class="form-control" placeholder="Insert Number" name="insert" />
                                 </div>
-                                <div class="col-md-4" id="sheet" style="visibility:hidden;">
+                                <div class="col-md-3" id="sheet" style="visibility:hidden;">
                                     <label>Sheet Number</label>
                                     <input type="text" class="form-control" placeholder="Sheet Number" name="sheet" />
+                                </div>
+                                <div class="col-md-3" id="sheet" style="visibility:hidden;">
+                                    <label>Block Number</label>
+                                    <input type="text" class="form-control" placeholder="Block Number" name="block" />
                                 </div>
                             </div><br>
                             <div class="row">
                                 <div class="col-md-12">
                                     <label>ID</label>
-                                    <input type="text" class="form-control" placeholder="Document ID" name="id" />
+                                    <input type="text" class="form-control" placeholder="Document ID" name="doc_id" />
                                 </div>
                             </div><br>
                             <div class="row">
@@ -264,6 +322,44 @@ $result_set = mysqli_query($conn, $sql);
                                         <i class="fa fa-cart-plus" id="cartIcon"></i>
                                     </button>
                                 </div>
+                            </div>
+                            <br><br><br><br>
+                            <div style="clear: both"></div>
+                            <h3>Document Details</h3>
+                            <div class="table-responsive">
+                                <table class=" table table-bordered">
+                                    <tr>
+                                        <th>Doc Type</th>
+                                        <th>Number</th>
+                                        <th>Sup Number</th>
+                                        <th>Insert Number</th>
+                                        <th>Sheet Number</th>
+                                        <th>Block Number</th>
+                                        <th>Doc Id</th>
+                                        <th>Remarks</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    <?php
+                                    if (!empty($_SESSION['cart'])) {
+                                        $total = 0;
+                                        foreach ($_SESSION['cart'] as $keys => $values) {
+                                            ?>
+                                            <tr>
+                                                <td><?php echo $values['item_type']; ?></td>
+                                                <td><?php echo $values['item_number']; ?></td>
+                                                <td><?php echo $values['item_sup']; ?></td>
+                                                <td><?php echo $values['item_insert']; ?></td>
+                                                <td><?php echo $values['item_sheet']; ?></td>
+                                                <td><?php echo $values['item_block']; ?></td>
+                                                <td><?php echo $values['item_doc']; ?></td>
+                                                <td><?php echo $values['item_remark']; ?></td>
+                                                <td><a href="addDoc.php?action=delete&id=<?php echo $values['item_id']; ?>"><span class="text-danger">Remove</span></a></td>
+                                            </tr>
+                                            <?php
+                                        }
+                                    }
+                                    ?>
+                                </table>
                             </div>
                         </div>
                         <input type="submit" name="submit" value="SUBMIT" class="btn btn-light" id="submit"/>
