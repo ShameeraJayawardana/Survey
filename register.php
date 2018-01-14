@@ -9,10 +9,10 @@ if (isset($_POST['submit'])) {
 
     if ($password != $confirm) {
         $confirmErr = "Password doesn't match";
-    }else {
-        $sql = "INSERT INTO member(fname, lname, email, password, role) VALUES('$_POST[fname]','$_POST[lname]','$_POST[email]','$en_pwd','$role')";
+    } else {
+        $sql = "INSERT INTO member(name, emplNo, des, district, email, password, role) VALUES('$_POST[name]','$_POST[emplNo]','$_POST[des]','$_POST[district]','$_POST[email]','$en_pwd','$role')";
         $query = mysqli_query($conn, $sql);
-        if($query){
+        if ($query) {
             echo '<script>alert("You have successfully signed up");</script>';
         }
     }
@@ -44,15 +44,37 @@ if (isset($_POST['submit'])) {
                     <form method="post" action="register.php">
                         <div class="form-group">
                             <div class="form-row">
-                                <div class="col-md-6">
-                                    <label for="exampleInputName">First name</label>
-                                    <input class="form-control" required name="fname" id="exampleInputName" type="text" aria-describedby="nameHelp" placeholder="Enter first name">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="exampleInputLastName">Last name</label>
-                                    <input class="form-control" required name="lname" id="exampleInputLastName" type="text" aria-describedby="nameHelp" placeholder="Enter last name">
+                                <div class="col-md-12">
+                                    <label for="exampleInputName">Name with Initials</label>
+                                    <input class="form-control" required name="name" id="exampleInputName" type="text" aria-describedby="nameHelp" placeholder="Enter Your Name with Initials">
                                 </div>
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <label>Employee Number</label>
+                                    <input class="form-control" required name="emplNo" id="emplNo" type="text" aria-describedby="emplHelp" placeholder="Enter your Employee Number">
+                                </div>
+                                <div class="col-md-6">
+                                    <label>Designation</label>
+                                    <select class="form-control" name="des">
+                                        <option>Select...</option>
+                                        <option value="Surveyor">Surveyor</option>
+                                        <option value="Supdt. of Surveyor">Supdt. of Surveyor</option>
+                                        <option value="SNR. Supdt. of Surveyor">SNR. Supdt. of Surveyor</option>
+                                        <option value="M.T.O">M.T.O</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>District</label>
+                            <select class="form-control" name="district">
+                                <option>Select...</option>
+                                <option value="Galle">Galle</option>
+                                <option value="Rathnapura">Rathnapura</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email address</label>

@@ -1,5 +1,4 @@
 <?php include 'src/components/db.php'; ?>
-<?php unset($_SESSION); ?>
 <?php include 'src/components/sessions.php'; ?>
 <?php include 'src/components/functions.php'; ?>
 <?php confirm_logged_in(); ?>
@@ -122,7 +121,7 @@ if (isset($_GET['action'])) {
                         </a>
                         <ul class="sidenav-second-level collapse" id="collapseMulti">
                             <li>
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="issue.php">
                                     <i class="fa fa-long-arrow-right"></i>
                                     <span class="nav-link-text">Issues</span>
                                 </a>
@@ -353,7 +352,7 @@ if (isset($_GET['action'])) {
                                                 <td><?php echo $values['item_block']; ?></td>
                                                 <td><?php echo $values['item_doc']; ?></td>
                                                 <td><?php echo $values['item_remark']; ?></td>
-                                                <td><a href="addDoc.php?action=delete&id=<?php echo $values['item_id']; ?>"><span class="text-danger">Remove</span></a></td>
+                                                <td><a href="addDoc.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a></td>
                                             </tr>
                                             <?php
                                         }
