@@ -70,13 +70,13 @@
                         </a>
                         <ul class="sidenav-second-level collapse" id="collapseMulti">
                             <li>
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="issue.php">
                                     <i class="fa fa-long-arrow-right"></i>
                                     <span class="nav-link-text">Issues</span>
                                 </a>
                             </li>
                             <li>
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="receiver.php">
                                     <i class="fa fa-long-arrow-left"></i>
                                     <span class="nav-link-text">Receipt</span>
                                 </a>
