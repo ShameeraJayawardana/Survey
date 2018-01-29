@@ -2,18 +2,23 @@
 <?php include 'src/components/sessions.php'; ?>
 <?php include 'src/components/functions.php'; ?>
 <?php confirm_logged_in(); ?>
+$type = "";
 <?php
 if (isset($_POST['submit'])) {
     $sql = "SELECT * FROM doctypes WHERE type='$_POST[type]'";
     $row_set = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($row_set);
-    $type = $row['id'];
-    
-    $query = "INSERT INTO doc_rtn(doc_id,doc_typ_id,doc_name,sht_no,sup_no,inset_no,bl_no,remarks) VALUES('$_POST[doc_id]','$type','$_POST[number]','$_POST[sheet]','$_POST[sup]','$_POST[insert]','$_POST[block]','$_POST[remark]')";
+    $id = $row['id'];
+    $query = "INSERT INTO doc_rtn(doc_id,doc_typ_id,doc_name,sht_no,sup_no,inset_no,bl_no,pp_code,remarks) VALUES('$_POST[doc_id]','$id','$_POST[number]','$_POST[sheet]','$_POST[sup]','$_POST[insert]','$_POST[block]','$_POST[dist]','$_POST[remark]')";
     $result_set = mysqli_query($conn, $query);
     $error = mysqli_error($conn);
     echo $error;
 }
+?>
+<?php
+    $sql = "SELECT * FROM ppcodedist";
+    $row_set = mysqli_query($conn, $sql);
+    //$row = mysqli_fetch_assoc($row_set);
 ?>
 <?php
 //if (isset($_POST['cart'])) {
@@ -261,29 +266,181 @@ if (isset($_POST['submit'])) {
                     <?php
                     $sql = "SELECT * FROM docTypes";
                     $result_set = mysqli_query($conn, $sql);
-                    $result = mysqli_fetch_assoc($result_set);
+                    //$result = mysqli_fetch_assoc($result_set);
                     ?>
                     <form action="addDoc.php" method="post" id="form">
                         <div class="form-group">
                             <label>Document Type</label>
-                            <select class="form-control" name="type" onchange="if (this.value == 'EDM') {
+                            <select class="form-control" name="type" onchange="if (this.value == 'PP') {
                                         //this.form['sup'].style.visibility = 'visible';
-                                        document.getElementById('sup').style.visibility = 'visible';
-                                        document.getElementById('insert').style.visibility = 'visible';
+                                        document.getElementById('sup').style.visibility = 'hidden';
+                                        document.getElementById('insert').style.visibility = 'hidden';
                                         document.getElementById('sheet').style.visibility = 'hidden';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'visible';
                                     } else if (this.value == 'Topo. PP') {
                                         document.getElementById('sup').style.visibility = 'visible';
                                         document.getElementById('insert').style.visibility = 'visible';
                                         document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
                                     } else if (this.value == 'FTP') {
                                         document.getElementById('sup').style.visibility = 'visible';
                                         document.getElementById('insert').style.visibility = 'visible';
                                         document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'VP') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
                                     } else if (this.value == 'FVP') {
                                         document.getElementById('sup').style.visibility = 'visible';
                                         document.getElementById('insert').style.visibility = 'hidden';
                                         document.getElementById('sheet').style.visibility = 'visible';
-                                    }
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'CP') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'FCP') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'FSP') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'FSPP') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'ISPP') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'FUP') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'TRC') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'TP') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'CTP') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'TTP') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'TWNP') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'TSP') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'TSPP') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'MSPP') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'Condo_Plan') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'CM') {
+                                        document.getElementById('sup').style.visibility = 'hidden';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'visible';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'BSVP') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'BSPP') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'CLP') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'UP') {
+                                        document.getElementById('sup').style.visibility = 'visible';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'visible';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'EDM') {
+                                        document.getElementById('sup').style.visibility = 'hidden';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'hidden';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'visible';
+                                    } else if (this.value == 'Old FB') {
+                                        document.getElementById('sup').style.visibility = 'hidden';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'hidden';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'hidden';
+                                    } else if (this.value == 'M.FB') {
+                                        document.getElementById('sup').style.visibility = 'hidden';
+                                        document.getElementById('insert').style.visibility = 'hidden';
+                                        document.getElementById('sheet').style.visibility = 'hidden';
+                                        document.getElementById('block').style.visibility = 'hidden';
+                                        document.getElementById('dist').style.visibility = 'visible';
+                                    } 
                                     ;">
                                 <option value="">Select...</option>
                                 <?php while ($result = mysqli_fetch_assoc($result_set)) { ?>
@@ -311,15 +468,18 @@ if (isset($_POST['submit'])) {
                                     <label>Sheet Number</label>
                                     <input type="text" class="form-control" placeholder="Sheet Number" name="sheet" />
                                 </div>
-                                <div class="col-md-3" id="sheet" style="visibility:hidden;">
+                                <div class="col-md-3" id="block" style="visibility:hidden;">
                                     <label>Block Number</label>
                                     <input type="text" class="form-control" placeholder="Block Number" name="block" />
                                 </div>
-                            </div><br>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <label>ID</label>
-                                    <input type="text" class="form-control" placeholder="Document ID" name="doc_id" />
+                                <div class="col-md-12" id="dist" style="visibility:hidden;">
+                                    <label>District</label>
+                                    <select name="dist" class="form-control-sm">
+                                        <option value="">Select...</option>
+                                        <?php while ($row = mysqli_fetch_assoc($row_set)){ ?>
+                                        <option value="<?php echo $row['dist']; ?>"><?php echo $row['dist']; ?></option>
+                                        <?php } ?>
+                                    </select>
                                 </div>
                             </div><br>
                             <div class="row">
