@@ -46,6 +46,12 @@ $result_set = mysqli_query($conn, $sql);
                             <span class="nav-link-text">Search documents</span>
                         </a>
                     </li>
+                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                        <a class="nav-link" href="addMembers.php">
+                            <i class="fa fa-user-circle"></i>
+                            <span class="nav-link-text">Add Members</span>
+                        </a>
+                    </li>
                     <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Home">
                         <a class="nav-link" href="requestDoc.php">
                             <i class="fa fa-exclamation"></i>

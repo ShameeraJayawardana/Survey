@@ -1,17 +1,26 @@
 <?php include 'src/components/db.php'; ?>
 <?php
 $confirmErr = "";
+$permission = "";
+$error = "";
 if (isset($_POST['submit'])) {
     $password = $_POST['password'];
     $en_pwd = md5($password);
     $role = "member";
     $confirm = $_POST['confirm'];
-
-    if ($password != $confirm) {
+    
+    $select = "SELECT * FROM addmembers WHERE email='$_POST[email]'";
+    $row_set = mysqli_query($conn, $select);
+    $row = mysqli_num_rows($row_set);
+    
+    if ($row < 1){
+        $permission = "You don't have permission to register";
+    }elseif ($password != $confirm) {
         $confirmErr = "Password doesn't match";
     } else {
         $sql = "INSERT INTO member(name, emplNo, des, district, email, password, role) VALUES('$_POST[name]','$_POST[emplNo]','$_POST[des]','$_POST[district]','$_POST[email]','$en_pwd','$role')";
         $query = mysqli_query($conn, $sql);
+        $error = mysqli_error($conn);
         if ($query) {
             echo '<script>alert("You have successfully signed up");</script>';
         }
@@ -79,6 +88,8 @@ if (isset($_POST['submit'])) {
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email address</label>
                             <input class="form-control" required name="email" id="exampleInputEmail1" type="email" aria-describedby="emailHelp" placeholder="Enter email">
+                            <span style="color: red"><?php echo $permission; ?></span>
+                            <span style="color: red"><?php echo $error; ?></span>
                         </div>
                         <div class="form-group">
                             <div class="form-row">

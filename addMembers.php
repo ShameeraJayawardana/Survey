@@ -3,8 +3,13 @@
 <?php include 'src/components/functions.php'; ?>
 <?php confirm_logged_in(); ?>
 <?php
-$sql = "SELECT * FROM docTypes";
-$result_set = mysqli_query($conn, $sql);
+if (isset($_POST['submit'])) {
+    $sql = "INSERT INTO addMembers(emplNo, des, email, district) VALUES('$_POST[emplNo]','$_POST[des]','$_POST[email]','$_POST[district]')";
+    $query = mysqli_query($conn, $sql);
+    if ($query) {
+        echo '<script>alert("Member added!");</script>';
+    }
+}
 ?>
 <html lang="en">
     <head>
@@ -13,7 +18,7 @@ $result_set = mysqli_query($conn, $sql);
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>Return Documents</title>
+        <title>Add Members</title>
         <!-- Bootstrap core CSS-->
         <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <!-- Custom fonts for this template-->
@@ -22,7 +27,7 @@ $result_set = mysqli_query($conn, $sql);
         <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
         <!-- Custom styles for this template-->
         <link href="css/sb-admin.css" rel="stylesheet">
-        <link href="css/addDoc.css" rel="stylesheet">
+        <link href="css/chargeList.css" rel="stylesheet">
     </head>
 
     <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -58,7 +63,7 @@ $result_set = mysqli_query($conn, $sql);
                             <span class="nav-link-text">Request documents</span>
                         </a>
                     </li>
-                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Home">
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
                         <a class="nav-link" href="returnDoc.php">
                             <i class="fa fa-undo"></i>
                             <span class="nav-link-text">Return documents</span>
@@ -172,58 +177,29 @@ $result_set = mysqli_query($conn, $sql);
                 <div class="col-md-8">
                     <div class="row">
                         <div class="col-md-12">
-                            <h3>Return Document</h3>
+                            <h3>Add Members</h3>
                         </div>
                     </div><br><br>
-                    <table class="table table-responsive-lg table-hover">
-                        <tr>
-                            <th>
-                                No
-                            </th>
-                            <th>
-                                Document ID
-                            </th>
-                            <th>
-                                Put the tick for returns
-                            </th>
-                        </tr>
-                        <tr>
-                            <td>
-                                1
-                            </td>
-                            <td>
-                                FB.11010
-                            </td>
-                            <td>
-                                <input type="checkbox" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                2
-                            </td>
-                            <td>
-                                FVP 85(AC)
-                            </td>
-                            <td>
-                                <input type="checkbox" />
-                            </td>
-                        </tr>
-                    </table>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form action="addMembers.php" method="post">
+                                <div class="form-group">
+                                    <label>Employee Number</label>
+                                    <input type="text" placeholder="Employee Number" class="form-control" name="emplNo" /><br/>
+                                    <label>Designation</label>
+                                    <input type="text" placeholder="Designation" class="form-control" name="des"/><br/>
+                                    <label>Email</label>
+                                    <input type="email" placeholder="Email of the employee" class="form-control" name="email"/><br/>
+                                    <label>District</label>
+                                    <input type="text" placeholder="District" class="form-control" name="district"/><br/>
+                                    <input type="submit" class="btn btn-info" name="submit" value="ADD MEMBER" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-2">
 
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    
-                </div>
-                <div class="col-md-4">
-                    
-                </div>
-                <div class="col-md-4">
-                    <input type="submit" value="SEND TO DSO" class="btn btn-light"/>
                 </div>
             </div>
             <!-- /.container-fluid-->
@@ -271,5 +247,6 @@ $result_set = mysqli_query($conn, $sql);
     </body>
 
 </html>
+
 
 
