@@ -9,7 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>Profile</title>
+        <title>Admin Panel</title>
         <!-- Bootstrap core CSS-->
         <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <!-- Custom fonts for this template-->
@@ -28,7 +28,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+                                <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
                     <?php
                     if (isset($_SESSION["id"])) {
                         $user = $_SESSION["email"];
@@ -1283,3 +1283,4 @@
     </body>
 
 </html>
+

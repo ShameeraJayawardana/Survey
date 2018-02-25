@@ -6,7 +6,7 @@ if (isset($_POST['submit'])) {
     $password = $_POST['password'];
     $en_pwd = md5($password);
     $email = $_POST['email'];
-    
+
     $query = "SELECT * FROM member WHERE email='$email'";
     $result_set = mysqli_query($conn, $query);
     $result = mysqli_fetch_assoc($result_set);
@@ -14,9 +14,15 @@ if (isset($_POST['submit'])) {
     if ($en_pwd == $result['password']) {
         $_SESSION['id'] = $result['id'];
         $_SESSION['email'] = $result['email'];
-        if($result['role'] == 'admin'){
+        if ($result['role'] == 'admin') {
             redirect_to("adminPanel.php");
-        }  else {
+        } else if ($result['role'] == 'sadmin') {
+            redirect_to("sadmin.php");
+        } else if ($result['role'] == 'ss') {
+            redirect_to("ss.php");
+        } else if ($result['role'] == 'snrss') {
+            redirect_to("snrss.php");
+        } else {
             redirect_to("index.php");
         }
     } else {

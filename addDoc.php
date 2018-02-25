@@ -9,8 +9,8 @@ if (isset($_POST['submit'])) {
     $row_set = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($row_set);
     $id = $row['id'];
-    
-    $doc_id = "Sheet ".$_POST['sheet']." and Sup " .$_POST['sup']." of FVP ". $_POST['insert'];
+
+    $doc_id = "Sheet " . $_POST['sheet'] . " and Sup " . $_POST['sup'] . " of FVP " . $_POST['insert'];
     $query = "INSERT INTO doc_rtn(doc_id,doc_typ_id,doc_name,sht_no,sup_no,inset_no,bl_no,oc,fc,vol,pp_code,remarks) VALUES('$doc_id','$id','$_POST[number]','$_POST[sheet]','$_POST[sup]','$_POST[insert]','$_POST[block]','$_POST[oc]','$_POST[fc]','$_POST[vol]','$_POST[dist]','$_POST[remark]')";
     $result_set = mysqli_query($conn, $query);
     $error = mysqli_error($conn);
@@ -106,64 +106,263 @@ $row_set = mysqli_query($conn, $sql);
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
-                        <a class="nav-link" href="index.php">
-                            <i class="fa fa-user-circle"></i>
-                            <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
-                        </a>
-                    </li>
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
-                        <a class="nav-link" href="search.php">
-                            <i class="fa fa-search"></i>
-                            <span class="nav-link-text">Search documents</span>
-                        </a>
-                    </li>
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
-                        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
-                            <i class="fa fa-fw fa-wrench"></i>
-                            <span class="nav-link-text">Manage documents</span>
-                        </a>
-                        <ul class="sidenav-second-level collapse" id="collapseComponents">
-                            <li class="active">
-                                <a class="nav-link" href="addDoc.php">
+                    <?php
+                    if (isset($_SESSION["id"])) {
+                        $user = $_SESSION["email"];
+                        $query = "SELECT * FROM member WHERE email = '$user'";
+                        $row_set = mysqli_query($conn, $query);
+                        $row = mysqli_fetch_assoc($row_set);
+                        if ($row["role"] == "sadmin") {
+                            ?>
+                            <li class = "nav-item active" data-toggle = "tooltip" data-placement = "right" title = "Dashboard">
+                                <a class = "nav-link" href = "sadmin.php">
+                                    <i class = "fa fa-user-circle"></i>
+                                    <span class = "nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                                <a class="nav-link" href="addsnrss.php">
                                     <i class="fa fa-plus"></i>
-                                    <span class="nav-link-text">Add document</span>
+                                    <span class="nav-link-text">Add SNRSS</span>
                                 </a>
                             </li>
-                            <li>
-                                <a class="nav-link" href="updateDoc.php">
-                                    <i class="fa fa-pencil-square-o"></i>
-                                    <span class="nav-link-text">Update document</span>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
+                                <a class="nav-link" href="transfer.php">
+                                    <i class="fa fa-space-shuttle"></i>
+                                    <span class="nav-link-text">Transfer SNRSS</span>
                                 </a>
                             </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
-                        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti" data-parent="#exampleAccordion">
-                            <i class="fa fa-exchange"></i>
-                            <span class="nav-link-text">Transactions</span>
-                        </a>
-                        <ul class="sidenav-second-level collapse" id="collapseMulti">
-                            <li>
-                                <a class="nav-link" href="issue.php">
-                                    <i class="fa fa-long-arrow-right"></i>
-                                    <span class="nav-link-text">Issues</span>
+                            <?php
+                        } elseif ($row["role"] == "snrss") {
+                            ?>
+                            <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                                <a class="nav-link" href="snrss.php">
+                                    <i class="fa fa-user-circle"></i>
+                                    <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
                                 </a>
                             </li>
-                            <li>
-                                <a class="nav-link" href="receiver.php">
-                                    <i class="fa fa-long-arrow-left"></i>
-                                    <span class="nav-link-text">Receipt</span>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
+                                <a class="nav-link" href="addmem.php">
+                                    <i class="fa fa-plus"></i>
+                                    <span class="nav-link-text">Add Member</span>
                                 </a>
                             </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
-                        <a class="nav-link" href="#">
-                            <i class="fa fa-file"></i>
-                            <span class="nav-link-text">Reports</span>
-                        </a>
-                    </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
+                                <a class="nav-link" href="Transferss.php">
+                                    <i class="fa fa-space-shuttle"></i>
+                                    <span class="nav-link-text">Transfer</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
+                                <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
+                                    <i class="fa fa-fw fa-wrench"></i>
+                                    <span class="nav-link-text">Manage documents</span>
+                                </a>
+                                <ul class="sidenav-second-level collapse" id="collapseComponents">
+                                    <li>
+                                        <a class="nav-link" href="addDoc.php">
+                                            <i class="fa fa-plus"></i>
+                                            <span class="nav-link-text">Add document</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link" href="updateDoc.php">
+                                            <i class="fa fa-pencil-square-o"></i>
+                                            <span class="nav-link-text">Update document</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
+                                <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti" data-parent="#exampleAccordion">
+                                    <i class="fa fa-exchange"></i>
+                                    <span class="nav-link-text">Transactions</span>
+                                </a>
+                                <ul class="sidenav-second-level collapse" id="collapseMulti">
+                                    <li>
+                                        <a class="nav-link" href="issue.php">
+                                            <i class="fa fa-long-arrow-right"></i>
+                                            <span class="nav-link-text">Issues</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link" href="receiver.php">
+                                            <i class="fa fa-long-arrow-left"></i>
+                                            <span class="nav-link-text">Receipt</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <?php
+                        } elseif ($row["role"] == "ss") {
+                            ?>
+                            <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                                <a class="nav-link" href="ss.php">
+                                    <i class="fa fa-user-circle"></i>
+                                    <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
+                                <a class="nav-link" href="search.php">
+                                    <i class="fa fa-search"></i>
+                                    <span class="nav-link-text">Search documents</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                                <a class="nav-link" href="addMembers.php">
+                                    <i class="fa fa-user-circle"></i>
+                                    <span class="nav-link-text">Add Members</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
+                                <a class="nav-link" href="requestDoc.php">
+                                    <i class="fa fa-exclamation"></i>
+                                    <span class="nav-link-text">Request documents</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
+                                <a class="nav-link" href="returnDoc.php">
+                                    <i class="fa fa-undo"></i>
+                                    <span class="nav-link-text">Return documents</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
+                                <a class="nav-link" href="chargeList.php">
+                                    <i class="fa fa-list"></i>
+                                    <span class="nav-link-text">Chargeable list</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
+                                <a class="nav-link" href="chargeList.php">
+                                    <i class="fa fa-list"></i>
+                                    <span class="nav-link-text">Approve surveyor doc list</span>
+                                </a>
+                            </li>
+                            <?php
+                        } elseif ($row["role"] == "admin") {
+                            ?>
+                            <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                                <a class="nav-link" href="adminPanel.php">
+                                    <i class="fa fa-user-circle"></i>
+                                    <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
+                                <a class="nav-link" href="search.php">
+                                    <i class="fa fa-search"></i>
+                                    <span class="nav-link-text">Search documents</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
+                                <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
+                                    <i class="fa fa-fw fa-wrench"></i>
+                                    <span class="nav-link-text">Manage documents</span>
+                                </a>
+                                <ul class="sidenav-second-level collapse" id="collapseComponents">
+                                    <li>
+                                        <a class="nav-link" href="addDoc.php">
+                                            <i class="fa fa-plus"></i>
+                                            <span class="nav-link-text">Add document</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link" href="updateDoc.php">
+                                            <i class="fa fa-pencil-square-o"></i>
+                                            <span class="nav-link-text">Update document</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
+                                <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti" data-parent="#exampleAccordion">
+                                    <i class="fa fa-exchange"></i>
+                                    <span class="nav-link-text">Transactions</span>
+                                </a>
+                                <ul class="sidenav-second-level collapse" id="collapseMulti">
+                                    <li>
+                                        <a class="nav-link" href="issue.php">
+                                            <i class="fa fa-long-arrow-right"></i>
+                                            <span class="nav-link-text">Issues</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link" href="receiver.php">
+                                            <i class="fa fa-long-arrow-left"></i>
+                                            <span class="nav-link-text">Receipt</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
+                                <a class="nav-link" href="reports.php">
+                                    <i class="fa fa-list"></i>
+                                    <span class="nav-link-text">Reports</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
+                                <a class="nav-link" href="chargeList.php">
+                                    <i class="fa fa-list"></i>
+                                    <span class="nav-link-text">Chargeable list</span>
+                                </a>
+                            </li>
+                            <?php
+                        } elseif ($row["role"] == "member") {
+                            ?>
+                            <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                                <a class="nav-link" href="index.php">
+                                    <i class="fa fa-user-circle"></i>
+                                    <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
+                                <a class="nav-link" href="search.php">
+                                    <i class="fa fa-search"></i>
+                                    <span class="nav-link-text">Search documents</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
+                                <a class="nav-link" href="requestDoc.php">
+                                    <i class="fa fa-exclamation"></i>
+                                    <span class="nav-link-text">Request documents</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
+                                <a class="nav-link" href="returnDoc.php">
+                                    <i class="fa fa-undo"></i>
+                                    <span class="nav-link-text">Return documents</span>
+                                </a>
+                            </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
+                                <a class="nav-link" href="chargeList.php">
+                                    <i class="fa fa-list"></i>
+                                    <span class="nav-link-text">Chargeable list</span>
+                                </a>
+                            </li>
+                            <?php
+                        }
+                    } else {
+                        ?>
+                        <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Home">
+                            <a class="nav-link" href="home.php">
+                                <i class="fa fa-home"></i>
+                                <span class="nav-link-text"><b>HOME</b></span>
+                            </a>
+                        </li>
+                        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="About Us">
+                            <a class="nav-link" href="#">
+                                <i class="fa fa-address-book-o"></i>
+                                <span class="nav-link-text"><b>ABOUT US</b></span>
+                            </a>
+                        </li>
+                        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Contact Us">
+                            <a class="nav-link" href="#">
+                                <i class="fa fa-phone"></i>
+                                <span class="nav-link-text"><b>CONTACT US</b></span>
+                            </a>
+                        </li>
+                        <?php
+                    }
+                    ?>
                 </ul>
                 <ul class="navbar-nav sidenav-toggler">
                     <li class="nav-item">
@@ -626,14 +825,14 @@ $row_set = mysqli_query($conn, $sql);
 //                                        foreach ($_SESSION['cart'] as $keys => $values) {
                             ?>
                                                                         <tr>
-                                                                            <td><?php //echo $values['item_type'];      ?></td>
-                                                                            <td><?php //echo $values['item_number'];      ?></td>
-                                                                            <td><?php //echo $values['item_sup'];      ?></td>
-                                                                            <td><?php //echo $values['item_insert'];      ?></td>
-                                                                            <td><?php //echo $values['item_sheet'];      ?></td>
-                                                                            <td><?php //echo $values['item_block'];      ?></td>
-                                                                            <td><?php //echo $values['item_doc'];      ?></td>
-                                                                            <td><?php //echo $values['item_remark'];      ?></td>
+                                                                            <td><?php //echo $values['item_type'];        ?></td>
+                                                                            <td><?php //echo $values['item_number'];        ?></td>
+                                                                            <td><?php //echo $values['item_sup'];        ?></td>
+                                                                            <td><?php //echo $values['item_insert'];        ?></td>
+                                                                            <td><?php //echo $values['item_sheet'];        ?></td>
+                                                                            <td><?php //echo $values['item_block'];        ?></td>
+                                                                            <td><?php //echo $values['item_doc'];        ?></td>
+                                                                            <td><?php //echo $values['item_remark'];        ?></td>
                                                                             <td><a href="addDoc.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a></td>
                                                                         </tr>
                             <?php
