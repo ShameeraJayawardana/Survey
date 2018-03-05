@@ -5,6 +5,14 @@
 <?php
 $sql = "SELECT * FROM docTypes";
 $result_set = mysqli_query($conn, $sql);
+$status = "pending";
+
+if(isset($_POST['submit'])){
+    $name = $_SESSION['email'];
+    $insert = "INSERT INTO req(name,doc_type,number,doc_id,status) VALUES('$name','$_POST[type]','$_POST[number]','$_POST[id]','$status')";
+    mysqli_query($conn,$insert);
+}
+
 ?>
 <html lang="en">
     <head>
@@ -396,10 +404,10 @@ $result_set = mysqli_query($conn, $sql);
                             <h3>Request Document</h3>
                         </div>
                     </div><br><br>
-                    <form action="addDoc.php" method="post" id="form">
+                    <form action="requestDoc.php" method="post" id="form">
                         <div class="form-group">
                             <label>Document Type</label>
-                            <select class="form-control">
+                            <select class="form-control" name = "type">
                                 <option value="">Select...</option>
                                 <?php while ($result = mysqli_fetch_assoc($result_set)) { ?>
                                     <option value="<?php echo $result['type']; ?>"><?php echo $result['type']; ?></option>
