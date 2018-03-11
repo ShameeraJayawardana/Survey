@@ -13,8 +13,17 @@ if (isset($_POST['submit'])) {
     $row = mysqli_fetch_assoc($row_set);
     $id = $row['id'];
 
-    $doc_id = "Sheet " . $_POST['sheet'] . " and Sup " . $_POST['sup'] . " of FVP " . $_POST['insert'];
-    $query = "INSERT INTO doc_rtn(doc_id,doc_typ_id,doc_name,sht_no,sup_no,inset_no,bl_no,oc,fc,vol,pp_code,remarks) VALUES(12,12,'$_POST[number]','$_POST[sheet]','$_POST[sup]','$_POST[insert]','$_POST[block]','$_POST[oc]','$_POST[fc]','$_POST[vol]','$_POST[dist]','$_POST[remark]')";
+    $district = 62;
+
+    //$doc_id = $district . $_POST['dist'] . $id . $_POST['type'].$_POST['sheet'].$_POST['sup'].$_POST['insert'].$_POST['block'].$_POST['oc'].$_POST['fc'].$_POST['vol'].;
+    $doc_id = "abc";
+    $sd ="algo";
+    
+    $query = "INSERT INTO doc_rtn(district,fb_decode,doc_id,sd_code,doc_typ_id,doc_name,sht_no,sup_no,"
+            . "inset_no,bl_no,oc,fc,vol,pp_code,court_no,field_book,sub_category,remarks) "
+            . "VALUES('$district','$_POST[dist]','$doc_id','$sd','$id','$_POST[number]','$_POST[sheet]',"
+            . "'$_POST[sup]','$_POST[insert]','$_POST[block]','$_POST[oc]','$_POST[fc]','$_POST[vol]',"
+            . "'$_POST[dist]','$_POST[court]','$_POST[field_b]','$_POST[subCat]','$_POST[remark]')";
     $result_set = mysqli_query($conn, $query);
     $error = mysqli_error($conn);
     echo $error;
@@ -26,7 +35,7 @@ $re_set = mysqli_query($conn, $qu);
 ?>
 <?php
 $sql = "SELECT * FROM ppcodedist";
-$row_set = mysqli_query($conn, $sql);
+$_result_set = mysqli_query($conn, $sql);
 //$row = mysqli_fetch_assoc($row_set);
 ?>
 <?php
@@ -476,233 +485,7 @@ $row_set = mysqli_query($conn, $sql);
                             <div class="row">
                                 <div class="col-md-6">
                                     <label>Document Type</label>
-                                    <select class="form-control" name="type" onchange="if (this.value == 'PP') {
-                                                //this.form['sup'].style.visibility = 'visible';
-                                                document.getElementById('sup').style.visibility = 'hidden';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'hidden';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'visible';
-                                                document.getElementById('sub_cat_label').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat').style.visibility = 'hidden';
-                                            } else if (this.value == 'Topo. PP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'visible';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'FTP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'visible';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'VP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'FVP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'CP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'FCP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'FSP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'FSPP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'ISPP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'FUP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'TRC') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'TP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'CTP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'TTP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'TWNP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'TSP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'TSPP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'MSPP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'Condo_Plan') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'CM') {
-                                                document.getElementById('sup').style.visibility = 'hidden';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'visible';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'BSVP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat').style.visibility = 'hidden';
-                                            } else if (this.value == 'BSPP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat').style.visibility = 'hidden';
-                                            } else if (this.value == 'CLP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'UP') {
-                                                document.getElementById('sup').style.visibility = 'visible';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'visible';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'visible';
-                                                document.getElementById('sub_cat').style.visibility = 'visible';
-                                            } else if (this.value == 'EDM') {
-                                                document.getElementById('sup').style.visibility = 'hidden';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'hidden';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'visible';
-                                                document.getElementById('sub_cat_label').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat').style.visibility = 'hidden';
-                                            } else if (this.value == 'Old FB') {
-                                                document.getElementById('sup').style.visibility = 'hidden';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'hidden';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat_label').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat').style.visibility = 'hidden';
-                                            } else if (this.value == 'M.FB') {
-                                                document.getElementById('sup').style.visibility = 'hidden';
-                                                document.getElementById('insert').style.visibility = 'hidden';
-                                                document.getElementById('sheet').style.visibility = 'hidden';
-                                                document.getElementById('block').style.visibility = 'hidden';
-                                                document.getElementById('dist').style.visibility = 'visible';
-                                                document.getElementById('sub_cat_label').style.visibility = 'hidden';
-                                                document.getElementById('sub_cat').style.visibility = 'hidden';
-                                            }
-                                            ;">
+                                    <select class="form-control" name="type" id="category" onchange="selectValue()">
                                         <option value="">Select...</option>
                                         <?php while ($result = mysqli_fetch_assoc($result_set)) { ?>
                                             <option value="<?php echo $result['type']; ?>"><?php echo $result['type']; ?></option>
@@ -711,38 +494,52 @@ $row_set = mysqli_query($conn, $sql);
                                 </div>
                                 <div class="col-md-6">
                                     <label id="sub_cat_label" style="visibility:hidden;">Sub Category</label>
-                                    <select class="form-control" id="sub_cat" style="visibility:hidden;">
+                                    <select class="form-control" name="subCat" id="sub_cat" style="visibility:hidden;" onchange="selectValue()" >
                                         <option>Select...</option>
-                                        <?php while ($re = mysqli_fetch_assoc($re_set)) { ?>
-                                            <option value="<?php echo $re['sub']; ?>"><?php echo $re['sub']; ?></option>
-                                        <?php } ?>
+                                        <option value="Flat Copy" id="flatcopy">Flat Copy</option>
+                                        <option value="TL" id="tl">TL</option>
+                                        <option value="Full Copy" id="fullcopy">Full Copy</option>
+                                        <option value="Sup Sheet" id="sup_sheet">Sup Sheet</option>
+                                        <option value="Sheet" id="sheet_dropdown">Sheet</option>
                                     </select>
                                 </div>
+                                <div class="col-md-6"></div>
+                                <div class="col-md-6" style="visibility:hidden;" id="field_book">
+                                    <label>Field books</label>
+                                    <select class="form-control" onchange="selectValue()" id="field_b" name="field_b">
+                                        <option>Select...</option>
+                                        <option value="Level Book" id="level">Level Book</option>
+                                        <option value="Old field Book" id="old">Old field Book</option>
+                                        <option value="Metric book" id="metric">Metric field book</option>
+                                        <option value="EDM book" id="edm">EDM book</option>
+                                    </select>
+                                </div>
+
                             </div>
                         </div>
                         <div class="form-group" id="check">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-4" id="oc" style="visibility: hidden;">
                                     <div class="row">
                                         <div class="col-md-2">
                                             <label>OC</label>
                                         </div>
                                         <div class="col-md-10">
-                                            <input type="checkbox" style="zoom: 2" name="oc"/>
+                                            <input type="radio" style="zoom: 2" name="radio"/>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4" id="fc" style="visibility: hidden;">
                                     <div class="row">
                                         <div class="col-md-2">
                                             <label>FC</label>
                                         </div>
                                         <div class="col-md-10">
-                                            <input type="checkbox" style="zoom: 2" name="fc"/>
+                                            <input type="radio" style="zoom: 2" name="radio" />
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4" id="vol" style="visibility: hidden;">
                                     <div class="row">
                                         <div class="col-md-4">
                                             <label>Volume</label>
@@ -752,6 +549,16 @@ $row_set = mysqli_query($conn, $sql);
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-6" id="dist" style="visibility:hidden;">
+                                    <label>District</label>
+                                    <select name="dist" class="form-control">
+                                        <option value="">Select...</option>
+                                        <?php while ($_result = mysqli_fetch_assoc($_result_set)) { ?>
+                                            <option value="<?php echo $_result['dist']; ?>"><?php echo $_result['dist']; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-6"></div>
                             </div>
                         </div>
                         <div class="form-group" id="border">
@@ -762,30 +569,28 @@ $row_set = mysqli_query($conn, $sql);
                                 </div>
                             </div><br>
                             <div class="row">
-                                <div class="col-md-3" id="sup" style="visibility:hidden;">
+                                <div class="col-md-4" id="sup" style="visibility:hidden;">
                                     <label>Sup Number</label>
                                     <input type="text" class="form-control" placeholder="Sup No" name="sup"/>
                                 </div>
-                                <div class="col-md-3" id="insert" style="visibility:hidden;">
+                                <div class="col-md-4" id="insert" style="visibility:hidden;">
                                     <label>Insert Number</label>
                                     <input type="text" class="form-control" placeholder="Insert Number" name="insert" />
                                 </div>
-                                <div class="col-md-3" id="sheet" style="visibility:hidden;">
+                                <div class="col-md-4" id="sheet" style="visibility:hidden;">
                                     <label>Sheet Number</label>
                                     <input type="text" class="form-control" placeholder="Sheet Number" name="sheet" />
                                 </div>
-                                <div class="col-md-3" id="block" style="visibility:hidden;">
+                                <div class="col-md-4" id="block" style="visibility:hidden;">
                                     <label>Block Number</label>
                                     <input type="text" class="form-control" placeholder="Block Number" name="block" />
                                 </div>
-                                <div class="col-md-12" id="dist" style="visibility:hidden;">
-                                    <label>District</label>
-                                    <select name="dist" class="form-control-sm">
-                                        <option value="">Select...</option>
-                                        <?php while ($row = mysqli_fetch_assoc($row_set)) { ?>
-                                            <option value="<?php echo $row['dist']; ?>"><?php echo $row['dist']; ?></option>
-                                        <?php } ?>
-                                    </select>
+                                <div class="col-md-4" id="court" style="visibility:hidden;">
+                                    <label>Court Number</label>
+                                    <input type="text" class="form-control" placeholder="Court Number" name="court" />
+                                </div>
+                                <div class="col-md-4" id="court" style="visibility:hidden;">
+
                                 </div>
                             </div><br>
                             <div class="row">
@@ -823,14 +628,14 @@ $row_set = mysqli_query($conn, $sql);
 //                                        foreach ($_SESSION['cart'] as $keys => $values) {
                             ?>
                                                                         <tr>
-                                                                            <td><?php //echo $values['item_type'];         ?></td>
-                                                                            <td><?php //echo $values['item_number'];         ?></td>
-                                                                            <td><?php //echo $values['item_sup'];         ?></td>
-                                                                            <td><?php //echo $values['item_insert'];         ?></td>
-                                                                            <td><?php //echo $values['item_sheet'];         ?></td>
-                                                                            <td><?php //echo $values['item_block'];         ?></td>
-                                                                            <td><?php //echo $values['item_doc'];         ?></td>
-                                                                            <td><?php //echo $values['item_remark'];         ?></td>
+                                                                            <td><?php //echo $values['item_type'];            ?></td>
+                                                                            <td><?php //echo $values['item_number'];            ?></td>
+                                                                            <td><?php //echo $values['item_sup'];            ?></td>
+                                                                            <td><?php //echo $values['item_insert'];            ?></td>
+                                                                            <td><?php //echo $values['item_sheet'];            ?></td>
+                                                                            <td><?php //echo $values['item_block'];            ?></td>
+                                                                            <td><?php //echo $values['item_doc'];            ?></td>
+                                                                            <td><?php //echo $values['item_remark'];            ?></td>
                                                                             <td><a href="addDoc.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a></td>
                                                                         </tr>
                             <?php
@@ -875,6 +680,7 @@ $row_set = mysqli_query($conn, $sql);
                 </div>
             </div>
             <!-- Bootstrap core JavaScript-->
+            <script src="js/addDoc.js"></script>
             <script src="vendor/jquery/jquery.min.js"></script>
             <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
             <!-- Core plugin JavaScript-->
