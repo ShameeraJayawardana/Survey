@@ -2,9 +2,59 @@
 <?php include 'src/components/sessions.php'; ?>
 <?php include 'src/components/functions.php'; ?>
 <?php
-    $id = $_GET['id'];
-    $status = 'Approved';
-    $query = "UPDATE req SET status='$status' WHERE id = '$id'";
-    mysqli_query($conn, $query);
-    redirect_to("ss.php");
+$name = '';
+if (isset($_GET['name'])) {
+    $name = $_GET['name'];
+}
+
+//$_SESSION['name'] = $name;
+
+$sql = "SELECT * FROM req WHERE name = '$name' AND status = 'pending'";
+$row_set = mysqli_query($conn, $sql);
+//$row = mysqli_fetch_assoc($row_set)
+
+//if (isset($_POST['submit'])) {
+//    $status = 'Approved';
+//    $query = "UPDATE req SET status='$status' WHERE id = '$id'";
+//    mysqli_query($conn, $query);
+//    redirect_to("ss.php");
+//}
 ?>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Request Documents</title>
+        <!-- Bootstrap core CSS-->
+        <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Custom fonts for this template-->
+        <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <!-- Page level plugin CSS-->
+        <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+        <!-- Custom styles for this template-->
+        <link href="css/sb-admin.css" rel="stylesheet">
+        <link href="css/addDoc.css" rel="stylesheet">
+    </head>
+
+    <body class="fixed-nav sticky-footer bg-dark">
+        <div class="container">
+            <?php while ($row = mysqli_fetch_assoc($row_set)) { ?>
+                <div class="jumbotron">
+                    <h5><?php echo $row['name']; ?></h5>
+                    <span class="float-left">
+                        Requests for <?php echo $row['doc_type']; ?><br>
+                        <span class="small float-right text-muted"><?php echo $row['time']; ?></span>
+                    </span><br><br><br>
+                    <span class="float-right">
+                        <a class="btn btn-success" href="approve.php?id=<?php echo urlencode($row['id']); ?>&name=<?php echo urlencode($row['name']); ?>">SEND</a>
+                        <a class="btn btn-danger" href="dismiss.php?id=<?php echo urlencode($row['id']); ?>&name=<?php echo urlencode($row['name']); ?>">DISMISS</a>
+                    </span>               
+                </div>
+            <?php } ?>
+            <a href="ss.php" class="text-center text-primary">Go back to previous page</a>
+        </div>
+    </body>
+</html>

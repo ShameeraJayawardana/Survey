@@ -3,9 +3,9 @@
 <?php include 'src/components/functions.php'; ?>
 <?php confirm_logged_in(); ?>
 <?php
-    $q = "SELECT * FROM req WHERE status = 'Approved'";
-    $result_set = mysqli_query($conn,$q);
-    //$row = mysqli_fetch_assoc($row_set);
+$q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'Approved' GROUP BY name";
+$result_set = mysqli_query($conn, $q);
+//$row = mysqli_fetch_assoc($row_set);
 ?>
 <html lang="en">
     <head>
@@ -300,31 +300,35 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-fw fa-envelope"></i>
-                            <span class="d-lg-none">Messages
-                                <span class="badge badge-pill badge-primary">12 New</span>
-                            </span>
-                            <span class="indicator text-primary d-none d-lg-block">
-                                <i class="fa fa-fw fa-circle"></i>
-                            </span>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="messagesDropdown">
-                            <h6 class="dropdown-header">New Messages:</h6>
-                            <div class="dropdown-divider"></div>
-                            <?php while($result = mysqli_fetch_assoc($result_set)){ ?>
-                                <div class="dropdown-item">
-                                    <strong><?php echo $result['name']; ?></strong>
-                                    <div class="dropdown-message small">Requests for <?php echo $result['doc_type']; ?></div>
-                                    <a href="done.php?id=<?php echo urlencode($result['id']); ?>" class="btn btn-success">Send</a>
-                                    <span class="small float-right text-muted">11:21 AM</span>
-                                </div>
-                            <?php } ?>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item small" href="#">View all messages</a>
-                        </div>
-                    </li>
+                    <?php if ($row["role"] == "admin") { ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-fw fa-envelope"></i>
+                                <span class="d-lg-none">Messages
+                                    <span class="badge badge-pill badge-primary">12 New</span>
+                                </span>
+                                <span class="indicator text-primary d-none d-lg-block">
+                                    <i class="fa fa-fw fa-circle"></i>
+                                </span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="messagesDropdown">
+                                <h6 class="dropdown-header">New Messages:</h6>
+                                <div class="dropdown-divider"></div>
+                                <?php while ($result = mysqli_fetch_array($result_set)) { ?>
+                                    <?php if ($result['name'] != $_SESSION['email']) { ?>
+                                        <a class="dropdown-item" href="done.php?name=<?php echo urlencode($result['name']); ?>">
+                                            <div class="dropdown-item">
+                                                <strong><?php echo $result['name']; ?></strong>
+                                                <div class="dropdown-message small">Requests for <?php echo $result['count']; ?>documents</div>
+                                            </div>
+                                        </a>
+                                    <?php } ?>
+                                <?php } ?>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item small" href="#">View all messages</a>
+                            </div>
+                        </li>
+                    <?php } ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle mr-lg-2" id="alertsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-fw fa-bell"></i>
