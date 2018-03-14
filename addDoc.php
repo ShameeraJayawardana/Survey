@@ -15,15 +15,37 @@ if (isset($_POST['submit'])) {
 
     $district = 62;
 
-    //$doc_id = $district . $_POST['dist'] . $id . $_POST['type'].$_POST['sheet'].$_POST['sup'].$_POST['insert'].$_POST['block'].$_POST['oc'].$_POST['fc'].$_POST['vol'].;
-    $doc_id = "abc";
-    $sd ="algo";
-    
+    $oc = "";
+    $fc = "";
+    if (isset($_POST['radio'])) {
+        if ($_POST['radio'] == 'oc') {
+            $oc = "oc";
+            $fc = "";
+        } elseif ($_POST['radio'] == 'fc') {
+            $oc = "";
+            $fc = "fc";
+        }
+    }
+
+    $pp = "";
+    $fb = "";
+
+    if ($_POST['type'] == 'PP') {
+        $pp = $_POST['dist'];
+        $fb = "";
+    } elseif ($_POST['type'] == 'Field book') {
+        $fb = $_POST['dist'];
+        $pp = "";
+    }
+    $doc_id = $district . $_POST['dist'] . $id . $_POST['type'] . $_POST['sheet'] . $_POST['sup'] . $_POST['insert'] . $_POST['block'] . $oc . $fc . $_POST['vol'];
+    //$doc_id = "abcdef";
+    $sd = "algo";
+
     $query = "INSERT INTO doc_rtn(district,fb_decode,doc_id,sd_code,doc_typ_id,doc_name,sht_no,sup_no,"
             . "inset_no,bl_no,oc,fc,vol,pp_code,court_no,field_book,sub_category,remarks) "
-            . "VALUES('$district','$_POST[dist]','$doc_id','$sd','$id','$_POST[number]','$_POST[sheet]',"
-            . "'$_POST[sup]','$_POST[insert]','$_POST[block]','$_POST[oc]','$_POST[fc]','$_POST[vol]',"
-            . "'$_POST[dist]','$_POST[court]','$_POST[field_b]','$_POST[subCat]','$_POST[remark]')";
+            . "VALUES('$district','$pp','$doc_id','$sd','$id','$_POST[number]','$_POST[sheet]',"
+            . "'$_POST[sup]','$_POST[insert]','$_POST[block]','$oc','$fc','$_POST[vol]',"
+            . "'$fb','$_POST[court]','$_POST[field_b]','$_POST[subCat]','$_POST[remark]')";
     $result_set = mysqli_query($conn, $query);
     $error = mysqli_error($conn);
     echo $error;
@@ -495,7 +517,7 @@ $_result_set = mysqli_query($conn, $sql);
                                 <div class="col-md-6">
                                     <label id="sub_cat_label" style="visibility:hidden;">Sub Category</label>
                                     <select class="form-control" name="subCat" id="sub_cat" style="visibility:hidden;" onchange="selectValue()" >
-                                        <option>Select...</option>
+                                        <option value="">Select...</option>
                                         <option value="Flat Copy" id="flatcopy">Flat Copy</option>
                                         <option value="TL" id="tl">TL</option>
                                         <option value="Full Copy" id="fullcopy">Full Copy</option>
@@ -507,7 +529,7 @@ $_result_set = mysqli_query($conn, $sql);
                                 <div class="col-md-6" style="visibility:hidden;" id="field_book">
                                     <label>Field books</label>
                                     <select class="form-control" onchange="selectValue()" id="field_b" name="field_b">
-                                        <option>Select...</option>
+                                        <option value="">Select...</option>
                                         <option value="Level Book" id="level">Level Book</option>
                                         <option value="Old field Book" id="old">Old field Book</option>
                                         <option value="Metric book" id="metric">Metric field book</option>
@@ -525,7 +547,7 @@ $_result_set = mysqli_query($conn, $sql);
                                             <label>OC</label>
                                         </div>
                                         <div class="col-md-10">
-                                            <input type="radio" style="zoom: 2" name="radio"/>
+                                            <input type="radio" style="zoom: 2" name="radio" value='oc'/>
                                         </div>
                                     </div>
                                 </div>
@@ -535,7 +557,7 @@ $_result_set = mysqli_query($conn, $sql);
                                             <label>FC</label>
                                         </div>
                                         <div class="col-md-10">
-                                            <input type="radio" style="zoom: 2" name="radio" />
+                                            <input type="radio" style="zoom: 2" name="radio" value='fc' />
                                         </div>
                                     </div>
                                 </div>
@@ -628,14 +650,14 @@ $_result_set = mysqli_query($conn, $sql);
 //                                        foreach ($_SESSION['cart'] as $keys => $values) {
                             ?>
                                                                         <tr>
-                                                                            <td><?php //echo $values['item_type'];            ?></td>
-                                                                            <td><?php //echo $values['item_number'];            ?></td>
-                                                                            <td><?php //echo $values['item_sup'];            ?></td>
-                                                                            <td><?php //echo $values['item_insert'];            ?></td>
-                                                                            <td><?php //echo $values['item_sheet'];            ?></td>
-                                                                            <td><?php //echo $values['item_block'];            ?></td>
-                                                                            <td><?php //echo $values['item_doc'];            ?></td>
-                                                                            <td><?php //echo $values['item_remark'];            ?></td>
+                                                                            <td><?php //echo $values['item_type'];              ?></td>
+                                                                            <td><?php //echo $values['item_number'];              ?></td>
+                                                                            <td><?php //echo $values['item_sup'];              ?></td>
+                                                                            <td><?php //echo $values['item_insert'];              ?></td>
+                                                                            <td><?php //echo $values['item_sheet'];              ?></td>
+                                                                            <td><?php //echo $values['item_block'];              ?></td>
+                                                                            <td><?php //echo $values['item_doc'];              ?></td>
+                                                                            <td><?php //echo $values['item_remark'];              ?></td>
                                                                             <td><a href="addDoc.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a></td>
                                                                         </tr>
                             <?php
