@@ -404,36 +404,167 @@ if (isset($_POST['submit'])) {
                     </div><br><br>
                     <form action="requestDoc.php" method="post" id="form">
                         <div class="form-group">
-                            <label>Document Type</label>
-                            <select class="form-control" name = "type">
-                                <option value="">Select...</option>
-                                <?php while ($result = mysqli_fetch_assoc($result_set)) { ?>
-                                    <option value="<?php echo $result['type']; ?>"><?php echo $result['type']; ?></option>
-                                <?php } ?>
-                            </select>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Document Type</label>
+                                    <select class="form-control" name="type" id="category" onchange="selectValue()">
+                                        <option value="">Select...</option>
+                                        <?php while ($result = mysqli_fetch_assoc($result_set)) { ?>
+                                            <option value="<?php echo $result['type']; ?>"><?php echo $result['type']; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label id="sub_cat_label" style="visibility:hidden;">Sub Category</label>
+                                    <select class="form-control" name="subCat" id="sub_cat" style="visibility:hidden;" onchange="selectValue()" >
+                                        <option value="">Select...</option>
+                                        <option value="Flat Copy" id="flatcopy">Flat Copy</option>
+                                        <option value="TL" id="tl">TL</option>
+                                        <option value="Full Copy" id="fullcopy">Full Copy</option>
+                                        <option value="Sup Sheet" id="sup_sheet">Sup Sheet</option>
+                                        <option value="Sheet" id="sheet_dropdown">Sheet</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6"></div>
+                                <div class="col-md-6" style="visibility:hidden;" id="field_book">
+                                    <label>Field books</label>
+                                    <select class="form-control" onchange="selectValue()" id="field_b" name="field_b">
+                                        <option value="">Select...</option>
+                                        <option value="Level Book" id="level">Level Book</option>
+                                        <option value="Old field Book" id="old">Old field Book</option>
+                                        <option value="Metric book" id="metric">Metric field book</option>
+                                        <option value="EDM book" id="edm">EDM book</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group" id="check">
+                            <div class="row">
+                                <div class="col-md-4" id="fc" style="visibility: hidden;">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label>FC</label>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <input type="checkbox" style="zoom: 2" name="radio" value='fc' />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" id="vol" style="visibility: hidden;">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label>Volume</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" name="vol" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6" id="dist" style="visibility:hidden;">
+                                    <label>District</label>
+                                    <select name="dist" class="form-control">
+                                        <option value="">Select...</option>
+                                        <?php while ($_result = mysqli_fetch_assoc($_result_set)) { ?>
+                                            <option value="<?php echo $_result['dist']; ?>"><?php echo $_result['dist']; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-6"></div>
+                            </div>
                         </div>
                         <div class="form-group" id="border">
                             <div class="row">
                                 <div class="col-md-12">
                                     <label>Number</label>
-                                    <input type="text" class="form-control" placeholder="Document Number" name="number" />
+                                    <input list="browsers" name="browser" class="form-control" placeholder="Document Number">
+                                    <datalist id="browsers">
+                                        <option value="Internet Explorer">
+                                        <option value="Firefox">
+                                        <option value="Chrome">
+                                        <option value="Opera">
+                                        <option value="Safari">
+                                    </datalist>
+                                </div>
+                            </div><br>
+                            <div class="row">
+                                <div class="col-md-4" id="sup" style="visibility:hidden;">
+                                    <label>Sup Number</label>
+                                    <input type="text" class="form-control" placeholder="Sup No" name="sup"/>
+                                </div>
+                                <div class="col-md-4" id="insert" style="visibility:hidden;">
+                                    <label>Insert Number</label>
+                                    <input type="text" class="form-control" placeholder="Insert Number" name="insert" />
+                                </div>
+                                <div class="col-md-4" id="sheet" style="visibility:hidden;">
+                                    <label>Sheet Number</label>
+                                    <input type="text" class="form-control" placeholder="Sheet Number" name="sheet" />
+                                </div>
+                                <div class="col-md-4" id="block" style="visibility:hidden;">
+                                    <label>Block Number</label>
+                                    <input type="text" class="form-control" placeholder="Block Number" name="block" />
+                                </div>
+                                <div class="col-md-4" id="court" style="visibility:hidden;">
+                                    <label>Court Number</label>
+                                    <input type="text" class="form-control" placeholder="Court Number" name="court" />
+                                </div>
+                                <div class="col-md-4" id="court" style="visibility:hidden;">
+
                                 </div>
                             </div><br>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <label>ID</label>
-                                    <input type="text" class="form-control" placeholder="Document ID" name="id" />
+                                    <label>Remarks</label>
+                                    <input type="text" class="form-control" placeholder="Optional" name="remark" />
                                 </div>
                             </div><br><br><br><br>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <button type="submit" name="cart" id="cart">
-                                        <i class="fa fa-cart-plus" id="cartIcon"></i>
-                                    </button>
-                                </div>
-                            </div>
+                            <!--                            <div class="row">
+                                                            <div class="col-md-12">
+                                                                <button type="submit" name="cart" id="cart">
+                                                                    <i class="fa fa-cart-plus" id="cartIcon"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>-->
+                            <br><br><br><br>
+                            <!--                            <div style="clear: both"></div>
+                                                        <h3>Document Details</h3>-->
+                            <!--                            <div class="table-responsive">
+                                                            <table class=" table table-bordered">
+                                                                <tr>
+                                                                    <th>Doc Type</th>
+                                                                    <th>Number</th>
+                                                                    <th>Sup Number</th>
+                                                                    <th>Insert Number</th>
+                                                                    <th>Sheet Number</th>
+                                                                    <th>Block Number</th>
+                                                                    <th>Doc Id</th>
+                                                                    <th>Remarks</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                            <?php
+//                                    if (!empty($_SESSION['cart'])) {
+//                                        $total = 0;
+//                                        foreach ($_SESSION['cart'] as $keys => $values) {
+                            ?>
+                                                                        <tr>
+                                                                            <td><?php //echo $values['item_type'];               ?></td>
+                                                                            <td><?php //echo $values['item_number'];               ?></td>
+                                                                            <td><?php //echo $values['item_sup'];               ?></td>
+                                                                            <td><?php //echo $values['item_insert'];               ?></td>
+                                                                            <td><?php //echo $values['item_sheet'];               ?></td>
+                                                                            <td><?php //echo $values['item_block'];               ?></td>
+                                                                            <td><?php //echo $values['item_doc'];               ?></td>
+                                                                            <td><?php //echo $values['item_remark'];               ?></td>
+                                                                            <td><a href="addDoc.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a></td>
+                                                                        </tr>
+                            <?php
+//                                        }
+//                                    }
+                            ?>
+                                                            </table>
+                                                        </div>-->
                         </div>
-                        <input type="submit" name="submit" value="APPROVE" class="btn btn-light" id="submit"/>
+                        <input type="submit" name="submit" value="SUBMIT" class="btn btn-light" id="submit"/>
                     </form>
                 </div>
                 <div class="col-md-2">
@@ -467,6 +598,7 @@ if (isset($_POST['submit'])) {
                     </div>
                 </div>
             </div>
+            <script src="js/reqDoc.js"></script>
             <!-- Bootstrap core JavaScript-->
             <script src="vendor/jquery/jquery.min.js"></script>
             <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

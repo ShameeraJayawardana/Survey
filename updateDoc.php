@@ -6,8 +6,8 @@
 $q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'Approved' GROUP BY name";
 $_row_set = mysqli_query($conn, $q);
 
-$sql = "SELECT * FROM docTypes";
-$result_set = mysqli_query($conn, $sql);
+//$sql = "SELECT * FROM docTypes";
+//$result_set = mysqli_query($conn, $sql);
 ?>
 <html lang="en">
     <head>
