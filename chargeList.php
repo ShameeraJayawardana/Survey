@@ -339,6 +339,9 @@ $result_set = mysqli_query($conn, $sql);
                         <?php
                         $q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'Approved' GROUP BY name";
                         $_row_set = mysqli_query($conn, $q);
+
+                        $q1 = "SELECT name,COUNT(name) AS count FROM req WHERE availability = 'returned' GROUP BY name";
+                        $result_set1 = mysqli_query($conn, $q1);
                         ?>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -359,6 +362,16 @@ $result_set = mysqli_query($conn, $sql);
                                             <div class="dropdown-item">
                                                 <strong><?php echo $_row['name']; ?></strong>
                                                 <div class="dropdown-message small">Requests for <?php echo $_row['count']; ?>documents</div>
+                                            </div>
+                                        </a>
+                                    <?php } ?>
+                                <?php } ?>
+                                <?php while ($result1 = mysqli_fetch_array($result_set1)) { ?>
+                                    <?php if ($result1['name'] != $_SESSION['email']) { ?>
+                                        <a class="dropdown-item" href="done.php?name=<?php echo urlencode($result1['name']); ?>">
+                                            <div class="dropdown-item">
+                                                <strong><?php echo $result1['name']; ?></strong>
+                                                <div class="dropdown-message small">Returned <?php echo $result1['count']; ?>documents</div>
                                             </div>
                                         </a>
                                     <?php } ?>

@@ -3,60 +3,28 @@
 <?php include 'src/components/functions.php'; ?>
 <?php confirm_logged_in(); ?>
 <?php
-$issue_no = "";
-//$result2 = array();
-
-$q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'Approved' GROUP BY name";
-$_row_set = mysqli_query($conn, $q);
-
-$q1 = "SELECT name,COUNT(name) AS count FROM req WHERE availability = 'returned' GROUP BY name";
-$result_set1 = mysqli_query($conn, $q1);
-
-
-$sql = "SELECT * FROM member";
-$result = mysqli_query($conn, $sql);
-?>
-<?php
-$query = "SELECT * FROM docTypes";
-$result_set = mysqli_query($conn, $query);
-?>
-<?php
-$email = htmlentities($_SESSION['email']);
-$sql2 = "SELECT * FROM member WHERE email='$email'";
-$row_set = mysqli_query($conn, $sql2);
-$row = mysqli_fetch_assoc($row_set);
-$receiver = $row['name'];
-$status = 0;
-$sender = "";
-
-if (isset($_POST['submit'])) {
-    $date = date("Y-m-d h:i:sa");
-
-    $myNo = date("Y");
-    $int = 1;
-    $sql3 = "SELECT * FROM receiv ORDER BY ID DESC LIMIT 1";
-    $result_set1 = mysqli_query($conn, $sql3);
-    $result1 = mysqli_fetch_assoc($result_set1);
-    $year = substr($result1['receiv_no'], 0, 4);
-    if ($year == $myNo) {
-        $int = substr($result1['receiv_no'], 7, 1);
-        $int = $int + 1;
-    }
-    $receive_no = $myNo . "/" . "r" . "/" . $int;
-
-    $sender = $_POST['sender'];
-
-    $insert = "INSERT INTO receiv(receiv_no,sender,receiver,doc_id,datetime) VALUES('$receive_no', '$_POST[sender]', '$receiver', '$_POST[doc_id]','$date')";
-    mysqli_query($conn, $insert);
-    //echo "fddufdfjfkdfdfkjdfhfdkjdfdkfjdfldfldfld     ".mysqli_error($conn);
-
-    $update = "UPDATE issue SET status = '$status' WHERE receiver = '$sender'";
-    mysqli_query($conn, $update);
+$sql = "SELECT * FROM docTypes";
+$result_set = mysqli_query($conn, $sql);
+$status = "pending";
+$type = "";
+if (isset($_POST['type'])) {
+    $type = $_POST['type'];
 }
 
-$sql4 = "SELECT * FROM member WHERE name = '$sender'";
-$result_set13 = mysqli_query($conn, $sql4);
-$result2 = mysqli_fetch_assoc($result_set13);
+$_sql = "SELECT * FROM doctypes WHERE type='$type'";
+$_row_set1 = mysqli_query($conn, $_sql);
+$_row = mysqli_fetch_assoc($_row_set1);
+$id = $_row['id'];
+
+$q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'pending' GROUP BY name";
+$_row_set = mysqli_query($conn, $q);
+
+$time = date("Y/m/d h:i:sa");
+if (isset($_POST['submit'])) {
+    $name = $_SESSION['email'];
+    $insert = "INSERT INTO req(name,doc_type,number,doc_id,time,status) VALUES('$name','$_POST[type]','$_POST[number]','$_POST[id]','$time','$status')";
+    mysqli_query($conn, $insert);
+}
 ?>
 <html lang="en">
     <head>
@@ -65,7 +33,7 @@ $result2 = mysqli_fetch_assoc($result_set13);
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>Receive Documents</title>
+        <title>Request Documents</title>
         <!-- Bootstrap core CSS-->
         <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <!-- Custom fonts for this template-->
@@ -74,13 +42,13 @@ $result2 = mysqli_fetch_assoc($result_set13);
         <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
         <!-- Custom styles for this template-->
         <link href="css/sb-admin.css" rel="stylesheet">
-        <link href="css/issue.css" rel="stylesheet">
+        <link href="css/addDoc.css" rel="stylesheet">
     </head>
 
     <body class="fixed-nav sticky-footer bg-dark" id="page-top">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-            <a class="navbar-brand" href="index.php">Survey Department</a>
+            <a class="navbar-brand" href="index.php">Online Document Management System</a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -352,7 +320,7 @@ $result2 = mysqli_fetch_assoc($result_set13);
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
-                    <?php if ($row["role"] == "admin") { ?>
+                    <?php if ($row["role"] == "ss") { ?>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-fw fa-envelope"></i>
@@ -368,20 +336,10 @@ $result2 = mysqli_fetch_assoc($result_set13);
                                 <div class="dropdown-divider"></div>
                                 <?php while ($_row = mysqli_fetch_array($_row_set)) { ?>
                                     <?php if ($_row['name'] != $_SESSION['email']) { ?>
-                                        <a class="dropdown-item" href="done.php?name=<?php echo urlencode($_row['name']); ?>">
+                                        <a class="dropdown-item" href="send.php?name=<?php echo urlencode($_row['name']); ?>">
                                             <div class="dropdown-item">
                                                 <strong><?php echo $_row['name']; ?></strong>
                                                 <div class="dropdown-message small">Requests for <?php echo $_row['count']; ?>documents</div>
-                                            </div>
-                                        </a>
-                                    <?php } ?>
-                                <?php } ?>
-                                <?php while ($result1 = mysqli_fetch_array($result_set1)) { ?>
-                                    <?php if ($result1['name'] != $_SESSION['email']) { ?>
-                                        <a class="dropdown-item" href="done.php?name=<?php echo urlencode($result1['name']); ?>">
-                                            <div class="dropdown-item">
-                                                <strong><?php echo $result1['name']; ?></strong>
-                                                <div class="dropdown-message small">Returned <?php echo $result1['count']; ?>documents</div>
                                             </div>
                                         </a>
                                     <?php } ?>
@@ -441,48 +399,50 @@ $result2 = mysqli_fetch_assoc($result_set13);
                 </ul>
             </div>
         </nav>
-        <div class="content-wrapper" id="background">
+        <div class="content-wrapper">
             <br>
-            <div class="row" id="border">
+            <div class="row">
                 <div class="col-md-2">
 
                 </div>
                 <div class="col-md-8">
                     <div class="row">
                         <div class="col-md-12">
-                            <h3>Receiving of Documents</h3>
+                            <h3>Request Document</h3>
                         </div>
                     </div><br><br>
-                    <form action="receiver.php" method="post">
+                    <form action="requestDoc.php" method="post" id="form">
                         <div class="form-group">
-                            <label>My No</label>
-                            <input type="text" name="myNo" class="form-control" placeholder="My Number" value="" /><br>
-                            <label>Received from(name)</label>&nbsp;&nbsp;
-                            <select class="alert" name="sender">
+                            <label>Document Type</label>
+                            <select class="form-control" name = "type">
                                 <option value="">Select...</option>
-                                <?php while ($row = mysqli_fetch_array($result)) { ?>
-                                    <option value="<?php echo $row['name']; ?>"><?php echo $row['name']; ?></option>
+                                <?php while ($result = mysqli_fetch_assoc($result_set)) { ?>
+                                    <option value="<?php echo $result['type']; ?>"><?php echo $result['type']; ?></option>
                                 <?php } ?>
-                            </select><br/>
-                            <label>Designation</label>
-                            <input type="text" name="des" value="<?php echo $result2['des']; ?>" class="form-control" placeholder="Enter Your Designation"/><br/>
-                            <label>Document Category</label>
-                            <select class="form-control" name="type">
-                                <option value="">Select...</option>
-                                <?php while ($select = mysqli_fetch_assoc($result_set)) { ?>
-                                    <option value="<?php echo $select['type']; ?>"><?php echo $select['type']; ?></option>
-                                <?php } ?>
-                            </select><br>
-                            <label>Document Id</label>
-                            <input type="text" placeholder="Document" name="doc_id" class="form-control" />
-                            <br>
-                            <label>Remarks</label>
-                            <input type="text" placeholder="Remarks" name="remarks" class="form-control"/>
+                            </select>
                         </div>
-                        <!--                        <button type="submit" name="cart" id="cart">
-                                                    <i class="fa fa-cart-plus" id="cartIcon"></i>
-                                                </button><br/><br/><br/><br/><br/><br/>-->
-                        <input type="submit" class="btn btn-info" name="submit" value="RECEIVE"/>
+                        <div class="form-group" id="border">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Number</label>
+                                    <input type="text" class="form-control" placeholder="Document Number" name="number" />
+                                </div>
+                            </div><br>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>ID</label>
+                                    <input type="text" class="form-control" placeholder="Document ID" name="id" />
+                                </div>
+                            </div><br><br><br><br>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" name="cart" id="cart">
+                                        <i class="fa fa-cart-plus" id="cartIcon"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="submit" name="submit" value="APPROVE" class="btn btn-light" id="submit"/>
                     </form>
                 </div>
                 <div class="col-md-2">
@@ -491,8 +451,8 @@ $result2 = mysqli_fetch_assoc($result_set13);
             </div>
             <!-- /.container-fluid-->
             <!-- /.content-wrapper-->
-            <div class="row">
-                <?php include './src/components/footer.php'; ?>
+            <div>
+                <?php include 'src/components/footer.php'; ?>
             </div>
             <!-- Scroll to Top Button-->
             <a class="scroll-to-top rounded" href="#page-top">
@@ -534,3 +494,5 @@ $result2 = mysqli_fetch_assoc($result_set13);
     </body>
 
 </html>
+
+

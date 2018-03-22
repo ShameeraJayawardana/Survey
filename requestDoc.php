@@ -6,16 +6,94 @@
 $sql = "SELECT * FROM docTypes";
 $result_set = mysqli_query($conn, $sql);
 $status = "pending";
+$type = "";
+if (isset($_POST['type'])) {
+    $type = $_POST['type'];
+}
+
+$_sql = "SELECT * FROM doctypes WHERE type='$type'";
+$_row_set1 = mysqli_query($conn, $_sql);
+$_row = mysqli_fetch_assoc($_row_set1);
+$id = $_row['id'];
 
 $q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'pending' GROUP BY name";
 $_row_set = mysqli_query($conn, $q);
 
+
+$num="";
+if (isset($_POST['number'])){
+    $num = $_POST['number'];
+}
+
+$availability = "locked";
 $time = date("Y/m/d h:i:sa");
 if (isset($_POST['submit'])) {
     $name = $_SESSION['email'];
-    $insert = "INSERT INTO req(name,doc_type,number,doc_id,time,status) VALUES('$name','$_POST[type]','$_POST[number]','$_POST[id]','$time','$status')";
+    $insert = "INSERT INTO req(name,doc_type,number,time,status,availability) VALUES('$name','$_POST[type]','$num','$time','$status', '$availability')";
     mysqli_query($conn, $insert);
+    $err = mysqli_error($conn);
+    echo $err;
 }
+
+$subCat = "";
+$dist = "";
+$vol = "";
+$sheet = "";
+$sup = "";
+$insert = "";
+$block = "";
+
+if (isset($_POST['subCat'])) {
+    $subCat = $_POST['subCat'];
+}
+
+if (isset($_POST['dist'])) {
+    $dist = $_POST['dist'];
+}
+
+if (isset($_POST['vol'])) {
+    $vol = $_POST['vol'];
+}
+
+if (isset($_POST['sheet'])) {
+    $sheet = $_POST['sheet'];
+}
+
+if (isset($_POST['sup'])) {
+    $sup = $_POST['sup'];
+}
+
+if (isset($_POST['insert'])) {
+    $insert = $_POST['insert'];
+}
+
+if (isset($_POST['block'])) {
+    $block = $_POST['block'];
+}
+
+$_query = "SELECT * FROM doc_rtn";
+if (isset($_POST['type'])) {
+    $_query = $_query . " WHERE doc_typ_id = '$_POST[type]'";
+}
+//if (isset($_POST['dist'])) {
+//    $_query = $_query . " OR fc = '$dist'";
+//}
+//if (isset($_POST['vol'])) {
+//    $_query = $_query . " OR vol = '$vol'";
+//}
+//if (isset($_POST['sheet'])) {
+//    $_query = $_query . " OR sht_no = '$sheet'";
+//}
+//if (isset($_POST['sup'])) {
+//    $_query = $_query . " OR sup_no = '$sup'";
+//}
+//if (isset($_POST['insert'])) {
+//    $_query = $_query . " OR inset_no = '$insert'";
+//}
+//if (isset($_POST['block'])) {
+//    $_query = $_query . " OR bl_no = '$block'";
+//}
+$insert = mysqli_query($conn, $_query);
 ?>
 <html lang="en">
     <head>
@@ -477,13 +555,16 @@ if (isset($_POST['submit'])) {
                             <div class="row">
                                 <div class="col-md-12">
                                     <label>Number</label>
-                                    <input list="browsers" name="browser" class="form-control" placeholder="Document Number">
+                                    <input list="browsers" name="browser" class="form-control" placeholder="Document Number" name="number">
                                     <datalist id="browsers">
-                                        <option value="Internet Explorer">
-                                        <option value="Firefox">
-                                        <option value="Chrome">
-                                        <option value="Opera">
-                                        <option value="Safari">
+                                        <?php while ($_raw = mysqli_fetch_assoc($insert)) { ?>
+                                            <option value="<?php echo $id . $_raw['sub_category'] . $_raw['district'] . $_raw['vol'] . $_raw['sht_no'] . $_raw['sup_no'] . $_raw['inset_no'] . $_raw['bl_no']; ?>"><?php echo $id . $_raw['sub_category'] . $_raw['district'] . $_raw['vol'] . $_raw['sht_no'] . $_raw['sup_no'] . $_raw['inset_no'] . $_raw['bl_no']; ?></option>
+                                        <?php } ?>
+                                        <!--                                        <option value="Internet Explorer">
+                                                                                <option value="Firefox">
+                                                                                <option value="Chrome">
+                                                                                <option value="Opera">
+                                                                                <option value="Safari">-->
                                     </datalist>
                                 </div>
                             </div><br>
@@ -547,14 +628,14 @@ if (isset($_POST['submit'])) {
 //                                        foreach ($_SESSION['cart'] as $keys => $values) {
                             ?>
                                                                         <tr>
-                                                                            <td><?php //echo $values['item_type'];               ?></td>
-                                                                            <td><?php //echo $values['item_number'];               ?></td>
-                                                                            <td><?php //echo $values['item_sup'];               ?></td>
-                                                                            <td><?php //echo $values['item_insert'];               ?></td>
-                                                                            <td><?php //echo $values['item_sheet'];               ?></td>
-                                                                            <td><?php //echo $values['item_block'];               ?></td>
-                                                                            <td><?php //echo $values['item_doc'];               ?></td>
-                                                                            <td><?php //echo $values['item_remark'];               ?></td>
+                                                                            <td><?php //echo $values['item_type'];                       ?></td>
+                                                                            <td><?php //echo $values['item_number'];                       ?></td>
+                                                                            <td><?php //echo $values['item_sup'];                       ?></td>
+                                                                            <td><?php //echo $values['item_insert'];                       ?></td>
+                                                                            <td><?php //echo $values['item_sheet'];                       ?></td>
+                                                                            <td><?php //echo $values['item_block'];                       ?></td>
+                                                                            <td><?php //echo $values['item_doc'];                       ?></td>
+                                                                            <td><?php //echo $values['item_remark'];                       ?></td>
                                                                             <td><a href="addDoc.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a></td>
                                                                         </tr>
                             <?php

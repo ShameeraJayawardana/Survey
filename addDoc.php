@@ -7,6 +7,9 @@ $type = "";
 $q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'Approved' GROUP BY name";
 $result_set = mysqli_query($conn, $q);
 
+$q1 = "SELECT name,COUNT(name) AS count FROM req WHERE availability = 'returned' GROUP BY name";
+$result_set1 = mysqli_query($conn, $q1);
+
 if (isset($_POST['submit'])) {
     $sql = "SELECT * FROM doctypes WHERE type='$_POST[type]'";
     $row_set = mysqli_query($conn, $sql);
@@ -37,16 +40,16 @@ if (isset($_POST['submit'])) {
         $fb = $_POST['dist'];
         $pp = "";
     }
-    $doc_id = $district . $_POST['dist'] . $id . $_POST['type'] . $_POST['sheet'] . $_POST['sup'] . $_POST['insert'] . $_POST['block'] . $oc . $fc . $_POST['vol'];
+    $doc_id = $district . $_POST['dist'] . $id . $_POST['type'] . $_POST['sheet'] . $_POST['sup'] . $_POST['insert'] . $_POST['block'] . $oc . $fc . $_POST['vol'] . $fb . $_POST['court'] . $_POST['field_b'] . $_POST['subCat'];
     //$doc_id = "abcdef";
-    $sd = "algo";
+    $sd = $_POST['dist'] . $_POST['type'] . $_POST['number'] . $pp . $_POST['block'] . $_POST['sup'] . $_POST['insert'] . $_POST['sheet'];
 
     $query = "INSERT INTO doc_rtn(district,fb_decode,doc_id,sd_code,doc_typ_id,doc_name,sht_no,sup_no,"
             . "inset_no,bl_no,oc,fc,vol,pp_code,court_no,field_book,sub_category,remarks) "
             . "VALUES('$district','$pp','$doc_id','$sd','$id','$_POST[number]','$_POST[sheet]',"
             . "'$_POST[sup]','$_POST[insert]','$_POST[block]','$oc','$fc','$_POST[vol]',"
             . "'$fb','$_POST[court]','$_POST[field_b]','$_POST[subCat]','$_POST[remark]')";
-    $result_set = mysqli_query($conn, $query);
+    mysqli_query($conn, $query);
     $error = mysqli_error($conn);
     echo $error;
 }
@@ -430,6 +433,16 @@ $_result_set = mysqli_query($conn, $sql);
                                         </a>
                                     <?php } ?>
                                 <?php } ?>
+                                <?php while ($result1 = mysqli_fetch_array($result_set1)) { ?>
+                                    <?php if ($result1['name'] != $_SESSION['email']) { ?>
+                                        <a class="dropdown-item" href="done.php?name=<?php echo urlencode($result1['name']); ?>">
+                                            <div class="dropdown-item">
+                                                <strong><?php echo $result1['name']; ?></strong>
+                                                <div class="dropdown-message small">Returned <?php echo $result1['count']; ?>documents</div>
+                                            </div>
+                                        </a>
+                                    <?php } ?>
+                                <?php } ?>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item small" href="#">View all messages</a>
                             </div>
@@ -650,14 +663,14 @@ $_result_set = mysqli_query($conn, $sql);
 //                                        foreach ($_SESSION['cart'] as $keys => $values) {
                             ?>
                                                                         <tr>
-                                                                            <td><?php //echo $values['item_type'];              ?></td>
-                                                                            <td><?php //echo $values['item_number'];              ?></td>
-                                                                            <td><?php //echo $values['item_sup'];              ?></td>
-                                                                            <td><?php //echo $values['item_insert'];              ?></td>
-                                                                            <td><?php //echo $values['item_sheet'];              ?></td>
-                                                                            <td><?php //echo $values['item_block'];              ?></td>
-                                                                            <td><?php //echo $values['item_doc'];              ?></td>
-                                                                            <td><?php //echo $values['item_remark'];              ?></td>
+                                                                            <td><?php //echo $values['item_type'];               ?></td>
+                                                                            <td><?php //echo $values['item_number'];               ?></td>
+                                                                            <td><?php //echo $values['item_sup'];               ?></td>
+                                                                            <td><?php //echo $values['item_insert'];               ?></td>
+                                                                            <td><?php //echo $values['item_sheet'];               ?></td>
+                                                                            <td><?php //echo $values['item_block'];               ?></td>
+                                                                            <td><?php //echo $values['item_doc'];               ?></td>
+                                                                            <td><?php //echo $values['item_remark'];               ?></td>
                                                                             <td><a href="addDoc.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a></td>
                                                                         </tr>
                             <?php

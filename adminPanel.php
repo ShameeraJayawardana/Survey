@@ -6,6 +6,9 @@
 $q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'Approved' GROUP BY name";
 $result_set = mysqli_query($conn, $q);
 //$row = mysqli_fetch_assoc($row_set);
+
+$q1 = "SELECT name,COUNT(name) AS count FROM req WHERE availability = 'returned' GROUP BY name";
+$result_set1 = mysqli_query($conn, $q1);
 ?>
 <html lang="en">
     <head>
@@ -320,6 +323,16 @@ $result_set = mysqli_query($conn, $q);
                                             <div class="dropdown-item">
                                                 <strong><?php echo $result['name']; ?></strong>
                                                 <div class="dropdown-message small">Requests for <?php echo $result['count']; ?>documents</div>
+                                            </div>
+                                        </a>
+                                    <?php } ?>
+                                <?php } ?>
+                                <?php while ($result1 = mysqli_fetch_array($result_set1)) { ?>
+                                    <?php if ($result1['name'] != $_SESSION['email']) { ?>
+                                        <a class="dropdown-item" href="done.php?name=<?php echo urlencode($result1['name']); ?>">
+                                            <div class="dropdown-item">
+                                                <strong><?php echo $result1['name']; ?></strong>
+                                                <div class="dropdown-message small">Returned <?php echo $result1['count']; ?>documents</div>
                                             </div>
                                         </a>
                                     <?php } ?>

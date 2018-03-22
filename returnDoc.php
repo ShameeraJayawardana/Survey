@@ -8,6 +8,26 @@ $_row_set = mysqli_query($conn, $q);
 
 $sql = "SELECT * FROM docTypes";
 $result_set = mysqli_query($conn, $sql);
+
+$user = $_SESSION['email'];
+
+$_q = "SELECT * FROM req WHERE name = '$user' AND availability= 'locked'";
+$q_set = mysqli_query($conn, $_q);
+
+$arr = array();
+$return = "";
+
+if(isset($_POST['return'])){
+    $return = $_POST['return'][0];
+}
+
+$arr = array_push($arr, $return);
+//while ($_r = mysqli_fetch_assoc($q_set)) {
+    if (isset($_POST['submit'])) {
+        $update_query = "UPDATE req SET availability = 'returned' WHERE number={$_POST['return']}";
+        mysqli_query($conn, $update_query);
+    }
+//}
 ?>
 <html lang="en">
     <head>
@@ -36,7 +56,7 @@ $result_set = mysqli_query($conn, $sql);
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
-                                <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+                <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
                     <?php
                     if (isset($_SESSION["id"])) {
                         $user = $_SESSION["email"];
@@ -384,67 +404,60 @@ $result_set = mysqli_query($conn, $sql);
         </nav>
         <div class="content-wrapper">
             <br>
-            <div class="row">
-                <div class="col-md-2">
+            <form action="returnDoc.php" method="post">
+                <div class="row">
+                    <div class="col-md-2">
 
-                </div>
-                <div class="col-md-8">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h3>Return Document</h3>
-                        </div>
-                    </div><br><br>
-                    <table class="table table-responsive-lg table-hover">
-                        <tr>
-                            <th>
-                                No
-                            </th>
-                            <th>
-                                Document ID
-                            </th>
-                            <th>
-                                Put the tick for returns
-                            </th>
-                        </tr>
-                        <tr>
-                            <td>
-                                1
-                            </td>
-                            <td>
-                                FB.11010
-                            </td>
-                            <td>
-                                <input type="checkbox" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                2
-                            </td>
-                            <td>
-                                FVP 85(AC)
-                            </td>
-                            <td>
-                                <input type="checkbox" />
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="col-md-2">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>Return Document</h3>
+                            </div>
+                        </div><br><br>
+                        <table class="table table-responsive-lg table-hover">
+                            <tr>
+                                <th>
+                                    No
+                                </th>
+                                <th>
+                                    Document ID
+                                </th>
+                                <th>
+                                    Put the tick for returns
+                                </th>
+                            </tr>
+                            <?php while ($_r = mysqli_fetch_assoc($q_set)) { ?>
+                                <tr>
+                                    <td>
+                                        <?php echo $_r['number']; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $_r['doc_type']; ?>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="return" value="<?php echo $_r['number']; ?>" />
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                        </table>
+                    </div>
+                    <div class="col-md-2">
 
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    
+                <div class="row">
+                    <div class="col-md-4">
+
+                    </div>
+                    <div class="col-md-4">
+
+                    </div>
+                    <div class="col-md-4">
+                        <input type="submit" value="SEND TO DSO" name="submit" class="btn btn-light"/>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    
-                </div>
-                <div class="col-md-4">
-                    <input type="submit" value="SEND TO DSO" class="btn btn-light"/>
-                </div>
-            </div>
+            </form>
             <!-- /.container-fluid-->
             <!-- /.content-wrapper-->
             <div>
