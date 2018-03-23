@@ -18,14 +18,16 @@ $arr = array();
 $return = "";
 
 if(isset($_POST['return'])){
-    $return = $_POST['return'][0];
+    $return = $_POST['return'];
 }
 
 $arr = array_push($arr, $return);
 //while ($_r = mysqli_fetch_assoc($q_set)) {
     if (isset($_POST['submit'])) {
-        $update_query = "UPDATE req SET availability = 'returned' WHERE number={$_POST['return']}";
-        mysqli_query($conn, $update_query);
+        $update_query = "UPDATE req SET availability = 'returned' WHERE doc_id='$return'";
+        $qu = mysqli_query($conn, $update_query);
+        //echo var_dump($qu);
+        
     }
 //}
 ?>

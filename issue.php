@@ -18,7 +18,7 @@ $sql2 = "SELECT * FROM member WHERE email='$email'";
 $row_set = mysqli_query($conn, $sql2);
 $row = mysqli_fetch_assoc($row_set);
 $issuer = $row['name'];
-$status = TRUE;
+$status = 1;
 $receiver = "";
 
 $q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'Approved' GROUP BY name";
