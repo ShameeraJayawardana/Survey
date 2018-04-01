@@ -40,9 +40,9 @@ if (isset($_POST['submit'])) {
         $fb = $_POST['dist'];
         $pp = "";
     }
-    $doc_id = $district . $_POST['dist'] . $id . $_POST['type'] . $_POST['sheet'] . $_POST['sup'] . $_POST['insert'] . $_POST['block'] . $oc . $fc . $_POST['vol'] . $fb . $_POST['court'] . $_POST['field_b'] . $_POST['subCat'];
+    $doc_id = $_POST['type'] . $district . $_POST['dist'] . $id . $_POST['sheet'] . $_POST['sup'] . $_POST['insert'] . $_POST['block'] . $oc . $fc . $_POST['vol'] . $fb . $_POST['court'] . $_POST['field_b'] . $_POST['subCat'];
     //$doc_id = "abcdef";
-    $sd = $_POST['dist'] . $_POST['type'] . $_POST['number'] . $pp . $_POST['block'] . $_POST['sup'] . $_POST['insert'] . $_POST['sheet'];
+    $sd = $_POST['type'] . $_POST['dist'] . $_POST['number'] . $pp . $_POST['block'] . $_POST['sup'] . $_POST['insert'] . $_POST['sheet'];
 
     $query = "INSERT INTO doc_rtn(district,fb_decode,doc_id,sd_code,doc_typ_id,doc_name,sht_no,sup_no,"
             . "inset_no,bl_no,oc,fc,vol,pp_code,court_no,field_book,sub_category,remarks) "

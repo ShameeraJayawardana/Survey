@@ -20,8 +20,8 @@ $q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'pending' GROUP B
 $_row_set = mysqli_query($conn, $q);
 
 
-$num="";
-if (isset($_POST['number'])){
+$num = "";
+if (isset($_POST['number'])) {
     $num = $_POST['number'];
 }
 
@@ -112,6 +112,24 @@ $insert = mysqli_query($conn, $_query);
         <!-- Custom styles for this template-->
         <link href="css/sb-admin.css" rel="stylesheet">
         <link href="css/addDoc.css" rel="stylesheet">
+        <script>
+            function showHint(str) {
+                console.log('aswssf', str);
+                if (str.length == 0) {
+                    document.getElementById("txtHint").value = "";
+                    return;
+                } else {
+                    var xmlhttp = new XMLHttpRequest();
+                    xmlhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            document.getElementById("txtHint").value = this.responseText;
+                        }
+                    };
+                    xmlhttp.open("GET", "gethint.php?q=" + str, true);
+                    xmlhttp.send();
+                }
+            }
+        </script>
     </head>
 
     <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -485,12 +503,13 @@ $insert = mysqli_query($conn, $_query);
                             <div class="row">
                                 <div class="col-md-6">
                                     <label>Document Type</label>
-                                    <select class="form-control" name="type" id="category" onchange="selectValue()">
+                                    <select class="form-control" name="type" id="category" onchange="selectValue(); showHint(this.value);">
                                         <option value="">Select...</option>
                                         <?php while ($result = mysqli_fetch_assoc($result_set)) { ?>
                                             <option value="<?php echo $result['type']; ?>"><?php echo $result['type']; ?></option>
                                         <?php } ?>
                                     </select>
+<!--                                    <p>Suggestions: <span id="txtHint"></span></p>-->
                                 </div>
                                 <div class="col-md-6">
                                     <label id="sub_cat_label" style="visibility:hidden;">Sub Category</label>
@@ -557,14 +576,7 @@ $insert = mysqli_query($conn, $_query);
                                     <label>Number</label>
                                     <input list="browsers" name="browser" class="form-control" placeholder="Document Number" name="number">
                                     <datalist id="browsers">
-                                        <?php while ($_raw = mysqli_fetch_assoc($insert)) { ?>
-                                            <option value="<?php echo $id . $_raw['sub_category'] . $_raw['district'] . $_raw['vol'] . $_raw['sht_no'] . $_raw['sup_no'] . $_raw['inset_no'] . $_raw['bl_no']; ?>"><?php echo $id . $_raw['sub_category'] . $_raw['district'] . $_raw['vol'] . $_raw['sht_no'] . $_raw['sup_no'] . $_raw['inset_no'] . $_raw['bl_no']; ?></option>
-                                        <?php } ?>
-                                        <!--                                        <option value="Internet Explorer">
-                                                                                <option value="Firefox">
-                                                                                <option value="Chrome">
-                                                                                <option value="Opera">
-                                                                                <option value="Safari">-->
+                                        <option id="txtHint"></option>
                                     </datalist>
                                 </div>
                             </div><br>
@@ -628,14 +640,14 @@ $insert = mysqli_query($conn, $_query);
 //                                        foreach ($_SESSION['cart'] as $keys => $values) {
                             ?>
                                                                         <tr>
-                                                                            <td><?php //echo $values['item_type'];                       ?></td>
-                                                                            <td><?php //echo $values['item_number'];                       ?></td>
-                                                                            <td><?php //echo $values['item_sup'];                       ?></td>
-                                                                            <td><?php //echo $values['item_insert'];                       ?></td>
-                                                                            <td><?php //echo $values['item_sheet'];                       ?></td>
-                                                                            <td><?php //echo $values['item_block'];                       ?></td>
-                                                                            <td><?php //echo $values['item_doc'];                       ?></td>
-                                                                            <td><?php //echo $values['item_remark'];                       ?></td>
+                                                                            <td><?php //echo $values['item_type'];                        ?></td>
+                                                                            <td><?php //echo $values['item_number'];                        ?></td>
+                                                                            <td><?php //echo $values['item_sup'];                        ?></td>
+                                                                            <td><?php //echo $values['item_insert'];                        ?></td>
+                                                                            <td><?php //echo $values['item_sheet'];                        ?></td>
+                                                                            <td><?php //echo $values['item_block'];                        ?></td>
+                                                                            <td><?php //echo $values['item_doc'];                        ?></td>
+                                                                            <td><?php //echo $values['item_remark'];                        ?></td>
                                                                             <td><a href="addDoc.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a></td>
                                                                         </tr>
                             <?php
