@@ -113,18 +113,31 @@ $insert = mysqli_query($conn, $_query);
         <link href="css/sb-admin.css" rel="stylesheet">
         <link href="css/addDoc.css" rel="stylesheet">
         <script>
+            var res = [];
             function showHint(str) {
-                console.log('aswssf', str);
+                //console.log('aswssf', str);
                 if (str.length == 0) {
-                    document.getElementById("txtHint").value = "";
+                    console.log("Value doesn't come");
+                    //document.getElementById("txtHint").value = "";
                     return;
                 } else {
+                    //console.log("Value comes");
                     var xmlhttp = new XMLHttpRequest();
                     xmlhttp.onreadystatechange = function () {
                         if (this.readyState == 4 && this.status == 200) {
-                            document.getElementById("txtHint").value = this.responseText;
+                            res= eval("(" + this.responseText + ")");
+                            console.log(res);
+                            
+                            var sel = document.getElementById('browsers');
+                            for (var i = 0; i < res.length; i++) {
+                                var opt = document.createElement('option');
+                                opt.innerHTML = res[i];
+                                opt.value = res[i];
+                                sel.appendChild(opt);
+                            }
                         }
                     };
+
                     xmlhttp.open("GET", "gethint.php?q=" + str, true);
                     xmlhttp.send();
                 }
@@ -503,7 +516,8 @@ $insert = mysqli_query($conn, $_query);
                             <div class="row">
                                 <div class="col-md-6">
                                     <label>Document Type</label>
-                                    <select class="form-control" name="type" id="category" onchange="selectValue(); showHint(this.value);">
+                                    <select class="form-control" name="type" id="category" onchange="selectValue();
+                                            showHint(this.value);">
                                         <option value="">Select...</option>
                                         <?php while ($result = mysqli_fetch_assoc($result_set)) { ?>
                                             <option value="<?php echo $result['type']; ?>"><?php echo $result['type']; ?></option>
@@ -576,7 +590,6 @@ $insert = mysqli_query($conn, $_query);
                                     <label>Number</label>
                                     <input list="browsers" name="browser" class="form-control" placeholder="Document Number" name="number">
                                     <datalist id="browsers">
-                                        <option id="txtHint"></option>
                                     </datalist>
                                 </div>
                             </div><br>
@@ -640,14 +653,14 @@ $insert = mysqli_query($conn, $_query);
 //                                        foreach ($_SESSION['cart'] as $keys => $values) {
                             ?>
                                                                         <tr>
-                                                                            <td><?php //echo $values['item_type'];                        ?></td>
-                                                                            <td><?php //echo $values['item_number'];                        ?></td>
-                                                                            <td><?php //echo $values['item_sup'];                        ?></td>
-                                                                            <td><?php //echo $values['item_insert'];                        ?></td>
-                                                                            <td><?php //echo $values['item_sheet'];                        ?></td>
-                                                                            <td><?php //echo $values['item_block'];                        ?></td>
-                                                                            <td><?php //echo $values['item_doc'];                        ?></td>
-                                                                            <td><?php //echo $values['item_remark'];                        ?></td>
+                                                                            <td><?php //echo $values['item_type'];                         ?></td>
+                                                                            <td><?php //echo $values['item_number'];                         ?></td>
+                                                                            <td><?php //echo $values['item_sup'];                         ?></td>
+                                                                            <td><?php //echo $values['item_insert'];                         ?></td>
+                                                                            <td><?php //echo $values['item_sheet'];                         ?></td>
+                                                                            <td><?php //echo $values['item_block'];                         ?></td>
+                                                                            <td><?php //echo $values['item_doc'];                         ?></td>
+                                                                            <td><?php //echo $values['item_remark'];                         ?></td>
                                                                             <td><a href="addDoc.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a></td>
                                                                         </tr>
                             <?php
