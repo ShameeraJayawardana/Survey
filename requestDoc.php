@@ -29,8 +29,11 @@ $availability = "locked";
 $time = date("Y/m/d h:i:sa");
 if (isset($_POST['submit'])) {
     $name = $_SESSION['email'];
-    $insert = "INSERT INTO req(name,doc_type,number,time,status,availability) VALUES('$name','$_POST[type]','$num','$time','$status', '$availability')";
+    $insert = "INSERT INTO req(name,doc_type,number,time,status,availability) VALUES('$name','$_POST[type]','$_POST[number]','$time','$status', '$availability')";
     mysqli_query($conn, $insert);
+    
+    $update = "UPDATE doc_rtn SET status = 'locked' WHERE doc_id = '$_POST[number]'";
+    mysqli_query($conn, $update);
     $err = mysqli_error($conn);
     echo $err;
 }
@@ -588,7 +591,7 @@ $insert = mysqli_query($conn, $_query);
                             <div class="row">
                                 <div class="col-md-12">
                                     <label>Number</label>
-                                    <input list="browsers" name="browser" class="form-control" placeholder="Document Number" name="number">
+                                    <input list="browsers" class="form-control" placeholder="Document Number" name="number">
                                     <datalist id="browsers">
                                     </datalist>
                                 </div>

@@ -17,6 +17,7 @@ if (isset($_POST['submit'])) {
     $id = $row['id'];
 
     $district = 62;
+    $status = "available";
 
     $oc = "";
     $fc = "";
@@ -40,15 +41,15 @@ if (isset($_POST['submit'])) {
         $fb = $_POST['dist'];
         $pp = "";
     }
-    $doc_id = $_POST['type'] . $district . $_POST['dist'] . $id . $_POST['sheet'] . $_POST['sup'] . $_POST['insert'] . $_POST['block'] . $oc . $fc . $_POST['vol'] . $fb . $_POST['court'] . $_POST['field_b'] . $_POST['subCat'];
+    $doc_id = $district . $_POST['dist'] . $_POST['type'] . $id . $_POST['sheet'] . $_POST['sup'] . $_POST['insert'] . $_POST['block'] . $oc . $fc . $_POST['vol'] . $fb . $_POST['court'] . $_POST['field_b'] . $_POST['subCat'];
     //$doc_id = "abcdef";
-    $sd = $_POST['type'] . $_POST['dist'] . $_POST['number'] . $pp . $_POST['block'] . $_POST['sup'] . $_POST['insert'] . $_POST['sheet'];
+    $sd = $_POST['dist'] . $_POST['type'] . $_POST['number'] . $pp . $_POST['block'] . $_POST['sup'] . $_POST['insert'] . $_POST['sheet'];
 
     $query = "INSERT INTO doc_rtn(district,fb_decode,doc_id,sd_code,doc_typ_id,doc_name,sht_no,sup_no,"
-            . "inset_no,bl_no,oc,fc,vol,pp_code,court_no,field_book,sub_category,remarks) "
+            . "inset_no,bl_no,oc,fc,vol,pp_code,court_no,field_book,sub_category,remarks,status) "
             . "VALUES('$district','$pp','$doc_id','$sd','$id','$_POST[number]','$_POST[sheet]',"
             . "'$_POST[sup]','$_POST[insert]','$_POST[block]','$oc','$fc','$_POST[vol]',"
-            . "'$fb','$_POST[court]','$_POST[field_b]','$_POST[subCat]','$_POST[remark]')";
+            . "'$fb','$_POST[court]','$_POST[field_b]','$_POST[subCat]','$_POST[remark]','$status')";
     mysqli_query($conn, $query);
     $error = mysqli_error($conn);
     echo $error;

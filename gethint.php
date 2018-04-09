@@ -3,7 +3,7 @@
 <?php include 'src/components/functions.php'; ?>
 <?php
 
-$sql = "SELECT * FROM doc_rtn";
+$sql = "SELECT * FROM doc_rtn WHERE status = 'available'";
 $row_set = mysqli_query($conn, $sql);
 
 $q = $_REQUEST["q"];
@@ -12,8 +12,11 @@ $hintArr = array();
 // lookup all hints from array if $q is different from "" 
 if ($q !== "") {
     $len = strlen($q);
+    if(!empty($hintArr)){
+        unset($hintArr);
+    }
     while ($row = mysqli_fetch_array($row_set)) {
-        if (stristr($q, substr($row['doc_id'], 0, $len))) {
+        if (stristr($row['doc_id'], $q)) {
             array_push($hintArr, $row['doc_id']);
         }
     }

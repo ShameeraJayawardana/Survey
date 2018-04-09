@@ -15,20 +15,31 @@ $_q = "SELECT * FROM req WHERE name = '$user' AND availability= 'locked'";
 $q_set = mysqli_query($conn, $_q);
 
 $arr = array();
-$return = "";
+$return = array();
 
-if(isset($_POST['return'])){
-    $return = $_POST['return'];
+if (isset($_POST['return'])) {
+    $_r = mysqli_fetch_array($q_set);
+    for ($i = 0; $i < sizeof($_r['number']); $i++) {
+        $return = $_POST['return'][$i];
+        array_push($arr, $return);
+    }
 }
 
-$arr = array_push($arr, $return);
+
+
 //while ($_r = mysqli_fetch_assoc($q_set)) {
-    if (isset($_POST['submit'])) {
-        $update_query = "UPDATE req SET availability = 'returned' WHERE doc_id='$return'";
-        $qu = mysqli_query($conn, $update_query);
-        //echo var_dump($qu);
-        
+
+if (isset($_POST['submit'])) {
+    foreach ($arr as $arrr) {
+        var_dump($arrr);
     }
+//    $update_query = "UPDATE req SET availability = 'returned' WHERE number='$return'";
+//    $qu = mysqli_query($conn, $update_query);
+//    
+//    $update = "UPDATE doc_rtn SET status = 'available' WHERE doc_id='$return'";
+//    $qu = mysqli_query($conn, $update);
+    //echo var_dump($qu);
+}
 //}
 ?>
 <html lang="en">
