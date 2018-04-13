@@ -17,30 +17,16 @@ $q_set = mysqli_query($conn, $_q);
 $arr = array();
 $return = array();
 
-if (isset($_POST['return'])) {
-    $_r = mysqli_fetch_array($q_set);
-    for ($i = 0; $i < sizeof($_r['number']); $i++) {
-        $return = $_POST['return'][$i];
-        array_push($arr, $return);
-    }
-}
-
-
-
-//while ($_r = mysqli_fetch_assoc($q_set)) {
-
 if (isset($_POST['submit'])) {
-    foreach ($arr as $arrr) {
-        var_dump($arrr);
+    foreach ($_POST['return'] as $value) {
+        $update_query = "UPDATE req SET availability = 'returned' WHERE number='$value'";
+        $qu = mysqli_query($conn, $update_query);
+
+        $update = "UPDATE doc_rtn SET status = 'available' WHERE doc_id='$value'";
+        $qu = mysqli_query($conn, $update);
     }
-//    $update_query = "UPDATE req SET availability = 'returned' WHERE number='$return'";
-//    $qu = mysqli_query($conn, $update_query);
-//    
-//    $update = "UPDATE doc_rtn SET status = 'available' WHERE doc_id='$return'";
-//    $qu = mysqli_query($conn, $update);
-    //echo var_dump($qu);
+    header("Refresh:0");
 }
-//}
 ?>
 <html lang="en">
     <head>
@@ -70,14 +56,14 @@ if (isset($_POST['submit'])) {
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-                    <?php
-                    if (isset($_SESSION["id"])) {
-                        $user = $_SESSION["email"];
-                        $query = "SELECT * FROM member WHERE email = '$user'";
-                        $row_set = mysqli_query($conn, $query);
-                        $row = mysqli_fetch_assoc($row_set);
-                        if ($row["role"] == "sadmin") {
-                            ?>
+<?php
+if (isset($_SESSION["id"])) {
+    $user = $_SESSION["email"];
+    $query = "SELECT * FROM member WHERE email = '$user'";
+    $row_set = mysqli_query($conn, $query);
+    $row = mysqli_fetch_assoc($row_set);
+    if ($row["role"] == "sadmin") {
+        ?>
                             <li class = "nav-item active" data-toggle = "tooltip" data-placement = "right" title = "Dashboard">
                                 <a class = "nav-link" href = "sadmin.php">
                                     <i class = "fa fa-user-circle"></i>
@@ -96,9 +82,9 @@ if (isset($_POST['submit'])) {
                                     <span class="nav-link-text">Transfer SNRSS</span>
                                 </a>
                             </li>
-                            <?php
-                        } elseif ($row["role"] == "snrss") {
-                            ?>
+        <?php
+    } elseif ($row["role"] == "snrss") {
+        ?>
                             <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
                                 <a class="nav-link" href="snrss.php">
                                     <i class="fa fa-user-circle"></i>
@@ -157,9 +143,9 @@ if (isset($_POST['submit'])) {
                                     </li>
                                 </ul>
                             </li>
-                            <?php
-                        } elseif ($row["role"] == "ss") {
-                            ?>
+        <?php
+    } elseif ($row["role"] == "ss") {
+        ?>
                             <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
                                 <a class="nav-link" href="ss.php">
                                     <i class="fa fa-user-circle"></i>
@@ -202,9 +188,9 @@ if (isset($_POST['submit'])) {
                                     <span class="nav-link-text">Approve surveyor doc list</span>
                                 </a>
                             </li>
-                            <?php
-                        } elseif ($row["role"] == "admin") {
-                            ?>
+        <?php
+    } elseif ($row["role"] == "admin") {
+        ?>
                             <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
                                 <a class="nav-link" href="adminPanel.php">
                                     <i class="fa fa-user-circle"></i>
@@ -269,9 +255,9 @@ if (isset($_POST['submit'])) {
                                     <span class="nav-link-text">Chargeable list</span>
                                 </a>
                             </li>
-                            <?php
-                        } elseif ($row["role"] == "member") {
-                            ?>
+        <?php
+    } elseif ($row["role"] == "member") {
+        ?>
                             <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
                                 <a class="nav-link" href="index.php">
                                     <i class="fa fa-user-circle"></i>
@@ -302,10 +288,10 @@ if (isset($_POST['submit'])) {
                                     <span class="nav-link-text">Chargeable list</span>
                                 </a>
                             </li>
-                            <?php
-                        }
-                    } else {
-                        ?>
+        <?php
+    }
+} else {
+    ?>
                         <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Home">
                             <a class="nav-link" href="home.php">
                                 <i class="fa fa-home"></i>
@@ -324,9 +310,9 @@ if (isset($_POST['submit'])) {
                                 <span class="nav-link-text"><b>CONTACT US</b></span>
                             </a>
                         </li>
-                        <?php
-                    }
-                    ?>
+    <?php
+}
+?>
                 </ul>
                 <ul class="navbar-nav sidenav-toggler">
                     <li class="nav-item">
@@ -336,7 +322,7 @@ if (isset($_POST['submit'])) {
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
-                    <?php if ($row["role"] == "ss") { ?>
+<?php if ($row["role"] == "ss") { ?>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-fw fa-envelope"></i>
@@ -350,21 +336,21 @@ if (isset($_POST['submit'])) {
                             <div class="dropdown-menu" aria-labelledby="messagesDropdown">
                                 <h6 class="dropdown-header">New Messages:</h6>
                                 <div class="dropdown-divider"></div>
-                                <?php while ($_row = mysqli_fetch_array($_row_set)) { ?>
-                                    <?php if ($_row['name'] != $_SESSION['email']) { ?>
+    <?php while ($_row = mysqli_fetch_array($_row_set)) { ?>
+        <?php if ($_row['name'] != $_SESSION['email']) { ?>
                                         <a class="dropdown-item" href="send.php?name=<?php echo urlencode($_row['name']); ?>">
                                             <div class="dropdown-item">
                                                 <strong><?php echo $_row['name']; ?></strong>
                                                 <div class="dropdown-message small">Requests for <?php echo $_row['count']; ?>documents</div>
                                             </div>
                                         </a>
-                                    <?php } ?>
-                                <?php } ?>
+        <?php } ?>
+    <?php } ?>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item small" href="#">View all messages</a>
                             </div>
                         </li>
-                    <?php } ?>
+<?php } ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle mr-lg-2" id="alertsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-fw fa-bell"></i>
@@ -440,19 +426,19 @@ if (isset($_POST['submit'])) {
                                     Put the tick for returns
                                 </th>
                             </tr>
-                            <?php while ($_r = mysqli_fetch_assoc($q_set)) { ?>
+<?php while ($_r = mysqli_fetch_assoc($q_set)) { ?>
                                 <tr>
                                     <td>
-                                        <?php echo $_r['number']; ?>
+                                <?php echo $_r['number']; ?>
                                     </td>
                                     <td>
                                         <?php echo $_r['doc_type']; ?>
                                     </td>
                                     <td>
-                                        <input type="checkbox" name="return" value="<?php echo $_r['number']; ?>" />
+                                        <input type="checkbox" name="return[]" value="<?php echo htmlentities($_r['number']); ?>" />
                                     </td>
                                 </tr>
-                            <?php } ?>
+<?php } ?>
                         </table>
                     </div>
                     <div class="col-md-2">
@@ -474,7 +460,7 @@ if (isset($_POST['submit'])) {
             <!-- /.container-fluid-->
             <!-- /.content-wrapper-->
             <div>
-                <?php include 'src/components/footer.php'; ?>
+<?php include 'src/components/footer.php'; ?>
             </div>
             <!-- Scroll to Top Button-->
             <a class="scroll-to-top rounded" href="#page-top">
