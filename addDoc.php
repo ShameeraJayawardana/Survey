@@ -10,7 +10,17 @@ $result_set = mysqli_query($conn, $q);
 $q1 = "SELECT name,COUNT(name) AS count FROM req WHERE availability = 'returned' GROUP BY name";
 $result_set1 = mysqli_query($conn, $q1);
 
-if (isset($_POST['submit'])) {
+$qu = "SELECT * FROM sub_category";
+$re_set = mysqli_query($conn, $qu);
+//$re = mysqli_fetch_assoc($re_set);
+?>
+<?php
+$sql = "SELECT * FROM ppcodedist";
+$_result_set = mysqli_query($conn, $sql);
+//$row = mysqli_fetch_assoc($row_set);
+?>
+<?php
+if (isset($_POST['cart'])) {
     $sql = "SELECT * FROM doctypes WHERE type='$_POST[type]'";
     $row_set = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($row_set);
@@ -44,77 +54,97 @@ if (isset($_POST['submit'])) {
     $doc_id = $district . $_POST['dist'] . $_POST['type'] . $id . $_POST['sheet'] . $_POST['sup'] . $_POST['insert'] . $_POST['block'] . $oc . $fc . $_POST['vol'] . $fb . $_POST['court'] . $_POST['field_b'] . $_POST['subCat'];
     //$doc_id = "abcdef";
     $sd = $_POST['dist'] . $_POST['type'] . $_POST['number'] . $pp . $_POST['block'] . $_POST['sup'] . $_POST['insert'] . $_POST['sheet'];
-
-    $query = "INSERT INTO doc_rtn(district,fb_decode,doc_id,sd_code,doc_typ_id,doc_name,sht_no,sup_no,"
-            . "inset_no,bl_no,oc,fc,vol,pp_code,court_no,field_book,sub_category,remarks,status) "
-            . "VALUES('$district','$pp','$doc_id','$sd','$id','$_POST[number]','$_POST[sheet]',"
-            . "'$_POST[sup]','$_POST[insert]','$_POST[block]','$oc','$fc','$_POST[vol]',"
-            . "'$fb','$_POST[court]','$_POST[field_b]','$_POST[subCat]','$_POST[remark]','$status')";
-    mysqli_query($conn, $query);
-    $error = mysqli_error($conn);
-    echo $error;
+    $doc_id = $district . $_POST['dist'] . $_POST['type'] . $id . $_POST['sheet'] . $_POST['sup'] . $_POST['insert'] . $_POST['block'] . $oc . $fc . $_POST['vol'] . $fb . $_POST['court'] . $_POST['field_b'] . $_POST['subCat'];
+    if (isset($_SESSION['cart'])) {
+        $count = count($_SESSION['cart']);
+        $item_array = array(
+            'district' => $district,
+            'fb_decode' => $pp,
+            'item_id' => $doc_id,
+            'sd_code' => $sd,
+            'item_type' => $_POST['type'],
+            'item_number' => $_POST['number'],
+            'item_sup' => $_POST['sup'],
+            'item_insert' => $_POST['insert'],
+            'item_sheet' => $_POST['sheet'],
+            'item_block' => $_POST['block'],
+            'oc' => $oc,
+            'fc' => $fc,
+            'vol' => $_POST['vol'],
+            'pp_code' => $fb,
+            'court_no' => $_POST['court'],
+            'field_book' => $_POST['field_b'],
+            'sub_cat' => $_POST['subCat']
+        );
+        $_SESSION['cart'][$count] = $item_array;
+    } else {
+        $item_array = array(
+            'district' => $district,
+            'fb_decode' => $pp,
+            'item_id' => $doc_id,
+            'sd_code' => $sd,
+            'item_type' => $_POST['type'],
+            'item_number' => $_POST['number'],
+            'item_sup' => $_POST['sup'],
+            'item_insert' => $_POST['insert'],
+            'item_sheet' => $_POST['sheet'],
+            'item_block' => $_POST['block'],
+            'oc' => $oc,
+            'fc' => $fc,
+            'vol' => $_POST['vol'],
+            'pp_code' => $fb,
+            'court_no' => $_POST['court'],
+            'field_book' => $_POST['field_b'],
+            'sub_cat' => $_POST['subCat']
+        );
+        $_SESSION['cart'][0] = $item_array;
+    }
 }
 
-$qu = "SELECT * FROM sub_category";
-$re_set = mysqli_query($conn, $qu);
-//$re = mysqli_fetch_assoc($re_set);
-?>
-<?php
-$sql = "SELECT * FROM ppcodedist";
-$_result_set = mysqli_query($conn, $sql);
-//$row = mysqli_fetch_assoc($row_set);
-?>
-<?php
-//if (isset($_POST['cart'])) {
-//    if (isset($_SESSION['cart'])) {
-//        $item_array_id = array_column($_SESSION['cart'], 'item_id');
-//        if (!in_array($_GET['id'], $item_array_id)) {
-//            $count = count($_SESSION['cart']);
-//            $item_array = array(
-//                'item_id' => $_GET['id'],
-//                'item_type' => $_POST['type'],
-//                'item_number' => $_POST['number'],
-//                'item_sup' => $_POST['sup'],
-//                'item_insert' => $_POST['insert'],
-//                'item_sheet' => $_POST['sheet'],
-//                'item_block' => $_POST['block'],
-//                'item_doc' => $_POST['doc_id'],
-//                'item_remark' => $_POST['remark'],
-//            );
-//            $_SESSION['cart'][$count] = $item_array;
-//        } else {
-//            echo '<script>alert("Item already added!")</script>';
-//            //header("Location: addDoc.php");
-//            echo '<script>window.lacation="addDoc.php"</script>';
-//        }
-//    } else {
-//        $item_array = array(
-//            'item_id' => $_GET['id'],
-//            'item_type' => $_POST['type'],
-//            'item_number' => $_POST['number'],
-//            'item_sup' => $_POST['sup'],
-//            'item_insert' => $_POST['insert'],
-//            'item_sheet' => $_POST['sheet'],
-//            'item_block' => $_POST['block'],
-//            'item_doc' => $_POST['doc_id'],
-//            'item_remark' => $_POST['remark'],
-//        );
-//        $_SESSION['cart'][0] = $item_array;
-//    }
-//}
-//
-//if (isset($_GET['action'])) {
-//    if ($_GET['action'] == 'delete') {
-//        foreach ($_SESSION['cart'] as $keys => $values) {
-//            if ($values['item_id'] == $_GET['id']) {
-//                unset($_SESSION['cart'][$keys]);
-//                echo '<script>alert("Item Removed")</script>';
-//                //header("Location: addDoc.php");
-//                echo '<script>window.lacation="addDoc.php"</script>';
-//            }
-//        }
-//    }
-//}
+if (isset($_GET['action'])) {
+    if ($_GET['action'] == 'delete') {
+        foreach ($_SESSION['cart'] as $keys => $values) {
+            if ($values['item_id'] == $_GET['id']) {
+                unset($_SESSION['cart'][$keys]);
+                echo '<script>alert("Item Removed")</script>';
+                //header("Location: addDoc.php");
+                echo '<script>window.lacation="addDoc.php"</script>';
+            }
+        }
+    }
+}
+
+if (isset($_POST['submit'])) {
+    $status = "available";
+    $remark = "Remark";
+    foreach ($_SESSION['cart'] as $keys => $values) {
+        $sql = "SELECT * FROM doctypes WHERE type='$values[item_type]'";
+        $row_set = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($row_set);
+        $id = $row['id'];
+        $query = "INSERT INTO doc_rtn(district,fb_decode,doc_id,sd_code,doc_typ_id,doc_name,sht_no,sup_no,"
+                . "inset_no,bl_no,oc,fc,vol,pp_code,court_no,field_book,sub_category,remarks,status) "
+                . "VALUES('$values[district]','$values[fb_decode]','$values[item_id]','$values[sd_code]','$id','$values[item_number]','$values[item_sup]',"
+                . "'$values[item_insert]','$values[item_sheet]','$values[item_block]','$values[oc]','$values[fc]','$values[vol]',"
+                . "'$values[pp_code]','$values[court_no]','$values[field_book]','$values[sub_cat]','$remark','$status')";
+        $submit = mysqli_query($conn, $query);
+        if($submit){
+            unset($_SESSION['cart'][$keys]);
+        }
+        $error = mysqli_error($conn);
+        echo $error;
+    }
+
+
+//    $query = "INSERT INTO doc_rtn(district,fb_decode,doc_id,sd_code,doc_typ_id,doc_name,sht_no,sup_no,"
+//            . "inset_no,bl_no,oc,fc,vol,pp_code,court_no,field_book,sub_category,remarks,status) "
+//            . "VALUES('$district','$pp','$doc_id','$sd','$id','$_POST[number]','$_POST[sheet]',"
+//            . "'$_POST[sup]','$_POST[insert]','$_POST[block]','$oc','$fc','$_POST[vol]',"
+//            . "'$fb','$_POST[court]','$_POST[field_b]','$_POST[subCat]','$_POST[remark]','$status')";
+//    mysqli_query($conn, $query);
+//    $error = mysqli_error($conn);
+//    echo $error;
+}
 ?>
 <html lang="en">
     <head>
@@ -635,51 +665,68 @@ $_result_set = mysqli_query($conn, $sql);
                                     <input type="text" class="form-control" placeholder="Optional" name="remark" />
                                 </div>
                             </div><br><br><br><br>
-                            <!--                            <div class="row">
-                                                            <div class="col-md-12">
-                                                                <button type="submit" name="cart" id="cart">
-                                                                    <i class="fa fa-cart-plus" id="cartIcon"></i>
-                                                                </button>
-                                                            </div>
-                                                        </div>-->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" name="cart" id="cart">
+                                        <i class="fa fa-cart-plus" id="cartIcon"></i>
+                                    </button>
+                                </div>
+                            </div>
                             <br><br><br><br>
-                            <!--                            <div style="clear: both"></div>
-                                                        <h3>Document Details</h3>-->
-                            <!--                            <div class="table-responsive">
-                                                            <table class=" table table-bordered">
-                                                                <tr>
-                                                                    <th>Doc Type</th>
-                                                                    <th>Number</th>
-                                                                    <th>Sup Number</th>
-                                                                    <th>Insert Number</th>
-                                                                    <th>Sheet Number</th>
-                                                                    <th>Block Number</th>
-                                                                    <th>Doc Id</th>
-                                                                    <th>Remarks</th>
-                                                                    <th>Action</th>
-                                                                </tr>
-                            <?php
-//                                    if (!empty($_SESSION['cart'])) {
-//                                        $total = 0;
-//                                        foreach ($_SESSION['cart'] as $keys => $values) {
-                            ?>
-                                                                        <tr>
-                                                                            <td><?php //echo $values['item_type'];               ?></td>
-                                                                            <td><?php //echo $values['item_number'];               ?></td>
-                                                                            <td><?php //echo $values['item_sup'];               ?></td>
-                                                                            <td><?php //echo $values['item_insert'];               ?></td>
-                                                                            <td><?php //echo $values['item_sheet'];               ?></td>
-                                                                            <td><?php //echo $values['item_block'];               ?></td>
-                                                                            <td><?php //echo $values['item_doc'];               ?></td>
-                                                                            <td><?php //echo $values['item_remark'];               ?></td>
-                                                                            <td><a href="addDoc.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a></td>
-                                                                        </tr>
-                            <?php
-//                                        }
-//                                    }
-                            ?>
-                                                            </table>
-                                                        </div>-->
+                            <div style="clear: both"></div>
+                            <h3>Document Details</h3>
+                            <div class="table-responsive">
+                                <table class=" table table-bordered">
+                                    <tr>
+                                        <th>District</th>
+                                        <th>FB Decode</th>
+                                        <th>Doc Id</th>
+                                        <th>SD Code</th>
+                                        <th>Doc Type</th>
+                                        <th>Doc Name</th>
+                                        <th>Sup</th>
+                                        <th>Insert</th>
+                                        <th>Sheet</th>
+                                        <th>Block</th>
+                                        <th>OC</th>
+                                        <th>FC</th>
+                                        <th>Vol</th>
+                                        <th>PP Code</th>
+                                        <th>Court No</th>
+                                        <th>FB</th>
+                                        <th>Sub Cat</th>
+                                    </tr>
+                                    <?php
+                                    if (!empty($_SESSION['cart'])) {
+                                        $total = 0;
+                                        foreach ($_SESSION['cart'] as $keys => $values) {
+                                            ?>
+                                            <tr>
+                                                <td><?php echo $values['district']; ?></td>
+                                                <td><?php echo $values['fb_decode']; ?></td>
+                                                <td><?php echo $values['item_id']; ?></td>
+                                                <td><?php echo $values['sd_code']; ?></td>
+                                                <td><?php echo $values['item_type']; ?></td>
+                                                <td><?php echo $values['item_number']; ?></td>
+                                                <td><?php echo $values['item_sup']; ?></td>
+                                                <td><?php echo $values['item_insert']; ?></td>
+                                                <td><?php echo $values['item_sheet']; ?></td>
+                                                <td><?php echo $values['item_block']; ?></td>
+                                                <td><?php echo $values['oc']; ?></td>
+                                                <td><?php echo $values['fc']; ?></td>
+                                                <td><?php echo $values['vol']; ?></td>
+                                                <td><?php echo $values['pp_code']; ?></td>
+                                                <td><?php echo $values['court_no']; ?></td>
+                                                <td><?php echo $values['field_book']; ?></td>
+                                                <td><?php echo $values['sub_cat']; ?></td>
+                                                <td><a href="addDoc.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a></td>
+                                            </tr>
+                                            <?php
+                                        }
+                                    }
+                                    ?>
+                                </table>
+                            </div>
                         </div>
                         <input type="submit" name="submit" value="SUBMIT" class="btn btn-light" id="submit"/>
                     </form>
