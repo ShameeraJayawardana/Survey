@@ -53,3 +53,7 @@
     border: 1px solid #0572DF;
     margin-bottom: 10px;
 }
+
+#msg{
+    color: red;
+}

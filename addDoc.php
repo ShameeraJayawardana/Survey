@@ -20,6 +20,8 @@ $_result_set = mysqli_query($conn, $sql);
 //$row = mysqli_fetch_assoc($row_set);
 ?>
 <?php
+
+$msg = "";
 if (isset($_POST['cart'])) {
     $sql = "SELECT * FROM doctypes WHERE type='$_POST[type]'";
     $row_set = mysqli_query($conn, $sql);
@@ -74,7 +76,8 @@ if (isset($_POST['cart'])) {
             'pp_code' => $fb,
             'court_no' => $_POST['court'],
             'field_book' => $_POST['field_b'],
-            'sub_cat' => $_POST['subCat']
+            'sub_cat' => $_POST['subCat'],
+            'remarks' => $_POST['remark']
         );
         $_SESSION['cart'][$count] = $item_array;
     } else {
@@ -95,7 +98,8 @@ if (isset($_POST['cart'])) {
             'pp_code' => $fb,
             'court_no' => $_POST['court'],
             'field_book' => $_POST['field_b'],
-            'sub_cat' => $_POST['subCat']
+            'sub_cat' => $_POST['subCat'],
+            'remarks' => $_POST['remark']
         );
         $_SESSION['cart'][0] = $item_array;
     }
@@ -106,7 +110,7 @@ if (isset($_GET['action'])) {
         foreach ($_SESSION['cart'] as $keys => $values) {
             if ($values['item_id'] == $_GET['id']) {
                 unset($_SESSION['cart'][$keys]);
-                echo '<script>alert("Item Removed")</script>';
+                //echo '<script>alert("Item Removed")</script>';
                 //header("Location: addDoc.php");
                 echo '<script>window.lacation="addDoc.php"</script>';
             }
@@ -116,7 +120,6 @@ if (isset($_GET['action'])) {
 
 if (isset($_POST['submit'])) {
     $status = "available";
-    $remark = "Remark";
     foreach ($_SESSION['cart'] as $keys => $values) {
         $sql = "SELECT * FROM doctypes WHERE type='$values[item_type]'";
         $row_set = mysqli_query($conn, $sql);
@@ -126,13 +129,16 @@ if (isset($_POST['submit'])) {
                 . "inset_no,bl_no,oc,fc,vol,pp_code,court_no,field_book,sub_category,remarks,status) "
                 . "VALUES('$values[district]','$values[fb_decode]','$values[item_id]','$values[sd_code]','$id','$values[item_number]','$values[item_sup]',"
                 . "'$values[item_insert]','$values[item_sheet]','$values[item_block]','$values[oc]','$values[fc]','$values[vol]',"
-                . "'$values[pp_code]','$values[court_no]','$values[field_book]','$values[sub_cat]','$remark','$status')";
+                . "'$values[pp_code]','$values[court_no]','$values[field_book]','$values[sub_cat]','$values[remarks]','$status')";
         $submit = mysqli_query($conn, $query);
         if($submit){
             unset($_SESSION['cart'][$keys]);
         }
         $error = mysqli_error($conn);
-        echo $error;
+        //echo $error;
+        if($error){
+            $msg = "Two documents with same document ID can't exist";
+        }
     }
 
 
@@ -676,6 +682,7 @@ if (isset($_POST['submit'])) {
                             <div style="clear: both"></div>
                             <h3>Document Details</h3>
                             <div class="table-responsive">
+                                <h6 id="msg"><?php echo $msg; ?></h6>
                                 <table class=" table table-bordered">
                                     <tr>
                                         <th>District</th>
@@ -695,6 +702,7 @@ if (isset($_POST['submit'])) {
                                         <th>Court No</th>
                                         <th>FB</th>
                                         <th>Sub Cat</th>
+                                        <th>Remarks</th>
                                     </tr>
                                     <?php
                                     if (!empty($_SESSION['cart'])) {
@@ -719,6 +727,7 @@ if (isset($_POST['submit'])) {
                                                 <td><?php echo $values['court_no']; ?></td>
                                                 <td><?php echo $values['field_book']; ?></td>
                                                 <td><?php echo $values['sub_cat']; ?></td>
+                                                <td><?php echo $values['remarks']; ?></td>
                                                 <td><a href="addDoc.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a></td>
                                             </tr>
                                             <?php
