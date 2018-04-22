@@ -140,16 +140,6 @@ if (isset($_POST['submit'])) {
             $msg = "Two documents with same document ID can't exist";
         }
     }
-
-
-//    $query = "INSERT INTO doc_rtn(district,fb_decode,doc_id,sd_code,doc_typ_id,doc_name,sht_no,sup_no,"
-//            . "inset_no,bl_no,oc,fc,vol,pp_code,court_no,field_book,sub_category,remarks,status) "
-//            . "VALUES('$district','$pp','$doc_id','$sd','$id','$_POST[number]','$_POST[sheet]',"
-//            . "'$_POST[sup]','$_POST[insert]','$_POST[block]','$oc','$fc','$_POST[vol]',"
-//            . "'$fb','$_POST[court]','$_POST[field_b]','$_POST[subCat]','$_POST[remark]','$status')";
-//    mysqli_query($conn, $query);
-//    $error = mysqli_error($conn);
-//    echo $error;
 }
 ?>
 <html lang="en">

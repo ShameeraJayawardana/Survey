@@ -27,16 +27,6 @@ if (isset($_POST['number'])) {
 
 $availability = "locked";
 $time = date("Y/m/d h:i:sa");
-if (isset($_POST['submit'])) {
-    $name = $_SESSION['email'];
-    $insert = "INSERT INTO req(name,doc_type,number,time,status,availability) VALUES('$name','$_POST[type]','$_POST[number]','$time','$status', '$availability')";
-    mysqli_query($conn, $insert);
-    
-    $update = "UPDATE doc_rtn SET status = 'locked' WHERE doc_id = '$_POST[number]'";
-    mysqli_query($conn, $update);
-    $err = mysqli_error($conn);
-    echo $err;
-}
 
 $subCat = "";
 $dist = "";
@@ -78,25 +68,91 @@ $_query = "SELECT * FROM doc_rtn";
 if (isset($_POST['type'])) {
     $_query = $_query . " WHERE doc_typ_id = '$_POST[type]'";
 }
-//if (isset($_POST['dist'])) {
-//    $_query = $_query . " OR fc = '$dist'";
-//}
-//if (isset($_POST['vol'])) {
-//    $_query = $_query . " OR vol = '$vol'";
-//}
-//if (isset($_POST['sheet'])) {
-//    $_query = $_query . " OR sht_no = '$sheet'";
-//}
-//if (isset($_POST['sup'])) {
-//    $_query = $_query . " OR sup_no = '$sup'";
-//}
-//if (isset($_POST['insert'])) {
-//    $_query = $_query . " OR inset_no = '$insert'";
-//}
-//if (isset($_POST['block'])) {
-//    $_query = $_query . " OR bl_no = '$block'";
-//}
 $insert = mysqli_query($conn, $_query);
+?>
+
+<?php
+$msg = "";
+if (isset($_POST['cart'])) {
+
+    $name = $_SESSION['email'];
+    $time = date("Y/m/d h:i:sa");
+    if (isset($_SESSION['cart'])) {
+        $count = count($_SESSION['cart']);
+        $item_array = array(
+            'name' => $name,
+            'item_type' => $_POST['type'],
+            'item_number' => $_POST['number'],
+            'time' => $time,
+            'remarks' => $_POST['remark'],
+            'status' => $status,
+            'availability' => $availability
+        );
+        $_SESSION['cart'][$count] = $item_array;
+    } else {
+        $item_array = array(
+            'name' => $name,
+            'item_type' => $_POST['type'],
+            'item_number' => $_POST['number'],
+            'time' => $time,
+            'remarks' => $_POST['remark'],
+            'status' => $status,
+            'availability' => $availability
+        );
+        $_SESSION['cart'][0] = $item_array;
+    }
+}
+
+if (isset($_GET['action'])) {
+    if ($_GET['action'] == 'delete') {
+        foreach ($_SESSION['cart'] as $keys => $values) {
+            if ($values['item_number'] == $_GET['id']) {
+                unset($_SESSION['cart'][$keys]);
+                //echo '<script>alert("Item Removed")</script>';
+                //header("Location: addDoc.php");
+                echo '<script>window.lacation="requestDoc.php"</script>';
+            }
+        }
+    }
+}
+
+if (isset($_POST['submit'])) {
+//    $name = $_SESSION['email'];
+//    $insert = "INSERT INTO req(name,doc_type,number,time,status,availability) VALUES"
+//            . "('$name','$_POST[type]','$_POST[number]','$time','$status', '$availability')";
+//    mysqli_query($conn, $insert);
+//
+//    $update = "UPDATE doc_rtn SET status = 'locked' WHERE doc_id = '$_POST[number]'";
+//    mysqli_query($conn, $update);
+//    $err = mysqli_error($conn);
+//    echo $err;
+    foreach ($_SESSION['cart'] as $keys => $values) {
+        $sql = "SELECT * FROM doc_rtn WHERE doc_id='$values[item_number]'";
+        $row_set = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($row_set);
+        $condition = $row['status'];
+        if ($condition == 'available') {
+            $insert = "INSERT INTO req(name,doc_type,number,time,remarks,status,availability) VALUES"
+                    . "('$values[name]','$values[item_type]','$values[item_number]','$values[time]','$values[remarks]', '$values[status]', "
+                    . "'$values[availability]')";
+
+            $submit = mysqli_query($conn, $insert);
+
+            if ($submit) {
+                unset($_SESSION['cart'][$keys]);
+                $update = "UPDATE doc_rtn SET status = 'locked' WHERE doc_id = '$values[item_number]'";
+                mysqli_query($conn, $update);
+            }
+        } else {
+            $msg = "Following documents are not available";
+        }
+        $error = mysqli_error($conn);
+        //echo $error;
+        if ($error) {
+            $msg = "Some documents can't be requested. Please contact the department.";
+        }
+    }
+}
 ?>
 <html lang="en">
     <head>
@@ -128,9 +184,9 @@ $insert = mysqli_query($conn, $_query);
                     var xmlhttp = new XMLHttpRequest();
                     xmlhttp.onreadystatechange = function () {
                         if (this.readyState == 4 && this.status == 200) {
-                            res= eval("(" + this.responseText + ")");
+                            res = eval("(" + this.responseText + ")");
                             console.log(res);
-                            
+
                             var sel = document.getElementById('browsers');
                             for (var i = 0; i < res.length; i++) {
                                 var opt = document.createElement('option');
@@ -627,51 +683,45 @@ $insert = mysqli_query($conn, $_query);
                                     <input type="text" class="form-control" placeholder="Optional" name="remark" />
                                 </div>
                             </div><br><br><br><br>
-                            <!--                            <div class="row">
-                                                            <div class="col-md-12">
-                                                                <button type="submit" name="cart" id="cart">
-                                                                    <i class="fa fa-cart-plus" id="cartIcon"></i>
-                                                                </button>
-                                                            </div>
-                                                        </div>-->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" name="cart" id="cart">
+                                        <i class="fa fa-cart-plus" id="cartIcon"></i>
+                                    </button>
+                                </div>
+                            </div>
                             <br><br><br><br>
-                            <!--                            <div style="clear: both"></div>
-                                                        <h3>Document Details</h3>-->
-                            <!--                            <div class="table-responsive">
-                                                            <table class=" table table-bordered">
-                                                                <tr>
-                                                                    <th>Doc Type</th>
-                                                                    <th>Number</th>
-                                                                    <th>Sup Number</th>
-                                                                    <th>Insert Number</th>
-                                                                    <th>Sheet Number</th>
-                                                                    <th>Block Number</th>
-                                                                    <th>Doc Id</th>
-                                                                    <th>Remarks</th>
-                                                                    <th>Action</th>
-                                                                </tr>
-                            <?php
-//                                    if (!empty($_SESSION['cart'])) {
-//                                        $total = 0;
-//                                        foreach ($_SESSION['cart'] as $keys => $values) {
-                            ?>
-                                                                        <tr>
-                                                                            <td><?php //echo $values['item_type'];                         ?></td>
-                                                                            <td><?php //echo $values['item_number'];                         ?></td>
-                                                                            <td><?php //echo $values['item_sup'];                         ?></td>
-                                                                            <td><?php //echo $values['item_insert'];                         ?></td>
-                                                                            <td><?php //echo $values['item_sheet'];                         ?></td>
-                                                                            <td><?php //echo $values['item_block'];                         ?></td>
-                                                                            <td><?php //echo $values['item_doc'];                         ?></td>
-                                                                            <td><?php //echo $values['item_remark'];                         ?></td>
-                                                                            <td><a href="addDoc.php?action=delete&id=<?php echo $values["item_id"]; ?>"><span class="text-danger">Remove</span></a></td>
-                                                                        </tr>
-                            <?php
-//                                        }
-//                                    }
-                            ?>
-                                                            </table>
-                                                        </div>-->
+                            <div style="clear: both"></div>
+                            <h3>Document Details</h3>
+                            <div class="table-responsive">
+                                <h6 id="msg"><?php echo $msg; ?></h6>
+                                <table class=" table table-bordered">
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Document type</th>
+                                        <th>Document Number</th>
+                                        <th>Time</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                    <?php
+                                    if (!empty($_SESSION['cart'])) {
+                                        $total = 0;
+                                        foreach ($_SESSION['cart'] as $keys => $values) {
+                                            ?>
+                                            <tr>
+                                                <td><?php echo $values['name']; ?></td>
+                                                <td><?php echo $values['item_type']; ?></td>
+                                                <td><?php echo $values['item_number']; ?></td>
+                                                <td><?php echo $values['time']; ?></td>
+                                                <td><?php echo $values['remarks']; ?></td>
+                                                <td><a href="requestDoc.php?action=delete&id=<?php echo $values["item_number"]; ?>"><span class="text-danger">Remove</span></a></td>
+                                            </tr>
+                                            <?php
+                                        }
+                                    }
+                                    ?>                                                      
+                                </table>
+                            </div>
                         </div>
                         <input type="submit" name="submit" value="SUBMIT" class="btn btn-light" id="submit"/>
                     </form>
