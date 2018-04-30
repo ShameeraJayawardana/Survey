@@ -16,6 +16,9 @@ $_row_set1 = mysqli_query($conn, $_sql);
 $_row = mysqli_fetch_assoc($_row_set1);
 $id = $_row['id'];
 
+$_q = "SELECT * FROM ppcodedist";
+$_result_set = mysqli_query($conn, $_q);
+
 $q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'pending' GROUP BY name";
 $_row_set = mysqli_query($conn, $q);
 
@@ -173,8 +176,10 @@ if (isset($_POST['submit'])) {
         <link href="css/addDoc.css" rel="stylesheet">
         <script>
             var res = [];
+            var arrayValue = [];
             function showHint(str) {
-                //console.log('aswssf', str);
+                arrayValue.push(str);
+                //console.log('aswssf', arrayValue);
                 if (str.length == 0) {
                     console.log("Value doesn't come");
                     //document.getElementById("txtHint").value = "";
@@ -188,6 +193,7 @@ if (isset($_POST['submit'])) {
                             console.log(res);
 
                             var sel = document.getElementById('browsers');
+                            sel.innerHTML = null;
                             for (var i = 0; i < res.length; i++) {
                                 var opt = document.createElement('option');
                                 opt.innerHTML = res[i];
@@ -196,9 +202,40 @@ if (isset($_POST['submit'])) {
                             }
                         }
                     };
-
-                    xmlhttp.open("GET", "gethint.php?q=" + str, true);
-                    xmlhttp.send();
+                    if (arrayValue.length == 1) {
+                        xmlhttp.open("GET", "gethint.php?q=" + arrayValue[0], true);
+                        xmlhttp.send();
+                    } else if (arrayValue.length == 2) {
+                        xmlhttp.open("GET", "gethint.php?q=" + arrayValue[0] + "&q2=" + arrayValue[1], true);
+                        xmlhttp.send();
+                    } else if (arrayValue.length == 3) {
+                        xmlhttp.open("GET", "gethint.php?q=" + arrayValue[0] + "&q2=" + arrayValue[1] + "&q3=" + arrayValue[2], true);
+                        xmlhttp.send();
+                    } else if (arrayValue.length == 4) {
+                        xmlhttp.open("GET", "gethint.php?q=" + arrayValue[0] + "&q2=" + arrayValue[1] + "&q3=" + arrayValue[2] + "&q4=" + arrayValue[3], true);
+                        xmlhttp.send();
+                    } else if (arrayValue.length == 5) {
+                        xmlhttp.open("GET", "gethint.php?q=" + arrayValue[0] + "&q2=" + arrayValue[1] + "&q3=" + arrayValue[2] + "&q4=" + arrayValue[3] + "&q5=" + arrayValue[4], true);
+                        xmlhttp.send();
+                    } else if (arrayValue.length == 6) {
+                        xmlhttp.open("GET", "gethint.php?q=" + arrayValue[0] + "&q2=" + arrayValue[1] + "&q3=" + arrayValue[2] + "&q4=" + arrayValue[3] + "&q5=" + arrayValue[4] + "&q6=" + arrayValue[5], true);
+                        xmlhttp.send();
+                    } else if (arrayValue.length == 7) {
+                        xmlhttp.open("GET", "gethint.php?q=" + arrayValue[0] + "&q2=" + arrayValue[1] + "&q3=" + arrayValue[2] + "&q4=" + arrayValue[3] + "&q5=" + arrayValue[4] + "&q6=" + arrayValue[5] + "&q7=" + arrayValue[6], true);
+                        xmlhttp.send();
+                    } else if (arrayValue.length == 8) {
+                        xmlhttp.open("GET", "gethint.php?q=" + arrayValue[0] + "&q2=" + arrayValue[1] + "&q3=" + arrayValue[2] + "&q4=" + arrayValue[3] + "&q5=" + arrayValue[4] + "&q6=" + arrayValue[5] + "&q7=" + arrayValue[6] + "&q8=" + arrayValue[7], true);
+                        xmlhttp.send();
+                    } else if (arrayValue.length == 9) {
+                        xmlhttp.open("GET", "gethint.php?q=" + arrayValue[0] + "&q2=" + arrayValue[1] + "&q3=" + arrayValue[2] + "&q4=" + arrayValue[3] + "&q5=" + arrayValue[4] + "&q6=" + arrayValue[5] + "&q7=" + arrayValue[6] + "&q8=" + arrayValue[7] + "&q9=" + arrayValue[8], true);
+                        xmlhttp.send();
+                    } else if (arrayValue.length == 10) {
+                        xmlhttp.open("GET", "gethint.php?q=" + arrayValue[0] + "&q2=" + arrayValue[1] + "&q3=" + arrayValue[2] + "&q4=" + arrayValue[3] + "&q5=" + arrayValue[4] + "&q6=" + arrayValue[5] + "&q7=" + arrayValue[6] + "&q8=" + arrayValue[7] + "&q9=" + arrayValue[8] + "&q10=" + arrayValue[9], true);
+                        xmlhttp.send();
+                    } else if (arrayValue.length == 11) {
+                        xmlhttp.open("GET", "gethint.php?q=" + arrayValue[0] + "&q2=" + arrayValue[1] + "&q3=" + arrayValue[2] + "&q4=" + arrayValue[3] + "&q5=" + arrayValue[4] + "&q6=" + arrayValue[5] + "&q7=" + arrayValue[6] + "&q8=" + arrayValue[7] + "&q9=" + arrayValue[8] + "&q10=" + arrayValue[9] + "&q11=" + arrayValue[10], true);
+                        xmlhttp.send();
+                    }
                 }
             }
         </script>
@@ -586,7 +623,7 @@ if (isset($_POST['submit'])) {
                                 </div>
                                 <div class="col-md-6">
                                     <label id="sub_cat_label" style="visibility:hidden;">Sub Category</label>
-                                    <select class="form-control" name="subCat" id="sub_cat" style="visibility:hidden;" onchange="selectValue()" >
+                                    <select class="form-control" name="subCat" id="sub_cat" style="visibility:hidden;" onchange="selectValue();showHint(this.value);" >
                                         <option value="">Select...</option>
                                         <option value="Flat Copy" id="flatcopy">Flat Copy</option>
                                         <option value="TL" id="tl">TL</option>
@@ -598,7 +635,7 @@ if (isset($_POST['submit'])) {
                                 <div class="col-md-6"></div>
                                 <div class="col-md-6" style="visibility:hidden;" id="field_book">
                                     <label>Field books</label>
-                                    <select class="form-control" onchange="selectValue()" id="field_b" name="field_b">
+                                    <select class="form-control" onchange="selectValue();showHint(this.value);" id="field_b" name="field_b">
                                         <option value="">Select...</option>
                                         <option value="Level Book" id="level">Level Book</option>
                                         <option value="Old field Book" id="old">Old field Book</option>
@@ -617,7 +654,7 @@ if (isset($_POST['submit'])) {
                                             <label>FC</label>
                                         </div>
                                         <div class="col-md-10">
-                                            <input type="checkbox" style="zoom: 2" name="radio" value='fc' />
+                                            <input type="checkbox" style="zoom: 2" name="radio" value='fc' onchange="showHint(this.value);" />
                                         </div>
                                     </div>
                                 </div>
@@ -627,13 +664,13 @@ if (isset($_POST['submit'])) {
                                             <label>Volume</label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input type="text" name="vol" class="form-control" />
+                                            <input type="text" name="vol" class="form-control" onchange="showHint(this.value);" />
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6" id="dist" style="visibility:hidden;">
                                     <label>District</label>
-                                    <select name="dist" class="form-control">
+                                    <select name="dist" class="form-control" onchange="showHint(this.value);">
                                         <option value="">Select...</option>
                                         <?php while ($_result = mysqli_fetch_assoc($_result_set)) { ?>
                                             <option value="<?php echo $_result['dist']; ?>"><?php echo $_result['dist']; ?></option>
@@ -645,36 +682,36 @@ if (isset($_POST['submit'])) {
                         </div>
                         <div class="form-group" id="border">
                             <div class="row">
+                                <div class="col-md-4" id="sup" style="visibility:hidden;">
+                                    <label>Sup Number</label>
+                                    <input type="text" class="form-control" placeholder="Sup No" name="sup" onchange="showHint(this.value);" />
+                                </div>
+                                <div class="col-md-4" id="insert" style="visibility:hidden;">
+                                    <label>Insert Number</label>
+                                    <input type="text" class="form-control" placeholder="Insert Number" name="insert" onchange="showHint(this.value);" />
+                                </div>
+                                <div class="col-md-4" id="sheet" style="visibility:hidden;">
+                                    <label>Sheet Number</label>
+                                    <input type="text" class="form-control" placeholder="Sheet Number" name="sheet" onchange="showHint(this.value);" />
+                                </div>
+                                <div class="col-md-4" id="block" style="visibility:hidden;">
+                                    <label>Block Number</label>
+                                    <input type="text" class="form-control" placeholder="Block Number" name="block" onchange="showHint(this.value);" />
+                                </div>
+                                <div class="col-md-4" id="court" style="visibility:hidden;">
+                                    <label>Court Number</label>
+                                    <input type="text" class="form-control" placeholder="Court Number" name="court" onchange="showHint(this.value);" />
+                                </div>
+                                <div class="col-md-4" id="court" style="visibility:hidden;">
+
+                                </div>
+                            </div><br>
+                            <div class="row">
                                 <div class="col-md-12">
                                     <label>Number</label>
                                     <input list="browsers" class="form-control" placeholder="Document Number" name="number">
                                     <datalist id="browsers">
                                     </datalist>
-                                </div>
-                            </div><br>
-                            <div class="row">
-                                <div class="col-md-4" id="sup" style="visibility:hidden;">
-                                    <label>Sup Number</label>
-                                    <input type="text" class="form-control" placeholder="Sup No" name="sup"/>
-                                </div>
-                                <div class="col-md-4" id="insert" style="visibility:hidden;">
-                                    <label>Insert Number</label>
-                                    <input type="text" class="form-control" placeholder="Insert Number" name="insert" />
-                                </div>
-                                <div class="col-md-4" id="sheet" style="visibility:hidden;">
-                                    <label>Sheet Number</label>
-                                    <input type="text" class="form-control" placeholder="Sheet Number" name="sheet" />
-                                </div>
-                                <div class="col-md-4" id="block" style="visibility:hidden;">
-                                    <label>Block Number</label>
-                                    <input type="text" class="form-control" placeholder="Block Number" name="block" />
-                                </div>
-                                <div class="col-md-4" id="court" style="visibility:hidden;">
-                                    <label>Court Number</label>
-                                    <input type="text" class="form-control" placeholder="Court Number" name="court" />
-                                </div>
-                                <div class="col-md-4" id="court" style="visibility:hidden;">
-
                                 </div>
                             </div><br>
                             <div class="row">
