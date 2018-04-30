@@ -3,19 +3,22 @@
 $confirmErr = "";
 $permission = "";
 $error = "";
+$_query = "SELECT * FROM district";
+$_row_set = mysqli_query($conn, $_query);
+
 if (isset($_POST['submit'])) {
     $password = $_POST['password'];
     $en_pwd = md5($password);
     $role = "member";
     $confirm = $_POST['confirm'];
-    
+
     $select = "SELECT * FROM addmembers WHERE email='$_POST[email]'";
     $row_set = mysqli_query($conn, $select);
     $row = mysqli_num_rows($row_set);
-    
-    if ($row < 1){
+
+    if ($row < 1) {
         $permission = "You don't have permission to register";
-    }elseif ($password != $confirm) {
+    } elseif ($password != $confirm) {
         $confirmErr = "Password doesn't match";
     } else {
         $sql = "INSERT INTO member(name, emplNo, des, district, email, password, role) VALUES('$_POST[name]','$_POST[emplNo]','$_POST[des]','$_POST[district]','$_POST[email]','$en_pwd','$role')";
@@ -80,9 +83,10 @@ if (isset($_POST['submit'])) {
                         <div class="form-group">
                             <label>District</label>
                             <select class="form-control" name="district">
-                                <option>Select...</option>
-                                <option value="Galle">Galle</option>
-                                <option value="Rathnapura">Rathnapura</option>
+                                <option value="">Select...</option>
+                                <?php while ($_row = mysqli_fetch_assoc($_row_set)) { ?>
+                                    <option value="<?php echo $_row['dist_code']; ?>"><?php echo $_row['dist_nm']; ?></option>
+                                <?php } ?>
                             </select>
                         </div>
                         <div class="form-group">

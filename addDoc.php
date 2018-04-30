@@ -27,8 +27,14 @@ if (isset($_POST['cart'])) {
     $row_set = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($row_set);
     $id = $row['id'];
+    
+    $email = $_SESSION['email'];
+    
+    $disQuery = "SELECT * FROM addmembers WHERE email = '$email'";
+    $dis_result_set = mysqli_query($conn, $disQuery);
+    $dis_result = mysqli_fetch_assoc($dis_result_set);
 
-    $district = 62;
+    $district = $dis_result['district'];
     $status = "available";
 
     $oc = "";

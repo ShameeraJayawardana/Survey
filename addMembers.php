@@ -6,6 +6,9 @@
 $q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'pending' GROUP BY name";
 $result_set = mysqli_query($conn, $q);
 
+$_query = "SELECT * FROM district";
+$_row_set = mysqli_query($conn, $_query);
+
 if (isset($_POST['submit'])) {
     $sql = "INSERT INTO addMembers(emplNo, des, email, district) VALUES('$_POST[emplNo]','$_POST[des]','$_POST[email]','$_POST[district]')";
     $query = mysqli_query($conn, $sql);
@@ -410,7 +413,13 @@ if (isset($_POST['submit'])) {
                                     <label>Email</label>
                                     <input type="email" placeholder="Email of the employee" class="form-control" name="email"/><br/>
                                     <label>District</label>
-                                    <input type="text" placeholder="District" class="form-control" name="district"/><br/>
+<!--                                    <input type="text" placeholder="District" class="form-control" name="district"/><br/>-->
+                                    <select class="form-control" name="district">
+                                        <option value="">Select...</option>
+                                        <?php while ($_row = mysqli_fetch_assoc($_row_set)) { ?>
+                                            <option value="<?php echo $_row['dist_code']; ?>"><?php echo $_row['dist_nm']; ?></option>
+                                        <?php } ?>
+                                    </select><br />
                                     <input type="submit" class="btn btn-info" name="submit" value="ADD MEMBER" />
                                 </div>
                             </form>
