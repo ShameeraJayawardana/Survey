@@ -48,12 +48,7 @@ if (isset($_REQUEST["q11"])) {
     $q11 = $_REQUEST["q11"];
 }
 $hintArr = array();
-// lookup all hints from array if $q is different from "" 
 if ($q !== "") {
-//    $len = strlen($q);
-//    if(!empty($hintArr)){
-//        unset($hintArr);
-//    }
     while ($row = mysqli_fetch_array($row_set)) {
         if (empty($q11)) {
             if (empty($q10)) {
@@ -123,7 +118,4 @@ if ($q !== "") {
 
 echo json_encode($hintArr);
 
-//foreach ($hintArr as $var) {
-//    echo $var;
-//}
 ?>
