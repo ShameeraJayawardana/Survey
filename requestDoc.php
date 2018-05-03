@@ -11,6 +11,12 @@ if (isset($_POST['type'])) {
     $type = $_POST['type'];
 }
 
+$doc_id = "";
+
+if (isset($_GET['id'])) {
+    $doc_id = $_GET['id'];
+}
+
 $_sql = "SELECT * FROM doctypes WHERE type='$type'";
 $_row_set1 = mysqli_query($conn, $_sql);
 $_row = mysqli_fetch_assoc($_row_set1);
@@ -709,7 +715,7 @@ if (isset($_POST['submit'])) {
                             <div class="row">
                                 <div class="col-md-12">
                                     <label>Number</label>
-                                    <input list="browsers" class="form-control" placeholder="Document Number" name="number">
+                                    <input list="browsers" class="form-control" placeholder="Document Number" name="number" value="<?php echo $doc_id ?>">
                                     <datalist id="browsers">
                                     </datalist>
                                 </div>
