@@ -76,7 +76,7 @@ $result_set = mysqli_query($conn, $q);
                                 </a>
                             </li>
                             <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
-                                <a class="nav-link" href="Transferss.php">
+                                <a class="nav-link" href="transferss.php">
                                     <i class="fa fa-space-shuttle"></i>
                                     <span class="nav-link-text">Transfer</span>
                                 </a>

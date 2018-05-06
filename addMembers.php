@@ -9,12 +9,13 @@ $result_set = mysqli_query($conn, $q);
 $_query = "SELECT * FROM district";
 $_row_set = mysqli_query($conn, $_query);
 
+$q1 = "SELECT * FROM division";
+$r_set = mysqli_query($conn,$q1);
+
+
 if (isset($_POST['submit'])) {
-    $sql = "INSERT INTO addMembers(emplNo, des, email, district) VALUES('$_POST[emplNo]','$_POST[des]','$_POST[email]','$_POST[district]')";
+    $sql = "INSERT INTO addMembers(emplNo, des, email, district,division) VALUES('$_POST[emplNo]','$_POST[des]','$_POST[email]','$_POST[district]','$_POST[division]')";
     $query = mysqli_query($conn, $sql);
-    if ($query) {
-        echo '<script>alert("Member added!");</script>';
-    }
 }
 ?>
 <html lang="en">
@@ -87,7 +88,7 @@ if (isset($_POST['submit'])) {
                                 </a>
                             </li>
                             <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
-                                <a class="nav-link" href="Transferss.php">
+                                <a class="nav-link" href="transferss.php">
                                     <i class="fa fa-space-shuttle"></i>
                                     <span class="nav-link-text">Transfer</span>
                                 </a>
@@ -407,17 +408,28 @@ if (isset($_POST['submit'])) {
                             <form action="addMembers.php" method="post">
                                 <div class="form-group">
                                     <label>Employee Number</label>
-                                    <input type="text" placeholder="Employee Number" class="form-control" name="emplNo" /><br/>
+                                    <input type="text" placeholder="Employee Number" class="form-control" name="emplNo" required /><br/>
                                     <label>Designation</label>
-                                    <input type="text" placeholder="Designation" class="form-control" name="des"/><br/>
+<!--                                    <input type="text" placeholder="Designation" class="form-control" name="des"/><br/>-->
+                                    <select class="form-control" name="des" required>
+                                        <option value="">Select...</option>
+                                        <option value="Surveyor">Surveyor</option>
+                                    </select><br/>
                                     <label>Email</label>
-                                    <input type="email" placeholder="Email of the employee" class="form-control" name="email"/><br/>
+                                    <input type="email" placeholder="Email of the employee" class="form-control" name="email" required/><br/>
                                     <label>District</label>
 <!--                                    <input type="text" placeholder="District" class="form-control" name="district"/><br/>-->
-                                    <select class="form-control" name="district">
+                                    <select class="form-control" name="district" required>
                                         <option value="">Select...</option>
                                         <?php while ($_row = mysqli_fetch_assoc($_row_set)) { ?>
                                             <option value="<?php echo $_row['dist_code']; ?>"><?php echo $_row['dist_nm']; ?></option>
+                                        <?php } ?>
+                                    </select><br />
+                                    <label>Division</label>
+                                    <select class="form-control" name="division" required>
+                                        <option value="">Select...</option>
+                                        <?php while ($_r = mysqli_fetch_assoc($r_set)) { ?>
+                                            <option value="<?php echo $_r['id']; ?>"><?php echo $_r['div_name']; ?></option>
                                         <?php } ?>
                                     </select><br />
                                     <input type="submit" class="btn btn-info" name="submit" value="ADD MEMBER" />

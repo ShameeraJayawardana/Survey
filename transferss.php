@@ -3,17 +3,29 @@
 <?php include 'src/components/functions.php'; ?>
 <?php confirm_logged_in(); ?>
 <?php
-$q1 = "SELECT * FROM docTypes";
-$r_set1 = mysqli_query($conn, $q1);
+$_query = "SELECT * FROM district";
+$_row_set = mysqli_query($conn, $_query);
 
-$q2 = "SELECT * FROM sub_category";
-$r_set2 = mysqli_query($conn, $q2);
+$q1 = "SELECT * FROM division";
+$r_set = mysqli_query($conn, $q1);
 
 $email = $_SESSION["email"];
-$q3 = "SELECT * FROM member WHERE email = '$email'";
-$r_set3 = mysqli_query($conn, $q3);
-$r3 = mysqli_fetch_assoc($r_set3);
 $msg = "";
+
+if (isset($_POST['submit'])) {
+    $q3 = "SELECT * FROM member WHERE email = '$_POST[email]'";
+    $r_set3 = mysqli_query($conn, $q3);
+    $r3 = mysqli_fetch_assoc($r_set3);
+    if ($r3['des'] == 'Surveyor') {
+        $update1 = "UPDATE member SET district = '$_POST[district]', division = '$_POST[division]' WHERE email = '$_POST[email]'";
+        mysqli_query($conn, $update1);
+
+        $update2 = "UPDATE addmembers SET district = '$_POST[district]', division = '$_POST[division]' WHERE email = '$_POST[email]'";
+        mysqli_query($conn, $update2);
+    } else {
+        $msg = "You can only transfer Surveyors";
+    }
+}
 ?>
 <html lang="en">
 <head>
@@ -422,23 +434,29 @@ $msg = "";
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <form action="reportsDownload.php" method="post">
-                        <label>Category</label>
-                        <select class="form-control" name="type">
-                            <option>Select...</option>
-                            <?php while ($r1 = mysqli_fetch_assoc($r_set1)) { ?>
-                                <option value="<?php echo $r1['id']; ?>"><?php echo $r1['type']; ?></option>
+                    <form action="transferss.php" method="post">
+                        <label>Email</label>
+                        <input type="email" required class="form-control"
+                               placeholder="example@example.com" name="email">
+                        <span style="color: red;"><?php echo $msg; ?></span><br/>
+                        <label>District</label>
+                        <!-- <input type="text" placeholder="District" class="form-control" name="district"/><br/>-->
+                        <select class="form-control" name="district" required>
+                            <option value="">Select...</option>
+                            <?php while ($_row = mysqli_fetch_assoc($_row_set)) { ?>
+                                <option
+                                    value="<?php echo $_row['dist_code']; ?>"><?php echo $_row['dist_nm']; ?></option>
                             <?php } ?>
                         </select><br/>
-                        <h4><?php echo $msg; ?></h4>
-                        <label>Sub Category</label>
-                        <select class="form-control" name="sub_cat">
-                            <option>Select...</option>
-                            <?php while ($r2 = mysqli_fetch_assoc($r_set2)) { ?>
-                                <option value="<?php echo $r2['sub']; ?>"><?php echo $r2['sub']; ?></option>
+                        <label>Division</label>
+                        <select class="form-control" name="division" required>
+                            <option value="">Select...</option>
+                            <?php while ($_r = mysqli_fetch_assoc($r_set)) { ?>
+                                <option value="<?php echo $_r['id']; ?>"><?php echo $_r['div_name']; ?></option>
                             <?php } ?>
                         </select><br/>
-                        <button class="btn btn-outline-dark" name="download"><img src="pics/csv_file.png" /> DOWNLOAD</button>
+                        <button class="btn btn-outline-dark" name="submit">TRANSFER
+                        </button>
                     </form>
                 </div>
             </div>

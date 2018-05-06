@@ -3,17 +3,20 @@
 <?php include 'src/components/functions.php'; ?>
 <?php confirm_logged_in(); ?>
 <?php
-$q1 = "SELECT * FROM docTypes";
-$r_set1 = mysqli_query($conn, $q1);
+$q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'pending' GROUP BY name";
+$result_set = mysqli_query($conn, $q);
 
-$q2 = "SELECT * FROM sub_category";
-$r_set2 = mysqli_query($conn, $q2);
+$_query = "SELECT * FROM district";
+$_row_set = mysqli_query($conn, $_query);
 
-$email = $_SESSION["email"];
-$q3 = "SELECT * FROM member WHERE email = '$email'";
-$r_set3 = mysqli_query($conn, $q3);
-$r3 = mysqli_fetch_assoc($r_set3);
-$msg = "";
+$q1 = "SELECT * FROM division";
+$r_set = mysqli_query($conn,$q1);
+
+
+if (isset($_POST['submit'])) {
+    $sql = "INSERT INTO addMembers(emplNo, des, email, district,division) VALUES('$_POST[emplNo]','$_POST[des]','$_POST[email]','$_POST[district]','$_POST[division]')";
+    $query = mysqli_query($conn, $sql);
+}
 ?>
 <html lang="en">
 <head>
@@ -22,7 +25,7 @@ $msg = "";
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Add Documents</title>
+    <title>Add Members</title>
     <!-- Bootstrap core CSS-->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom fonts for this template-->
@@ -31,16 +34,14 @@ $msg = "";
     <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
     <!-- Custom styles for this template-->
     <link href="css/sb-admin.css" rel="stylesheet">
-    <link href="css/search.css" rel="stylesheet">
+    <link href="css/chargeList.css" rel="stylesheet">
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
     <a class="navbar-brand" href="index.php">Online Document Management System</a>
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-            data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
-            aria-label="Toggle navigation">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
@@ -53,10 +54,10 @@ $msg = "";
                 $row = mysqli_fetch_assoc($row_set);
                 if ($row["role"] == "sadmin") {
                     ?>
-                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
-                        <a class="nav-link" href="sadmin.php">
-                            <i class="fa fa-user-circle"></i>
-                            <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
+                    <li class = "nav-item active" data-toggle = "tooltip" data-placement = "right" title = "Dashboard">
+                        <a class = "nav-link" href = "sadmin.php">
+                            <i class = "fa fa-user-circle"></i>
+                            <span class = "nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
                         </a>
                     </li>
                     <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
@@ -93,8 +94,7 @@ $msg = "";
                         </a>
                     </li>
                     <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
-                        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse"
-                           href="#collapseComponents" data-parent="#exampleAccordion">
+                        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
                             <i class="fa fa-fw fa-wrench"></i>
                             <span class="nav-link-text">Manage documents</span>
                         </a>
@@ -114,8 +114,7 @@ $msg = "";
                         </ul>
                     </li>
                     <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
-                        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti"
-                           data-parent="#exampleAccordion">
+                        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti" data-parent="#exampleAccordion">
                             <i class="fa fa-exchange"></i>
                             <span class="nav-link-text">Transactions</span>
                         </a>
@@ -195,8 +194,7 @@ $msg = "";
                         </a>
                     </li>
                     <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
-                        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse"
-                           href="#collapseComponents" data-parent="#exampleAccordion">
+                        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
                             <i class="fa fa-fw fa-wrench"></i>
                             <span class="nav-link-text">Manage documents</span>
                         </a>
@@ -216,8 +214,7 @@ $msg = "";
                         </ul>
                     </li>
                     <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
-                        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti"
-                           data-parent="#exampleAccordion">
+                        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti" data-parent="#exampleAccordion">
                             <i class="fa fa-exchange"></i>
                             <span class="nav-link-text">Transactions</span>
                         </a>
@@ -315,10 +312,9 @@ $msg = "";
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">
-            <?php if ($row["role"] == "admin") { ?>
+            <?php if ($row["role"] == "ss") { ?>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-fw fa-envelope"></i>
                         <span class="d-lg-none">Messages
                                     <span class="badge badge-pill badge-primary">12 New</span>
@@ -332,25 +328,10 @@ $msg = "";
                         <div class="dropdown-divider"></div>
                         <?php while ($result = mysqli_fetch_array($result_set)) { ?>
                             <?php if ($result['name'] != $_SESSION['email']) { ?>
-                                <a class="dropdown-item" href="done.php?name=<?php echo urlencode($result['name']); ?>">
+                                <a class="dropdown-item" href="send.php?name=<?php echo urlencode($result['name']); ?>">
                                     <div class="dropdown-item">
                                         <strong><?php echo $result['name']; ?></strong>
-                                        <div class="dropdown-message small">Requests for <?php echo $result['count']; ?>
-                                            documents
-                                        </div>
-                                    </div>
-                                </a>
-                            <?php } ?>
-                        <?php } ?>
-                        <?php while ($result1 = mysqli_fetch_array($result_set1)) { ?>
-                            <?php if ($result1['name'] != $_SESSION['email']) { ?>
-                                <a class="dropdown-item"
-                                   href="done.php?name=<?php echo urlencode($result1['name']); ?>">
-                                    <div class="dropdown-item">
-                                        <strong><?php echo $result1['name']; ?></strong>
-                                        <div class="dropdown-message small">Returned <?php echo $result1['count']; ?>
-                                            documents
-                                        </div>
+                                        <div class="dropdown-message small">Requests for <?php echo $result['count']; ?>documents</div>
                                     </div>
                                 </a>
                             <?php } ?>
@@ -361,8 +342,7 @@ $msg = "";
                 </li>
             <?php } ?>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle mr-lg-2" id="alertsDropdown" href="#" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle mr-lg-2" id="alertsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-fw fa-bell"></i>
                     <span class="d-lg-none">Alerts
                                 <span class="badge badge-pill badge-warning">6 New</span>
@@ -380,9 +360,7 @@ $msg = "";
                                         <i class="fa fa-long-arrow-up fa-fw"></i>Status Update</strong>
                                 </span>
                         <span class="small float-right text-muted">11:21 AM</span>
-                        <div class="dropdown-message small">This is an automated server response message. All systems
-                            are online.
-                        </div>
+                        <div class="dropdown-message small">This is an automated server response message. All systems are online.</div>
                     </a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">
@@ -391,9 +369,7 @@ $msg = "";
                                         <i class="fa fa-long-arrow-down fa-fw"></i>Status Update</strong>
                                 </span>
                         <span class="small float-right text-muted">11:21 AM</span>
-                        <div class="dropdown-message small">This is an automated server response message. All systems
-                            are online.
-                        </div>
+                        <div class="dropdown-message small">This is an automated server response message. All systems are online.</div>
                     </a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">
@@ -402,9 +378,7 @@ $msg = "";
                                         <i class="fa fa-long-arrow-up fa-fw"></i>Status Update</strong>
                                 </span>
                         <span class="small float-right text-muted">11:21 AM</span>
-                        <div class="dropdown-message small">This is an automated server response message. All systems
-                            are online.
-                        </div>
+                        <div class="dropdown-message small">This is an automated server response message. All systems are online.</div>
                     </a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item small" href="#">View all alerts</a>
@@ -417,47 +391,68 @@ $msg = "";
         </ul>
     </div>
 </nav>
-<div class="content-wrapper" id="background">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <form action="reportsDownload.php" method="post">
-                        <label>Category</label>
-                        <select class="form-control" name="type">
-                            <option>Select...</option>
-                            <?php while ($r1 = mysqli_fetch_assoc($r_set1)) { ?>
-                                <option value="<?php echo $r1['id']; ?>"><?php echo $r1['type']; ?></option>
-                            <?php } ?>
-                        </select><br/>
-                        <h4><?php echo $msg; ?></h4>
-                        <label>Sub Category</label>
-                        <select class="form-control" name="sub_cat">
-                            <option>Select...</option>
-                            <?php while ($r2 = mysqli_fetch_assoc($r_set2)) { ?>
-                                <option value="<?php echo $r2['sub']; ?>"><?php echo $r2['sub']; ?></option>
-                            <?php } ?>
-                        </select><br/>
-                        <button class="btn btn-outline-dark" name="download"><img src="pics/csv_file.png" /> DOWNLOAD</button>
+<div class="content-wrapper">
+    <br>
+    <div class="row">
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Add Members</h3>
+                </div>
+            </div><br><br>
+            <div class="row">
+                <div class="col-md-12">
+                    <form action="addmem.php" method="post">
+                        <div class="form-group">
+                            <label>Employee Number</label>
+                            <input type="text" placeholder="Employee Number" class="form-control" name="emplNo" required /><br/>
+                            <label>Designation</label>
+                            <!--                                    <input type="text" placeholder="Designation" class="form-control" name="des"/><br/>-->
+                            <select class="form-control" name="des" required>
+                                <option value="">Select...</option>
+                                <option value="Senior Surveyor">Senior Surveyor</option>
+                            </select><br/>
+                            <label>Email</label>
+                            <input type="email" placeholder="Email of the employee" class="form-control" name="email" required/><br/>
+                            <label>District</label>
+                            <!--                                    <input type="text" placeholder="District" class="form-control" name="district"/><br/>-->
+                            <select class="form-control" name="district" required>
+                                <option value="">Select...</option>
+                                <?php while ($_row = mysqli_fetch_assoc($_row_set)) { ?>
+                                    <option value="<?php echo $_row['dist_code']; ?>"><?php echo $_row['dist_nm']; ?></option>
+                                <?php } ?>
+                            </select><br />
+                            <label>Division</label>
+                            <select class="form-control" name="division" required>
+                                <option value="">Select...</option>
+                                <?php while ($_r = mysqli_fetch_assoc($r_set)) { ?>
+                                    <option value="<?php echo $_r['id']; ?>"><?php echo $_r['div_name']; ?></option>
+                                <?php } ?>
+                            </select><br />
+                            <input type="submit" class="btn btn-info" name="submit" value="ADD MEMBER" />
+                        </div>
                     </form>
                 </div>
             </div>
-            <div class="col-md-8"></div>
+        </div>
+        <div class="col-md-2">
+
         </div>
     </div>
-
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
-    <div class="row">
-        <?php include './src/components/footer.php'; ?>
+    <div>
+        <?php include 'src/components/footer.php'; ?>
     </div>
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fa fa-angle-up"></i>
     </a>
     <!-- Logout Modal-->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -475,7 +470,6 @@ $msg = "";
         </div>
     </div>
     <!-- Bootstrap core JavaScript-->
-    <script src="js/addDoc.js"></script>
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Core plugin JavaScript-->

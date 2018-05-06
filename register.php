@@ -2,6 +2,7 @@
 <?php
 $confirmErr = "";
 $permission = "";
+$emplErr = "";
 $error = "";
 $_query = "SELECT * FROM district";
 $_row_set = mysqli_query($conn, $_query);
@@ -14,14 +15,17 @@ if (isset($_POST['submit'])) {
 
     $select = "SELECT * FROM addmembers WHERE email='$_POST[email]'";
     $row_set = mysqli_query($conn, $select);
-    $row = mysqli_num_rows($row_set);
+    $row = mysqli_fetch_assoc($row_set);
+    $r = mysqli_num_rows($row_set);
 
-    if ($row < 1) {
+    if ($r < 1) {
         $permission = "You don't have permission to register";
     } elseif ($password != $confirm) {
         $confirmErr = "Password doesn't match";
+    } elseif ($_POST['emplNo'] != $row['emplNo']) {
+        $emplErr = "Wrong employee number";
     } else {
-        $sql = "INSERT INTO member(name, emplNo, des, district, email, password, role) VALUES('$_POST[name]','$_POST[emplNo]','$_POST[des]','$_POST[district]','$_POST[email]','$en_pwd','$role')";
+        $sql = "INSERT INTO member(name, emplNo, des, district, division, email, password, role) VALUES('$_POST[name]','$row[emplNo]','$row[des]','$row[district]','$row[division]','$_POST[email]','$en_pwd','$role')";
         $query = mysqli_query($conn, $sql);
         $error = mysqli_error($conn);
         if ($query) {
@@ -64,30 +68,12 @@ if (isset($_POST['submit'])) {
                         </div>
                         <div class="form-group">
                             <div class="form-row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label>Employee Number</label>
                                     <input class="form-control" required name="emplNo" id="emplNo" type="text" aria-describedby="emplHelp" placeholder="Enter your Employee Number">
-                                </div>
-                                <div class="col-md-6">
-                                    <label>Designation</label>
-                                    <select class="form-control" name="des">
-                                        <option>Select...</option>
-                                        <option value="Surveyor">Surveyor</option>
-                                        <option value="Supdt. of Surveyor">Supdt. of Surveyor</option>
-                                        <option value="SNR. Supdt. of Surveyor">SNR. Supdt. of Surveyor</option>
-                                        <option value="M.T.O">M.T.O</option>
-                                    </select>
+                                    <span style="color: red"><?php echo $emplErr; ?></span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label>District</label>
-                            <select class="form-control" name="district">
-                                <option value="">Select...</option>
-                                <?php while ($_row = mysqli_fetch_assoc($_row_set)) { ?>
-                                    <option value="<?php echo $_row['dist_code']; ?>"><?php echo $_row['dist_nm']; ?></option>
-                                <?php } ?>
-                            </select>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email address</label>

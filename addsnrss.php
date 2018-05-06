@@ -3,17 +3,20 @@
 <?php include 'src/components/functions.php'; ?>
 <?php confirm_logged_in(); ?>
 <?php
-$q1 = "SELECT * FROM docTypes";
-$r_set1 = mysqli_query($conn, $q1);
+$q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'pending' GROUP BY name";
+$result_set = mysqli_query($conn, $q);
 
-$q2 = "SELECT * FROM sub_category";
-$r_set2 = mysqli_query($conn, $q2);
+$_query = "SELECT * FROM district";
+$_row_set = mysqli_query($conn, $_query);
 
-$email = $_SESSION["email"];
-$q3 = "SELECT * FROM member WHERE email = '$email'";
-$r_set3 = mysqli_query($conn, $q3);
-$r3 = mysqli_fetch_assoc($r_set3);
-$msg = "";
+$q1 = "SELECT * FROM division";
+$r_set = mysqli_query($conn, $q1);
+
+
+if (isset($_POST['submit'])) {
+    $sql = "INSERT INTO addMembers(emplNo, des, email, district,division) VALUES('$_POST[emplNo]','$_POST[des]','$_POST[email]','$_POST[district]','$_POST[division]')";
+    $query = mysqli_query($conn, $sql);
+}
 ?>
 <html lang="en">
 <head>
@@ -22,7 +25,7 @@ $msg = "";
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Add Documents</title>
+    <title>Add Members</title>
     <!-- Bootstrap core CSS-->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom fonts for this template-->
@@ -31,7 +34,7 @@ $msg = "";
     <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
     <!-- Custom styles for this template-->
     <link href="css/sb-admin.css" rel="stylesheet">
-    <link href="css/search.css" rel="stylesheet">
+    <link href="css/chargeList.css" rel="stylesheet">
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -315,7 +318,7 @@ $msg = "";
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">
-            <?php if ($row["role"] == "admin") { ?>
+            <?php if ($row["role"] == "ss") { ?>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
@@ -332,23 +335,10 @@ $msg = "";
                         <div class="dropdown-divider"></div>
                         <?php while ($result = mysqli_fetch_array($result_set)) { ?>
                             <?php if ($result['name'] != $_SESSION['email']) { ?>
-                                <a class="dropdown-item" href="done.php?name=<?php echo urlencode($result['name']); ?>">
+                                <a class="dropdown-item" href="send.php?name=<?php echo urlencode($result['name']); ?>">
                                     <div class="dropdown-item">
                                         <strong><?php echo $result['name']; ?></strong>
                                         <div class="dropdown-message small">Requests for <?php echo $result['count']; ?>
-                                            documents
-                                        </div>
-                                    </div>
-                                </a>
-                            <?php } ?>
-                        <?php } ?>
-                        <?php while ($result1 = mysqli_fetch_array($result_set1)) { ?>
-                            <?php if ($result1['name'] != $_SESSION['email']) { ?>
-                                <a class="dropdown-item"
-                                   href="done.php?name=<?php echo urlencode($result1['name']); ?>">
-                                    <div class="dropdown-item">
-                                        <strong><?php echo $result1['name']; ?></strong>
-                                        <div class="dropdown-message small">Returned <?php echo $result1['count']; ?>
                                             documents
                                         </div>
                                     </div>
@@ -417,39 +407,65 @@ $msg = "";
         </ul>
     </div>
 </nav>
-<div class="content-wrapper" id="background">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <form action="reportsDownload.php" method="post">
-                        <label>Category</label>
-                        <select class="form-control" name="type">
-                            <option>Select...</option>
-                            <?php while ($r1 = mysqli_fetch_assoc($r_set1)) { ?>
-                                <option value="<?php echo $r1['id']; ?>"><?php echo $r1['type']; ?></option>
-                            <?php } ?>
-                        </select><br/>
-                        <h4><?php echo $msg; ?></h4>
-                        <label>Sub Category</label>
-                        <select class="form-control" name="sub_cat">
-                            <option>Select...</option>
-                            <?php while ($r2 = mysqli_fetch_assoc($r_set2)) { ?>
-                                <option value="<?php echo $r2['sub']; ?>"><?php echo $r2['sub']; ?></option>
-                            <?php } ?>
-                        </select><br/>
-                        <button class="btn btn-outline-dark" name="download"><img src="pics/csv_file.png" /> DOWNLOAD</button>
+<div class="content-wrapper">
+    <br>
+    <div class="row">
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Add Members</h3>
+                </div>
+            </div>
+            <br><br>
+            <div class="row">
+                <div class="col-md-12">
+                    <form action="addsnrss.php" method="post">
+                        <div class="form-group">
+                            <label>Employee Number</label>
+                            <input type="text" placeholder="Employee Number" class="form-control" name="emplNo"
+                                   required/><br/>
+                            <label>Designation</label>
+                            <!--                                    <input type="text" placeholder="Designation" class="form-control" name="des"/><br/>-->
+                            <select class="form-control" name="des" required>
+                                <option value="">Select...</option>
+                                <option value="SNR. Supdt. of Surveyor">SNR. Supdt. of Surveyor</option>
+                            </select><br/>
+                            <label>Email</label>
+                            <input type="email" placeholder="Email of the employee" class="form-control" name="email"
+                                   required/><br/>
+                            <label>District</label>
+                            <!--                                    <input type="text" placeholder="District" class="form-control" name="district"/><br/>-->
+                            <select class="form-control" name="district" required>
+                                <option value="">Select...</option>
+                                <?php while ($_row = mysqli_fetch_assoc($_row_set)) { ?>
+                                    <option
+                                        value="<?php echo $_row['dist_code']; ?>"><?php echo $_row['dist_nm']; ?></option>
+                                <?php } ?>
+                            </select><br/>
+                            <label>Division</label>
+                            <select class="form-control" name="division" required>
+                                <option value="">Select...</option>
+                                <?php while ($_r = mysqli_fetch_assoc($r_set)) { ?>
+                                    <option value="<?php echo $_r['id']; ?>"><?php echo $_r['div_name']; ?></option>
+                                <?php } ?>
+                            </select><br/>
+                            <input type="submit" class="btn btn-info" name="submit" value="ADD MEMBER"/>
+                        </div>
                     </form>
                 </div>
             </div>
-            <div class="col-md-8"></div>
+        </div>
+        <div class="col-md-2">
+
         </div>
     </div>
-
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
-    <div class="row">
-        <?php include './src/components/footer.php'; ?>
+    <div>
+        <?php include 'src/components/footer.php'; ?>
     </div>
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -475,7 +491,6 @@ $msg = "";
         </div>
     </div>
     <!-- Bootstrap core JavaScript-->
-    <script src="js/addDoc.js"></script>
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Core plugin JavaScript-->
