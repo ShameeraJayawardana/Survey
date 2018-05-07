@@ -413,7 +413,8 @@ if (isset($_POST['submit'])) {
                             <!--                                    <input type="text" placeholder="Designation" class="form-control" name="des"/><br/>-->
                             <select class="form-control" name="des" required>
                                 <option value="">Select...</option>
-                                <option value="Senior Surveyor">Senior Surveyor</option>
+                                <option value="Supdt. of Surveyor">Supdt. of Surveyor</option>
+                                <option value="M.T.O">M.T.O</option>
                             </select><br/>
                             <label>Email</label>
                             <input type="email" placeholder="Email of the employee" class="form-control" name="email" required/><br/>

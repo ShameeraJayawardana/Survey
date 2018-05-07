@@ -16,14 +16,14 @@ if (isset($_POST['submit'])) {
     $q3 = "SELECT * FROM member WHERE email = '$_POST[email]'";
     $r_set3 = mysqli_query($conn, $q3);
     $r3 = mysqli_fetch_assoc($r_set3);
-    if ($r3['des'] == 'Surveyor') {
+    if ($r3['des'] == 'ss') {
         $update1 = "UPDATE member SET district = '$_POST[district]', division = '$_POST[division]' WHERE email = '$_POST[email]'";
         mysqli_query($conn, $update1);
 
         $update2 = "UPDATE addmembers SET district = '$_POST[district]', division = '$_POST[division]' WHERE email = '$_POST[email]'";
         mysqli_query($conn, $update2);
     } else {
-        $msg = "You can only transfer Surveyors";
+        $msg = "You can only transfer Supdt. of Surveyors";
     }
 }
 ?>
