@@ -8,25 +8,36 @@ $_row_set = mysqli_query($conn, $_query);
 
 $q1 = "SELECT * FROM division";
 $r_set = mysqli_query($conn, $q1);
-
-$email = $_SESSION["email"];
+$user = $_SESSION["email"];
+$query = "SELECT * FROM member WHERE email = '$user'";
+$row_set = mysqli_query($conn, $query);
+$row = mysqli_fetch_assoc($row_set);
 $msg = "";
-
+$delete_query = "";
+$delete_query2 = "";
 if (isset($_POST['submit'])) {
     $q3 = "SELECT * FROM member WHERE emplNo = '$_POST[empl]'";
     $r_set3 = mysqli_query($conn, $q3);
     $r3 = mysqli_fetch_assoc($r_set3);
     $num = mysqli_num_rows($r_set3);
     if ($num > 0) {
-        if ($r3['des'] == 'SNR. Supdt. of Surveyor') {
-            $update1 = "UPDATE member SET district = '$_POST[district]' WHERE emplNo = '$_POST[empl]'";
-            mysqli_query($conn, $update1);
-
-            $update2 = "UPDATE addmembers SET district = '$_POST[district]' WHERE emplNo = '$_POST[empl]'";
-            mysqli_query($conn, $update2);
-        } else {
-            $msg = "You can only transfer SNR. Supdt. of Surveyors";
+        if ($row["role"] == "snrss"){
+            if ($r3['des'] == 'M.T.O') {
+                $delete_query = "DELETE FROM member WHERE emplNo = '$_POST[empl]'";
+                $delete_query2 = "DELETE FROM addmembers WHERE emplNo = '$_POST[empl]'";
+                mysqli_query($conn, $delete_query);
+                mysqli_query($conn, $delete_query2);
+            }else{
+                $msg = "You don't have permission to delete that user";
+            }
+        }elseif ($row["role"] == "sadmin"){
+            $delete_query = "DELETE FROM member WHERE emplNo = '$_POST[empl]'";
+            $delete_query2 = "DELETE FROM addmembers WHERE emplNo = '$_POST[empl]'";
+            mysqli_query($conn, $delete_query);
+            mysqli_query($conn, $delete_query2);
         }
+
+
     } else {
         $msg = "Invalid Employee Number";
     }
@@ -49,6 +60,16 @@ if (isset($_POST['submit'])) {
     <!-- Custom styles for this template-->
     <link href="css/sb-admin.css" rel="stylesheet">
     <link href="css/search.css" rel="stylesheet">
+    <script>
+        function inputValue(val) {
+            //console.log("Value = ", val);
+            if (val.length != 0){
+                document.getElementById('submit').disabled = false;
+            }else{
+                document.getElementById('submit').disabled = true;
+            }
+        }
+    </script>
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -64,10 +85,6 @@ if (isset($_POST['submit'])) {
         <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
             <?php
             if (isset($_SESSION["id"])) {
-                $user = $_SESSION["email"];
-                $query = "SELECT * FROM member WHERE email = '$user'";
-                $row_set = mysqli_query($conn, $query);
-                $row = mysqli_fetch_assoc($row_set);
                 if ($row["role"] == "sadmin") {
                     ?>
                     <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
@@ -451,21 +468,12 @@ if (isset($_POST['submit'])) {
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <form action="transfer.php" method="post">
+                    <form action="deleteUser.php" method="post">
                         <label>Employee Number</label>
                         <input type="text" required class="form-control"
-                               placeholder="Enter the employee number" name="empl">
+                               placeholder="Enter the employee number" name="empl" oninput="inputValue(this.value);">
                         <span style="color: red;"><?php echo $msg; ?></span><br/>
-                        <label>District</label>
-                        <!-- <input type="text" placeholder="District" class="form-control" name="district"/><br/>-->
-                        <select class="form-control" name="district" required>
-                            <option value="">Select...</option>
-                            <?php while ($_row = mysqli_fetch_assoc($_row_set)) { ?>
-                                <option
-                                    value="<?php echo $_row['dist_code']; ?>"><?php echo $_row['dist_nm']; ?></option>
-                            <?php } ?>
-                        </select><br/>
-                        <button class="btn btn-outline-dark" name="submit">TRANSFER
+                        <button class="btn btn-outline-danger" disabled name="submit" id="submit" onclick="return confirm('Are you sure you want to delete this user?');">DELETE USER
                         </button>
                     </form>
                 </div>
