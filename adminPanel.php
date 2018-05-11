@@ -63,6 +63,12 @@ $result_set1 = mysqli_query($conn, $q1);
                                     <span class="nav-link-text">Transfer SNRSS</span>
                                 </a>
                             </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Delete">
+                                <a class="nav-link" href="deleteUser.php">
+                                    <i class="fa fa-space-shuttle"></i>
+                                    <span class="nav-link-text">Delete Members</span>
+                                </a>
+                            </li>
                             <?php
                         } elseif ($row["role"] == "snrss") {
                             ?>
@@ -123,6 +129,12 @@ $result_set1 = mysqli_query($conn, $q1);
                                         </a>
                                     </li>
                                 </ul>
+                            </li>
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Delete">
+                                <a class="nav-link" href="deleteUser.php">
+                                    <i class="fa fa-space-shuttle"></i>
+                                    <span class="nav-link-text">Delete Members</span>
+                                </a>
                             </li>
                             <?php
                         } elseif ($row["role"] == "ss") {

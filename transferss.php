@@ -13,17 +13,22 @@ $email = $_SESSION["email"];
 $msg = "";
 
 if (isset($_POST['submit'])) {
-    $q3 = "SELECT * FROM member WHERE email = '$_POST[email]'";
+    $q3 = "SELECT * FROM member WHERE emplNo = '$_POST[empl]'";
     $r_set3 = mysqli_query($conn, $q3);
     $r3 = mysqli_fetch_assoc($r_set3);
-    if ($r3['des'] == 'ss') {
-        $update1 = "UPDATE member SET district = '$_POST[district]', division = '$_POST[division]' WHERE email = '$_POST[email]'";
-        mysqli_query($conn, $update1);
+    $num = mysqli_num_rows($r_set3);
+    if ($num > 0){
+        if ($r3['des'] == 'ss') {
+            $update1 = "UPDATE member SET district = '$_POST[district]', division = '$_POST[division]' WHERE emplNo = '$_POST[empl]'";
+            mysqli_query($conn, $update1);
 
-        $update2 = "UPDATE addmembers SET district = '$_POST[district]', division = '$_POST[division]' WHERE email = '$_POST[email]'";
-        mysqli_query($conn, $update2);
-    } else {
-        $msg = "You can only transfer Supdt. of Surveyors";
+            $update2 = "UPDATE addmembers SET district = '$_POST[district]', division = '$_POST[division]' WHERE emplNo = '$_POST[empl]'";
+            mysqli_query($conn, $update2);
+        } else {
+            $msg = "You can only transfer Supdt. of Surveyors";
+        }
+    }else{
+        $msg = "Invalid Employee Number";
     }
 }
 ?>
@@ -81,6 +86,12 @@ if (isset($_POST['submit'])) {
                         <a class="nav-link" href="transfer.php">
                             <i class="fa fa-space-shuttle"></i>
                             <span class="nav-link-text">Transfer SNRSS</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Delete">
+                        <a class="nav-link" href="deleteUser.php">
+                            <i class="fa fa-space-shuttle"></i>
+                            <span class="nav-link-text">Delete Members</span>
                         </a>
                     </li>
                     <?php
@@ -145,6 +156,12 @@ if (isset($_POST['submit'])) {
                                 </a>
                             </li>
                         </ul>
+                    </li>
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Delete">
+                        <a class="nav-link" href="deleteUser.php">
+                            <i class="fa fa-space-shuttle"></i>
+                            <span class="nav-link-text">Delete Members</span>
+                        </a>
                     </li>
                     <?php
                 } elseif ($row["role"] == "ss") {
@@ -435,9 +452,9 @@ if (isset($_POST['submit'])) {
             <div class="col-md-4">
                 <div class="form-group">
                     <form action="transferss.php" method="post">
-                        <label>Email</label>
-                        <input type="email" required class="form-control"
-                               placeholder="example@example.com" name="email">
+                        <label>Employee Number</label>
+                        <input type="text" required class="form-control"
+                               placeholder="Enter the employee number" name="empl">
                         <span style="color: red;"><?php echo $msg; ?></span><br/>
                         <label>District</label>
                         <!-- <input type="text" placeholder="District" class="form-control" name="district"/><br/>-->

@@ -12,10 +12,12 @@ $_row_set = mysqli_query($conn, $_query);
 $q1 = "SELECT * FROM division";
 $r_set = mysqli_query($conn, $q1);
 
-
+$division = 0;
+$error = "";
 if (isset($_POST['submit'])) {
-    $sql = "INSERT INTO addMembers(emplNo, des, email, district,division) VALUES('$_POST[emplNo]','$_POST[des]','$_POST[email]','$_POST[district]','$_POST[division]')";
+    $sql = "INSERT INTO addMembers(emplNo, des, email, district,division) VALUES('$_POST[emplNo]','$_POST[des]','$_POST[email]','$_POST[district]','$division')";
     $query = mysqli_query($conn, $sql);
+    $error = mysqli_error($conn);
 }
 ?>
 <html lang="en">
@@ -72,6 +74,12 @@ if (isset($_POST['submit'])) {
                         <a class="nav-link" href="transfer.php">
                             <i class="fa fa-space-shuttle"></i>
                             <span class="nav-link-text">Transfer SNRSS</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Delete">
+                        <a class="nav-link" href="deleteUser.php">
+                            <i class="fa fa-space-shuttle"></i>
+                            <span class="nav-link-text">Delete Members</span>
                         </a>
                     </li>
                     <?php
@@ -136,6 +144,12 @@ if (isset($_POST['submit'])) {
                                 </a>
                             </li>
                         </ul>
+                    </li>
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Delete">
+                        <a class="nav-link" href="deleteUser.php">
+                            <i class="fa fa-space-shuttle"></i>
+                            <span class="nav-link-text">Delete Members</span>
+                        </a>
                     </li>
                     <?php
                 } elseif ($row["role"] == "ss") {
@@ -427,6 +441,7 @@ if (isset($_POST['submit'])) {
                             <label>Employee Number</label>
                             <input type="text" placeholder="Employee Number" class="form-control" name="emplNo"
                                    required/><br/>
+                            <span style="color: red;"><?php echo $error; ?></span>
                             <label>Designation</label>
                             <!--                                    <input type="text" placeholder="Designation" class="form-control" name="des"/><br/>-->
                             <select class="form-control" name="des" required>
@@ -443,13 +458,6 @@ if (isset($_POST['submit'])) {
                                 <?php while ($_row = mysqli_fetch_assoc($_row_set)) { ?>
                                     <option
                                         value="<?php echo $_row['dist_code']; ?>"><?php echo $_row['dist_nm']; ?></option>
-                                <?php } ?>
-                            </select><br/>
-                            <label>Division</label>
-                            <select class="form-control" name="division" required>
-                                <option value="">Select...</option>
-                                <?php while ($_r = mysqli_fetch_assoc($r_set)) { ?>
-                                    <option value="<?php echo $_r['id']; ?>"><?php echo $_r['div_name']; ?></option>
                                 <?php } ?>
                             </select><br/>
                             <input type="submit" class="btn btn-info" name="submit" value="ADD MEMBER"/>
