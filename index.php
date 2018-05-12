@@ -2,6 +2,12 @@
 <?php include 'src/components/sessions.php'; ?>
 <?php include 'src/components/functions.php'; ?>
 <?php confirm_logged_in(); ?>
+<?php
+$user = $_SESSION["email"];
+$query = "SELECT * FROM member WHERE email = '$user'";
+$row_set = mysqli_query($conn, $query);
+$row = mysqli_fetch_assoc($row_set);
+?>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -31,10 +37,6 @@
                 <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
                     <?php
                     if (isset($_SESSION["id"])) {
-                        $user = $_SESSION["email"];
-                        $query = "SELECT * FROM member WHERE email = '$user'";
-                        $row_set = mysqli_query($conn, $query);
-                        $row = mysqli_fetch_assoc($row_set);
                         if ($row["role"] == "sadmin") {
                             ?>
                             <li class = "nav-item active" data-toggle = "tooltip" data-placement = "right" title = "Dashboard">
@@ -398,7 +400,7 @@
                     <li class="breadcrumb-item">
                         <a href="#">Dashboard</a>
                     </li>
-                    <li class="breadcrumb-item active">My Dashboard</li>
+                    <li class="breadcrumb-item active"><?php echo htmlentities($_SESSION["email"]); ?></li>
                 </ol>
                 <!-- Icon Cards-->
                 <div class="row">

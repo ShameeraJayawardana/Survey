@@ -6,6 +6,7 @@ $emplErr = "";
 $error = "";
 $_query = "SELECT * FROM district";
 $_row_set = mysqli_query($conn, $_query);
+$picture = "pics/avatar.jpg";
 
 if (isset($_POST['submit'])) {
     $password = $_POST['password'];
@@ -25,7 +26,7 @@ if (isset($_POST['submit'])) {
     } elseif ($_POST['emplNo'] != $row['emplNo']) {
         $emplErr = "Wrong employee number";
     } else {
-        $sql = "INSERT INTO member(name, emplNo, des, district, division, email, password, role) VALUES('$_POST[name]','$row[emplNo]','$row[des]','$row[district]','$row[division]','$_POST[email]','$en_pwd','$role')";
+        $sql = "INSERT INTO member(name, emplNo, picture, des, district, division, email, password, role) VALUES('$_POST[name]','$row[emplNo]', '$picture','$row[des]','$row[district]','$row[division]','$_POST[email]','$en_pwd','$role')";
         $query = mysqli_query($conn, $sql);
         $error = mysqli_error($conn);
         if ($query) {
