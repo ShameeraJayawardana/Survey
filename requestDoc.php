@@ -87,17 +87,23 @@ if (isset($_POST['cart'])) {
     $name = $_SESSION['email'];
     $time = date("Y/m/d h:i:sa");
     if (isset($_SESSION['cart'])) {
-        $count = count($_SESSION['cart']);
-        $item_array = array(
-            'name' => $name,
-            'item_type' => $_POST['type'],
-            'item_number' => $_POST['number'],
-            'time' => $time,
-            'remarks' => $_POST['remark'],
-            'status' => $status,
-            'availability' => $availability
-        );
-        $_SESSION['cart'][$count] = $item_array;
+        $item_array_id = array_column($_SESSION['cart'], "item_number");
+        if (!in_array($_POST['number'], $item_array_id)) {
+            $count = count($_SESSION['cart']);
+            $item_array = array(
+                'name' => $name,
+                'item_type' => $_POST['type'],
+                'item_number' => $_POST['number'],
+                'time' => $time,
+                'remarks' => $_POST['remark'],
+                'status' => $status,
+                'availability' => $availability
+            );
+            $_SESSION['cart'][$count] = $item_array;
+        }else{
+            echo '<script>alert("Document already added!");</script>';
+            echo '<script>window.location="requestDoc.php"</script>';
+        }
     } else {
         $item_array = array(
             'name' => $name,
