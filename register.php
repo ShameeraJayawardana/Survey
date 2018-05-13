@@ -11,13 +11,25 @@ $picture = "pics/avatar.jpg";
 if (isset($_POST['submit'])) {
     $password = $_POST['password'];
     $en_pwd = md5($password);
-    $role = "member";
+    $role = "";
     $confirm = $_POST['confirm'];
 
     $select = "SELECT * FROM addmembers WHERE email='$_POST[email]'";
     $row_set = mysqli_query($conn, $select);
     $row = mysqli_fetch_assoc($row_set);
     $r = mysqli_num_rows($row_set);
+
+    if ($row['des'] == "ITBranch"){
+        $role = "sadmin";
+    }elseif ($row['des'] == "ss"){
+        $role = "ss";
+    }elseif ($row['des'] == "SNR. Supdt. of Surveyor"){
+        $role = "snrss";
+    }elseif ($row['des'] == "Surveyor"){
+        $role = "member";
+    }elseif ($row['des'] == "M.T.O"){
+        $role = "admin";
+    }
 
     if ($r < 1) {
         $permission = "You don't have permission to register";
