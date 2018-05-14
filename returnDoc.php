@@ -11,7 +11,7 @@ $result_set = mysqli_query($conn, $sql);
 
 $user = $_SESSION['email'];
 
-$_q = "SELECT * FROM req WHERE name = '$user' AND availability= 'locked'";
+$_q = "SELECT * FROM req WHERE name = '$user' AND status= 'Done'";
 $q_set = mysqli_query($conn, $_q);
 
 $arr = array();

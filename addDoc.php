@@ -59,10 +59,10 @@ if (isset($_POST['cart'])) {
         $fb = $_POST['dist'];
         $pp = "";
     }
-    $doc_id = $district . $_POST['dist'] . $_POST['type'] . $id . $_POST['sheet'] . $_POST['sup'] . $_POST['insert'] . $_POST['block'] . $oc . $fc . $_POST['vol'] . $fb . $_POST['court'] . $_POST['field_b'] . $_POST['subCat'];
+    //$doc_id = $district . $_POST['dist'] . $_POST['type'] . $id . $_POST['sheet'] . $_POST['sup'] . $_POST['insert'] . $_POST['block'] . $oc . $fc . $_POST['vol'] . $fb . $_POST['court'] . $_POST['field_b'] . $_POST['subCat'];
     //$doc_id = "abcdef";
     $sd = $_POST['dist'] . $_POST['type'] . $_POST['number'] . $pp . $_POST['block'] . $_POST['sup'] . $_POST['insert'] . $_POST['sheet'];
-    $doc_id = $district . $_POST['dist'] . $_POST['type'] . $id . $_POST['sheet'] . $_POST['sup'] . $_POST['insert'] . $_POST['block'] . $oc . $fc . $_POST['vol'] . $fb . $_POST['court'] . $_POST['field_b'] . $_POST['subCat'];
+    $doc_id = $district . $_POST['dist'] . $_POST['type'] . $_POST['number'] . $id . $_POST['sheet'] . $_POST['sup'] . $_POST['insert'] . $_POST['block'] . $oc . $fc . $_POST['vol'] . $fb . $_POST['court'] . $_POST['field_b'] . $_POST['subCat'];
     if (isset($_SESSION['cart'])) {
         $item_array_id = array_column($_SESSION['cart'], "item_id");
         if (!in_array($doc_id, $item_array_id)) {
@@ -673,7 +673,7 @@ if (isset($_POST['submit'])) {
                 <div class="form-group" id="border">
                     <div class="row">
                         <div class="col-md-12">
-                            <label>Number</label>
+                            <label>Plan Number/Book Number</label>
                             <input type="text" class="form-control" placeholder="Document Number" name="number"/>
                         </div>
                     </div>
