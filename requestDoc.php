@@ -3,8 +3,14 @@
 <?php include 'src/components/functions.php'; ?>
 <?php confirm_logged_in(); ?>
 <?php
-$sql = "SELECT * FROM docTypes";
-$result_set = mysqli_query($conn, $sql);
+
+$user = $_SESSION["email"];
+$query = "SELECT * FROM member WHERE email = '$user'";
+$row_set = mysqli_query($conn, $query);
+$row1 = mysqli_fetch_assoc($row_set);
+
+$doc_type_query = "SELECT * FROM docTypes";
+$doc_type_set = mysqli_query($conn, $doc_type_query);
 $status = "pending";
 $type = "";
 if (isset($_POST['type'])) {
@@ -84,15 +90,14 @@ $insert = mysqli_query($conn, $_query);
 $msg = "";
 if (isset($_POST['cart'])) {
 
-    $name = $_SESSION['email'];
     $time = date("Y/m/d h:i:sa");
     if (isset($_SESSION['cart'])) {
         $item_array_id = array_column($_SESSION['cart'], "item_number");
         if (!in_array($_POST['number'], $item_array_id)) {
             $count = count($_SESSION['cart']);
             $item_array = array(
-                'name' => $name,
-                'item_type' => $_POST['type'],
+                'name' => $user,
+                'item_type' => $row1['district'],
                 'item_number' => $_POST['number'],
                 'time' => $time,
                 'remarks' => $_POST['remark'],
@@ -106,8 +111,8 @@ if (isset($_POST['cart'])) {
         }
     } else {
         $item_array = array(
-            'name' => $name,
-            'item_type' => $_POST['type'],
+            'name' => $user,
+            'item_type' => $row1['district'],
             'item_number' => $_POST['number'],
             'time' => $time,
             'remarks' => $_POST['remark'],
@@ -147,7 +152,7 @@ if (isset($_POST['submit'])) {
         $row = mysqli_fetch_assoc($row_set);
         $condition = $row['status'];
         if ($condition == 'available') {
-            $insert = "INSERT INTO req(name,doc_type,number,time,remarks,status,availability) VALUES"
+            $insert = "INSERT INTO req(name,district,number,time,remarks,status,availability) VALUES"
                     . "('$values[name]','$values[item_type]','$values[item_number]','$values[time]','$values[remarks]', '$values[status]', "
                     . "'$values[availability]')";
 
@@ -264,11 +269,7 @@ if (isset($_POST['submit'])) {
                 <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
                     <?php
                     if (isset($_SESSION["id"])) {
-                        $user = $_SESSION["email"];
-                        $query = "SELECT * FROM member WHERE email = '$user'";
-                        $row_set = mysqli_query($conn, $query);
-                        $row = mysqli_fetch_assoc($row_set);
-                        if ($row["role"] == "sadmin") {
+                        if ($row1["role"] == "sadmin") {
                             ?>
                             <li class = "nav-item active" data-toggle = "tooltip" data-placement = "right" title = "Dashboard">
                                 <a class = "nav-link" href = "sadmin.php">
@@ -295,7 +296,7 @@ if (isset($_POST['submit'])) {
                                 </a>
                             </li>
                             <?php
-                        } elseif ($row["role"] == "snrss") {
+                        } elseif ($row1["role"] == "snrss") {
                             ?>
                             <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
                                 <a class="nav-link" href="snrss.php">
@@ -362,7 +363,7 @@ if (isset($_POST['submit'])) {
                                 </a>
                             </li>
                             <?php
-                        } elseif ($row["role"] == "ss") {
+                        } elseif ($row1["role"] == "ss") {
                             ?>
                             <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
                                 <a class="nav-link" href="ss.php">
@@ -407,7 +408,7 @@ if (isset($_POST['submit'])) {
                                 </a>
                             </li>
                             <?php
-                        } elseif ($row["role"] == "admin") {
+                        } elseif ($row1["role"] == "admin") {
                             ?>
                             <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
                                 <a class="nav-link" href="adminPanel.php">
@@ -474,7 +475,7 @@ if (isset($_POST['submit'])) {
                                 </a>
                             </li>
                             <?php
-                        } elseif ($row["role"] == "member") {
+                        } elseif ($row1["role"] == "member") {
                             ?>
                             <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
                                 <a class="nav-link" href="index.php">
@@ -540,9 +541,17 @@ if (isset($_POST['submit'])) {
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
-                    <?php if ($row["role"] == "ss") { ?>
+                    <?php if ($row1["role"] == "admin") { ?>
+                        <?php
+                        $q = "SELECT name,COUNT(name) AS count FROM req WHERE district = '$row1[district]' AND status = 'Approved' GROUP BY name";
+                        $result_set = mysqli_query($conn, $q);
+
+                        $q1 = "SELECT name,COUNT(name) AS count FROM req WHERE district = '$row1[district]' AND availability = 'returned' GROUP BY name";
+                        $result_set1 = mysqli_query($conn, $q1);
+                        ?>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-fw fa-envelope"></i>
                                 <span class="d-lg-none">Messages
                                     <span class="badge badge-pill badge-primary">12 New</span>
@@ -554,15 +563,98 @@ if (isset($_POST['submit'])) {
                             <div class="dropdown-menu" aria-labelledby="messagesDropdown">
                                 <h6 class="dropdown-header">New Messages:</h6>
                                 <div class="dropdown-divider"></div>
-                                <?php while ($_row = mysqli_fetch_array($_row_set)) { ?>
-                                    <?php if ($_row['name'] != $_SESSION['email']) { ?>
-                                        <a class="dropdown-item" href="send.php?name=<?php echo urlencode($_row['name']); ?>">
+                                <?php while ($result = mysqli_fetch_array($result_set)) { ?>
+                                    <?php if ($result['name'] != $_SESSION['email']) { ?>
+                                        <a class="dropdown-item" href="done.php?name=<?php echo urlencode($result['name']); ?>">
                                             <div class="dropdown-item">
-                                                <strong><?php echo $_row['name']; ?></strong>
-                                                <div class="dropdown-message small">Requests for <?php echo $_row['count']; ?>documents</div>
+                                                <strong><?php echo $result['name']; ?></strong>
+                                                <div class="dropdown-message small">Requests for <?php echo $result['count']; ?>
+                                                    documents
+                                                </div>
                                             </div>
                                         </a>
                                     <?php } ?>
+                                <?php } ?>
+                                <?php while ($result1 = mysqli_fetch_array($result_set1)) { ?>
+                                    <?php if ($result1['name'] != $_SESSION['email']) { ?>
+                                        <a class="dropdown-item"
+                                           href="done.php?name=<?php echo urlencode($result1['name']); ?>">
+                                            <div class="dropdown-item">
+                                                <strong><?php echo $result1['name']; ?></strong>
+                                                <div class="dropdown-message small">Returned <?php echo $result1['count']; ?>
+                                                    documents
+                                                </div>
+                                            </div>
+                                        </a>
+                                    <?php } ?>
+                                <?php } ?>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item small" href="#">View all messages</a>
+                            </div>
+                        </li>
+                    <?php } else if ($row1["role"] == "ss") { ?>
+                        <?php
+                        $q = "SELECT name,COUNT(name) AS count FROM req WHERE district = '$row1[district]' AND status = 'pending' GROUP BY name";
+                        $result_set = mysqli_query($conn, $q);
+                        ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-fw fa-envelope"></i>
+                                <span class="d-lg-none">Messages
+                                    <span class="badge badge-pill badge-primary">12 New</span>
+                                </span>
+                                <span class="indicator text-primary d-none d-lg-block">
+                                    <i class="fa fa-fw fa-circle"></i>
+                                </span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="messagesDropdown">
+                                <h6 class="dropdown-header">New Messages:</h6>
+                                <div class="dropdown-divider"></div>
+                                <?php while ($result = mysqli_fetch_array($result_set)) { ?>
+                                    <?php if ($result['name'] != $_SESSION['email']) { ?>
+                                        <a class="dropdown-item" href="send.php?name=<?php echo urlencode($result['name']); ?>">
+                                            <div class="dropdown-item">
+                                                <strong><?php echo $result['name']; ?></strong>
+                                                <div class="dropdown-message small">Requests for <?php echo $result['count']; ?>
+                                                    documents
+                                                </div>
+                                            </div>
+                                        </a>
+                                    <?php } ?>
+                                <?php } ?>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item small" href="#">View all messages</a>
+                            </div>
+                        </li>
+                    <?php } else if ($row1["role"] == "member") { ?>
+                        <?php
+                        $q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'Rejected' GROUP BY name";
+                        $result_set = mysqli_query($conn, $q);
+                        ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-fw fa-envelope"></i>
+                                <span class="d-lg-none">Messages
+                                    <span class="badge badge-pill badge-primary">12 New</span>
+                                </span>
+                                <span class="indicator text-primary d-none d-lg-block">
+                                    <i class="fa fa-fw fa-circle"></i>
+                                </span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="messagesDropdown">
+                                <h6 class="dropdown-header">New Messages:</h6>
+                                <div class="dropdown-divider"></div>
+                                <?php while ($result = mysqli_fetch_array($result_set)) { ?>
+                                    <a class="dropdown-item" href="reject.php?name=<?php echo urlencode($result['name']); ?>">
+                                        <div class="dropdown-item">
+                                            <strong><?php echo $result['name']; ?></strong>
+                                            <div class="dropdown-message small">Rejected <?php echo $result['count']; ?>
+                                                documents
+                                            </div>
+                                        </div>
+                                    </a>
                                 <?php } ?>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item small" href="#">View all messages</a>
@@ -639,7 +731,7 @@ if (isset($_POST['submit'])) {
                                     <select class="form-control" name="type" id="category" onchange="selectValue();
                                             showHint(this.value);">
                                         <option value="">Select...</option>
-                                        <?php while ($result = mysqli_fetch_assoc($result_set)) { ?>
+                                        <?php while ($result = mysqli_fetch_assoc($doc_type_set)) { ?>
                                             <option value="<?php echo $result['type']; ?>"><?php echo $result['type']; ?></option>
                                         <?php } ?>
                                     </select>
@@ -759,7 +851,7 @@ if (isset($_POST['submit'])) {
                                 <table class=" table table-bordered">
                                     <tr>
                                         <th>Name</th>
-                                        <th>Document type</th>
+                                        <th>District</th>
                                         <th>Document Number</th>
                                         <th>Time</th>
                                         <th>Remarks</th>

@@ -11,7 +11,7 @@ $result_set = mysqli_query($conn, $sql);
 
 $user = $_SESSION['email'];
 
-$_q = "SELECT * FROM req WHERE name = '$user' AND status= 'Done'";
+$_q = "SELECT * FROM req WHERE name = '$user' AND status = 'Done' AND availability = 'locked'";
 $q_set = mysqli_query($conn, $_q);
 
 $arr = array();
@@ -458,10 +458,10 @@ if (isset($_POST['submit'])) {
                     <?php while ($_r = mysqli_fetch_assoc($q_set)) { ?>
                         <tr>
                             <td>
-                                <?php echo $_r['number']; ?>
+                                <?php echo $_r['id']; ?>
                             </td>
                             <td>
-                                <?php echo $_r['doc_type']; ?>
+                                <?php echo $_r['number']; ?>
                             </td>
                             <td>
                                 <input type="checkbox" name="return[]"

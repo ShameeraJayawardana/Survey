@@ -328,6 +328,13 @@ $msg = "";
         </ul>
         <ul class="navbar-nav ml-auto">
             <?php if ($row["role"] == "admin") { ?>
+                <?php
+                $q = "SELECT name,COUNT(name) AS count FROM req WHERE district = '$row[district]' AND status = 'Approved' GROUP BY name";
+                $result_set = mysqli_query($conn, $q);
+
+                $q1 = "SELECT name,COUNT(name) AS count FROM req WHERE district = '$row[district]' AND availability = 'returned' GROUP BY name";
+                $result_set1 = mysqli_query($conn, $q1);
+                ?>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
@@ -366,6 +373,74 @@ $msg = "";
                                     </div>
                                 </a>
                             <?php } ?>
+                        <?php } ?>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item small" href="#">View all messages</a>
+                    </div>
+                </li>
+            <?php } else if ($row["role"] == "ss") { ?>
+                <?php
+                $q = "SELECT name,COUNT(name) AS count FROM req WHERE district = '$row[district]' AND status = 'pending' GROUP BY name";
+                $result_set = mysqli_query($conn, $q);
+                ?>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-fw fa-envelope"></i>
+                        <span class="d-lg-none">Messages
+                                    <span class="badge badge-pill badge-primary">12 New</span>
+                                </span>
+                        <span class="indicator text-primary d-none d-lg-block">
+                                    <i class="fa fa-fw fa-circle"></i>
+                                </span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="messagesDropdown">
+                        <h6 class="dropdown-header">New Messages:</h6>
+                        <div class="dropdown-divider"></div>
+                        <?php while ($result = mysqli_fetch_array($result_set)) { ?>
+                            <?php if ($result['name'] != $_SESSION['email']) { ?>
+                                <a class="dropdown-item" href="send.php?name=<?php echo urlencode($result['name']); ?>">
+                                    <div class="dropdown-item">
+                                        <strong><?php echo $result['name']; ?></strong>
+                                        <div class="dropdown-message small">Requests for <?php echo $result['count']; ?>
+                                            documents
+                                        </div>
+                                    </div>
+                                </a>
+                            <?php } ?>
+                        <?php } ?>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item small" href="#">View all messages</a>
+                    </div>
+                </li>
+            <?php } else if ($row["role"] == "member") { ?>
+                <?php
+                $q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'Rejected' GROUP BY name";
+                $result_set = mysqli_query($conn, $q);
+                ?>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle mr-lg-2" id="messagesDropdown" href="#" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-fw fa-envelope"></i>
+                        <span class="d-lg-none">Messages
+                                    <span class="badge badge-pill badge-primary">12 New</span>
+                                </span>
+                        <span class="indicator text-primary d-none d-lg-block">
+                                    <i class="fa fa-fw fa-circle"></i>
+                                </span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="messagesDropdown">
+                        <h6 class="dropdown-header">New Messages:</h6>
+                        <div class="dropdown-divider"></div>
+                        <?php while ($result = mysqli_fetch_array($result_set)) { ?>
+                            <a class="dropdown-item" href="reject.php?name=<?php echo urlencode($result['name']); ?>">
+                                <div class="dropdown-item">
+                                    <strong><?php echo $result['name']; ?></strong>
+                                    <div class="dropdown-message small">Rejected <?php echo $result['count']; ?>
+                                        documents
+                                    </div>
+                                </div>
+                            </a>
                         <?php } ?>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item small" href="#">View all messages</a>
@@ -450,7 +525,8 @@ $msg = "";
                                 <option value="<?php echo $r2['sub']; ?>"><?php echo $r2['sub']; ?></option>
                             <?php } ?>
                         </select><br/>
-                        <button class="btn btn-outline-dark" name="download"><img src="pics/csv_file.png" /> DOWNLOAD</button>
+                        <button class="btn btn-outline-dark" name="download"><img src="pics/csv_file.png"/> DOWNLOAD
+                        </button>
                     </form>
                 </div>
             </div>

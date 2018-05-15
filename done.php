@@ -7,18 +7,14 @@ if (isset($_GET['name'])) {
     $name = $_GET['name'];
 }
 
-//$_SESSION['name'] = $name;
+$user = $_SESSION["email"];
+$query = "SELECT * FROM member WHERE email = '$user'";
+$_row_set = mysqli_query($conn, $query);
+$_row = mysqli_fetch_assoc($_row_set);
 
-$sql = "SELECT * FROM req WHERE name = '$name' AND status = 'Approved'";
+$sql = "SELECT * FROM req WHERE district = '$_row[district]' AND name = '$name' AND status = 'Approved'";
 $row_set = mysqli_query($conn, $sql);
-//$row = mysqli_fetch_assoc($row_set)
 
-//if (isset($_POST['submit'])) {
-//    $status = 'Done';
-//    $query = "UPDATE req SET status='$status' WHERE id = '$id'";
-//    mysqli_query($conn, $query);
-//    redirect_to("ss.php");
-//}
 ?>
 <html lang="en">
     <head>
@@ -45,7 +41,7 @@ $row_set = mysqli_query($conn, $sql);
                 <div class="jumbotron">
                     <h5><?php echo $row['name']; ?></h5>
                     <span class="float-left">
-                        Requests for <?php echo $row['doc_type']; ?><br>
+                        Requests for <?php echo $row['number']; ?><br>
                         <span class="small float-right text-muted"><?php echo $row['time']; ?></span>
                     </span><br><br><br>
                     <span class="float-right">
