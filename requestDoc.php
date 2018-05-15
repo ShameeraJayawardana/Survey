@@ -128,8 +128,6 @@ if (isset($_GET['action'])) {
         foreach ($_SESSION['cart'] as $keys => $values) {
             if ($values['item_number'] == $_GET['id']) {
                 unset($_SESSION['cart'][$keys]);
-                //echo '<script>alert("Item Removed")</script>';
-                //header("Location: addDoc.php");
                 echo '<script>window.lacation="requestDoc.php"</script>';
             }
         }
@@ -137,15 +135,6 @@ if (isset($_GET['action'])) {
 }
 
 if (isset($_POST['submit'])) {
-//    $name = $_SESSION['email'];
-//    $insert = "INSERT INTO req(name,doc_type,number,time,status,availability) VALUES"
-//            . "('$name','$_POST[type]','$_POST[number]','$time','$status', '$availability')";
-//    mysqli_query($conn, $insert);
-//
-//    $update = "UPDATE doc_rtn SET status = 'locked' WHERE doc_id = '$_POST[number]'";
-//    mysqli_query($conn, $update);
-//    $err = mysqli_error($conn);
-//    echo $err;
     foreach ($_SESSION['cart'] as $keys => $values) {
         $sql = "SELECT * FROM doc_rtn WHERE doc_id='$values[item_number]'";
         $row_set = mysqli_query($conn, $sql);

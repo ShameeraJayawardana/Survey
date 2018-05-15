@@ -667,7 +667,7 @@ $result2 = mysqli_fetch_assoc($result_set13);
                     <select class="form-control" onchange="selectDes(this.value);" required>
                         <option value="">Select...</option>
                         <option value="Surveyor">Surveyor</option>
-                        <option value="ss">Senior Surveyor</option>
+                        <option value="Supdt. of Surveyor">Supdt. of Surveyor</option>
                     </select><br/>
                     <label>Issued to(name)</label>&nbsp;&nbsp;
                     <select class="alert" name="receiver" id="nameList" required>

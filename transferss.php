@@ -18,7 +18,7 @@ if (isset($_POST['submit'])) {
     $r3 = mysqli_fetch_assoc($r_set3);
     $num = mysqli_num_rows($r_set3);
     if ($num > 0) {
-        if ($r3['des'] == 'ss') {
+        if ($r3['des'] == 'Supdt. of Surveyor') {
             $update1 = "UPDATE member SET district = '$_POST[district]', division = '$_POST[division]' WHERE emplNo = '$_POST[empl]'";
             mysqli_query($conn, $update1);
 

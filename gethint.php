@@ -2,8 +2,14 @@
 <?php include 'src/components/sessions.php'; ?>
 <?php include 'src/components/functions.php'; ?>
 <?php
+$user = $_SESSION["email"];
+$query = "SELECT * FROM member WHERE email = '$user'";
+$result_set = mysqli_query($conn, $query);
+$result = mysqli_fetch_assoc($result_set);
+$district = $result['district'];
+$oc = 'oc';
 
-$sql = "SELECT * FROM doc_rtn WHERE status = 'available'";
+$sql = "SELECT * FROM doc_rtn WHERE district = '$district' AND status = 'available' AND doc_id NOT LIKE '%oc%'";
 $row_set = mysqli_query($conn, $sql);
 
 $q = $_REQUEST["q"];

@@ -21,7 +21,7 @@ if (isset($_POST['submit'])) {
 
     if ($row['des'] == "ITBranch"){
         $role = "sadmin";
-    }elseif ($row['des'] == "ss"){
+    }elseif ($row['des'] == "Supdt. of Surveyor"){
         $role = "ss";
     }elseif ($row['des'] == "SNR. Supdt. of Surveyor"){
         $role = "snrss";
