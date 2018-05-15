@@ -57,6 +57,10 @@ if (isset($_POST['submit'])) {
 
         $update = "UPDATE issue SET status = '$status' WHERE receiver = '$s_arr[email]' AND doc_id = '$value'";
         mysqli_query($conn, $update);
+        //$error = mysqli_error($conn);
+
+        $update2 = "UPDATE req SET availability = 'accepted' WHERE name = '$s_arr[email]' AND number = '$value'";
+        mysqli_query($conn, $update2);
         $error = mysqli_error($conn);
     }
 }

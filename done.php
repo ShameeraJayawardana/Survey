@@ -15,6 +15,9 @@ $_row = mysqli_fetch_assoc($_row_set);
 $sql = "SELECT * FROM req WHERE district = '$_row[district]' AND name = '$name' AND status = 'Approved'";
 $row_set = mysqli_query($conn, $sql);
 
+$sql1 = "SELECT * FROM req WHERE district = '$_row[district]' AND name = '$name' AND availability = 'returned'";
+$row_set1 = mysqli_query($conn, $sql1);
+
 ?>
 <html lang="en">
     <head>
@@ -48,6 +51,18 @@ $row_set = mysqli_query($conn, $sql);
                         <a class="btn btn-success" href="adminApprove.php?id=<?php echo urlencode($row['id']); ?>&name=<?php echo urlencode($row['name']); ?>">APPROVE</a>
                         <a class="btn btn-danger" href="adminReject.php?id=<?php echo urlencode($row['id']); ?>&name=<?php echo urlencode($row['name']); ?>">REJECT</a>
                     </span>               
+                </div>
+            <?php } ?>
+            <?php while ($row1 = mysqli_fetch_assoc($row_set1)) { ?>
+                <div class="jumbotron">
+                    <h5><?php echo $row1['name']; ?></h5>
+                    <span class="float-left">
+                        Requests for <?php echo $row1['number']; ?><br>
+                        <span class="small float-right text-muted"><?php echo $row1['time']; ?></span>
+                    </span><br><br><br>
+                    <span class="float-right">
+                        <a class="btn btn-success" href="adminAccept.php?id=<?php echo urlencode($row1['id']); ?>&name=<?php echo urlencode($row1['name']); ?>">ACCEPT</a>
+                    </span>
                 </div>
             <?php } ?>
             <a href="adminPanel.php" class="text-center text-primary">Go back to previous page</a>
