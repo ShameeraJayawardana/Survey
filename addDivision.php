@@ -3,17 +3,27 @@
 <?php include 'src/components/functions.php'; ?>
 <?php confirm_logged_in(); ?>
 <?php
-$q1 = "SELECT * FROM docTypes";
-$r_set1 = mysqli_query($conn, $q1);
+$_query = "SELECT * FROM district";
+$_row_set = mysqli_query($conn, $_query);
+$disArr = array();
 
-$q2 = "SELECT * FROM sub_category";
-$r_set2 = mysqli_query($conn, $q2);
+if (isset($_POST['submit'])){
+    $district = $_POST['district'];
+    $sql = "SELECT * FROM division WHERE district_id = '$district'";
+    $dis_set = mysqli_query($conn, $sql);
+    while ($dis = mysqli_fetch_assoc($dis_set)){
+        array_push($disArr, $dis['id']);
+    }
+//    var_dump($disArr);
+    $maxDis = max($disArr);
+    $id = $maxDis+1;
+    $land = 0;
+    $status = 1;
+    //var_dump($maxDis);
+    $insert = "INSERT INTO division(id,div_name,district_id,land_mark_qty1,status) VALUES('$id','$_POST[division]','$_POST[district]','$land','$status')";
+    mysqli_query($conn,$insert);
 
-$email = $_SESSION["email"];
-$q3 = "SELECT * FROM member WHERE email = '$email'";
-$r_set3 = mysqli_query($conn, $q3);
-$r3 = mysqli_fetch_assoc($r_set3);
-$msg = "";
+}
 ?>
 <html lang="en">
 <head>
@@ -513,30 +523,27 @@ $msg = "";
 <div class="content-wrapper" id="background">
     <div class="container">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-12">
                 <div class="form-group">
-                    <form action="reportsDownload.php" method="post">
-                        <label>Category</label>
-                        <select class="form-control" name="type">
-                            <option>Select...</option>
-                            <?php while ($r1 = mysqli_fetch_assoc($r_set1)) { ?>
-                                <option value="<?php echo $r1['id']; ?>"><?php echo $r1['type']; ?></option>
-                            <?php } ?>
-                        </select><br/>
-                        <h4><?php echo $msg; ?></h4>
-                        <label>Sub Category</label>
-                        <select class="form-control" name="sub_cat">
-                            <option>Select...</option>
-                            <?php while ($r2 = mysqli_fetch_assoc($r_set2)) { ?>
-                                <option value="<?php echo $r2['sub']; ?>"><?php echo $r2['sub']; ?></option>
-                            <?php } ?>
-                        </select><br/>
-                        <button class="btn btn-outline-dark" name="download"><img src="pics/csv_file.png"/> DOWNLOAD
-                        </button>
+                    <form action="addDivision.php" method="post">
+                        <div class="row align-items-center justify-content-center">
+                            <div style="width: 60%;">
+                                <label>Division Name</label>
+                                <input type="text" required class="form-control" name="division" placeholder="Add a division name"><br/>
+                                <label>District</label>
+                                <select class="form-control" name="district" required>
+                                    <option value="">Select...</option>
+                                    <?php while ($_row = mysqli_fetch_assoc($_row_set)) { ?>
+                                        <option
+                                            value="<?php echo $_row['dist_code']; ?>"><?php echo $_row['dist_nm']; ?></option>
+                                    <?php } ?>
+                                </select><br/>
+                                <input type="submit" class="btn btn-outline-dark" name="submit">
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
-            <div class="col-md-8"></div>
         </div>
     </div>
 

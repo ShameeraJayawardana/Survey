@@ -88,6 +88,12 @@ $select_set = mysqli_query($conn, $sql);
                             <span class="nav-link-text">Transfer SNRSS</span>
                         </a>
                     </li>
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
+                        <a class="nav-link" href="addDivision.php">
+                            <i class="fa fa-plus"></i>
+                            <span class="nav-link-text">Add Division</span>
+                        </a>
+                    </li>
                     <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Delete">
                         <a class="nav-link" href="deleteUser.php">
                             <i class="fa fa-space-shuttle"></i>
