@@ -98,6 +98,7 @@ if (isset($_POST['cart'])) {
             $item_array = array(
                 'name' => $user,
                 'item_type' => $row1['district'],
+                'division' => $row1['division'],
                 'item_number' => $_POST['number'],
                 'time' => $time,
                 'remarks' => $_POST['remark'],
@@ -113,6 +114,7 @@ if (isset($_POST['cart'])) {
         $item_array = array(
             'name' => $user,
             'item_type' => $row1['district'],
+            'division' => $row1['division'],
             'item_number' => $_POST['number'],
             'time' => $time,
             'remarks' => $_POST['remark'],
@@ -141,8 +143,8 @@ if (isset($_POST['submit'])) {
         $row = mysqli_fetch_assoc($row_set);
         $condition = $row['status'];
         if ($condition == 'available') {
-            $insert = "INSERT INTO req(name,district,number,time,remarks,status,availability) VALUES"
-                    . "('$values[name]','$values[item_type]','$values[item_number]','$values[time]','$values[remarks]', '$values[status]', "
+            $insert = "INSERT INTO req(name,district,division,number,time,remarks,status,availability) VALUES"
+                    . "('$values[name]','$values[item_type]','$values[division]','$values[item_number]','$values[time]','$values[remarks]', '$values[status]', "
                     . "'$values[availability]')";
 
             $submit = mysqli_query($conn, $insert);
@@ -530,7 +532,7 @@ if (isset($_POST['submit'])) {
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
-                    <?php if ($row1["role"] == "admin") { ?>
+                    <?php if ($row1["role"] == "admin" || $row1["role"] == "snrss") { ?>
                         <?php
                         $q = "SELECT name,COUNT(name) AS count FROM req WHERE district = '$row1[district]' AND status = 'Approved' GROUP BY name";
                         $result_set = mysqli_query($conn, $q);
@@ -583,7 +585,7 @@ if (isset($_POST['submit'])) {
                         </li>
                     <?php } else if ($row1["role"] == "ss") { ?>
                         <?php
-                        $q = "SELECT name,COUNT(name) AS count FROM req WHERE district = '$row1[district]' AND status = 'pending' GROUP BY name";
+                        $q = "SELECT name,COUNT(name) AS count FROM req WHERE district = '$row1[district]' AND division = '$row1[division]' AND status = 'pending' GROUP BY name";
                         $result_set = mysqli_query($conn, $q);
                         ?>
                         <li class="nav-item dropdown">
@@ -618,7 +620,7 @@ if (isset($_POST['submit'])) {
                         </li>
                     <?php } else if ($row1["role"] == "member") { ?>
                         <?php
-                        $q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'Rejected' GROUP BY name";
+                        $q = "SELECT name,COUNT(name) AS count FROM req WHERE name = '$row1[email]' AND status = 'Rejected' GROUP BY name";
                         $result_set = mysqli_query($conn, $q);
                         ?>
                         <li class="nav-item dropdown">
@@ -841,6 +843,7 @@ if (isset($_POST['submit'])) {
                                     <tr>
                                         <th>Name</th>
                                         <th>District</th>
+                                        <th>Division</th>
                                         <th>Document Number</th>
                                         <th>Time</th>
                                         <th>Remarks</th>
@@ -853,6 +856,7 @@ if (isset($_POST['submit'])) {
                                             <tr>
                                                 <td><?php echo $values['name']; ?></td>
                                                 <td><?php echo $values['item_type']; ?></td>
+                                                <td><?php echo $values['division']; ?></td>
                                                 <td><?php echo $values['item_number']; ?></td>
                                                 <td><?php echo $values['time']; ?></td>
                                                 <td><?php echo $values['remarks']; ?></td>

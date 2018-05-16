@@ -332,7 +332,7 @@ $r_set2 = mysqli_query($conn, $q2);
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">
-            <?php if ($row["role"] == "admin") { ?>
+            <?php if ($row["role"] == "admin" || $row["role"] == "snrss") { ?>
                 <?php
                 $q = "SELECT name,COUNT(name) AS count FROM req WHERE district = '$row[district]' AND status = 'Approved' GROUP BY name";
                 $result_set = mysqli_query($conn, $q);
@@ -385,7 +385,7 @@ $r_set2 = mysqli_query($conn, $q2);
                 </li>
             <?php } else if ($row["role"] == "ss") { ?>
                 <?php
-                $q = "SELECT name,COUNT(name) AS count FROM req WHERE district = '$row[district]' AND status = 'pending' GROUP BY name";
+                $q = "SELECT name,COUNT(name) AS count FROM req WHERE district = '$row[district]' AND division = '$row[division]' AND status = 'pending' GROUP BY name";
                 $result_set = mysqli_query($conn, $q);
                 ?>
                 <li class="nav-item dropdown">
@@ -420,7 +420,7 @@ $r_set2 = mysqli_query($conn, $q2);
                 </li>
             <?php } else if ($row["role"] == "member") { ?>
                 <?php
-                $q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'Rejected' GROUP BY name";
+                $q = "SELECT name,COUNT(name) AS count FROM req WHERE name = '$row[email]' AND status = 'Rejected' GROUP BY name";
                 $result_set = mysqli_query($conn, $q);
                 ?>
                 <li class="nav-item dropdown">

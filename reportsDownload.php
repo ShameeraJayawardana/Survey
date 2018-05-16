@@ -23,36 +23,22 @@ if (isset($_POST['download'])){
     $re_set = mysqli_query($conn, $sql);
 
     $_file = $date . '.csv';
-    //$fp = fopen($_file, 'w');
     header('Content-Type: application/csv');
     // tell the browser we want to save it instead of displaying it
     header('Content-Disposition: attachment; filename="'.$_file.'";');
     $fp = fopen("php://output", 'w');
-//    if (!$fp = @fopen("php://output", 'w')) {
-//        echo "<script>console.log('Error');</script>";
-//    }else{
-//        echo "<script>console.log('Success');</script>";
-//    }
+
 
     $header = 'Index,District,FB Decode,Document ID,SD Code,Document Type,Document Name,Sheet,Sup,Insert,Block,OC,FC,VOL,PP Code,Court Number,Field Book,Sub Category,Remarks,Status';
     fwrite($fp, "{$header}\n");
-//    if (!@fwrite($fp, "{$header}\n")) {
-//        echo "<script>console.log('Write Error');</script>";
-//    }else{
-//        echo "<script>console.log('Write Success');</script>";
-//    }
+
     $n = 0;
 
     while ($result = mysqli_fetch_assoc($re_set)){
         $n++;
         fputcsv($fp, $result);
-//        if (!@fputcsv($fp, $result)) {
-//            echo "<script>console.log('Download Error');</script>";
-//        }else{
-//            echo "<script>console.log('Download Success');</script>";
-//        }
     }
-    //fseek($fp, 0);
+
     fclose($fp);
     if(file_exists($_file)) {
 
