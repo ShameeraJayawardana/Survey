@@ -49,6 +49,38 @@ if (isset($_POST['submit'])) {
     <!-- Custom styles for this template-->
     <link href="css/sb-admin.css" rel="stylesheet">
     <link href="css/search.css" rel="stylesheet">
+    <script>
+        var res = [];
+        function selectDistrict(str) {
+            //arrayValue.push(str);
+            console.log('aswssf', str);
+            if (str.length == 0) {
+                console.log("Value doesn't come");
+                //document.getElementById("txtHint").value = "";
+                return;
+            } else {
+                //console.log("Value comes");
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        res = eval("(" + this.responseText + ")");
+                        console.log(res);
+
+                        var sel = document.getElementById('divList');
+                        sel.innerHTML = null;
+                        for (var i = 0; i < res.length; i++) {
+                            var opt = document.createElement('option');
+                            opt.innerHTML = res[i];
+                            opt.value = res[i];
+                            sel.appendChild(opt);
+                        }
+                    }
+                };
+                xmlhttp.open("GET", "getDistrict.php?q=" + str, true);
+                xmlhttp.send();
+            }
+        }
+    </script>
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -533,7 +565,7 @@ if (isset($_POST['submit'])) {
                         <span style="color: red;"><?php echo $msg; ?></span><br/>
                         <label>District</label>
                         <!-- <input type="text" placeholder="District" class="form-control" name="district"/><br/>-->
-                        <select class="form-control" name="district" required>
+                        <select class="form-control" name="district" required onchange="selectDistrict(this.value);">
                             <option value="">Select...</option>
                             <?php while ($_row = mysqli_fetch_assoc($_row_set)) { ?>
                                 <option
@@ -541,7 +573,7 @@ if (isset($_POST['submit'])) {
                             <?php } ?>
                         </select><br/>
                         <label>Division</label>
-                        <select class="form-control" name="division" required>
+                        <select class="form-control" name="division" required id="divList">
                             <option value="">Select...</option>
                             <?php while ($_r = mysqli_fetch_assoc($r_set)) { ?>
                                 <option value="<?php echo $_r['id']; ?>"><?php echo $_r['div_name']; ?></option>
