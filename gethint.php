@@ -7,7 +7,6 @@ $query = "SELECT * FROM member WHERE email = '$user'";
 $result_set = mysqli_query($conn, $query);
 $result = mysqli_fetch_assoc($result_set);
 $district = $result['district'];
-$oc = 'oc';
 
 $sql = "SELECT * FROM doc_rtn WHERE district = '$district' AND status = 'available' AND doc_id NOT LIKE '%oc%'";
 $row_set = mysqli_query($conn, $sql);
