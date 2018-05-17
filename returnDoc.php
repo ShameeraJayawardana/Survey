@@ -6,6 +6,8 @@
 $q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'pending' GROUP BY name";
 $_row_set = mysqli_query($conn, $q);
 
+$id = 0;
+
 $sql = "SELECT * FROM docTypes";
 $result_set = mysqli_query($conn, $sql);
 
@@ -543,6 +545,9 @@ if (isset($_POST['submit'])) {
                             No
                         </th>
                         <th>
+                            Issued Date
+                        </th>
+                        <th>
                             Document ID
                         </th>
                         <th>
@@ -550,9 +555,13 @@ if (isset($_POST['submit'])) {
                         </th>
                     </tr>
                     <?php while ($_r = mysqli_fetch_assoc($q_set)) { ?>
+                        <?php $id = $id + 1; ?>
                         <tr>
                             <td>
-                                <?php echo $_r['id']; ?>
+                                <?php echo $id; ?>
+                            </td>
+                            <td>
+                                <?php echo $_r['time']; ?>
                             </td>
                             <td>
                                 <?php echo $_r['number']; ?>
