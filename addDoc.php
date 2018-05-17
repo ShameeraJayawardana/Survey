@@ -4,20 +4,14 @@
 <?php confirm_logged_in(); ?>
 $type = "";
 <?php
-$q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'Approved' GROUP BY name";
-$result_set = mysqli_query($conn, $q);
-
-$q1 = "SELECT name,COUNT(name) AS count FROM req WHERE availability = 'returned' GROUP BY name";
-$result_set1 = mysqli_query($conn, $q1);
 
 $qu = "SELECT * FROM sub_category";
 $re_set = mysqli_query($conn, $qu);
-//$re = mysqli_fetch_assoc($re_set);
+
 ?>
 <?php
 $sql = "SELECT * FROM ppcodedist";
 $_result_set = mysqli_query($conn, $sql);
-//$row = mysqli_fetch_assoc($row_set);
 ?>
 <?php
 
@@ -59,8 +53,7 @@ if (isset($_POST['cart'])) {
         $fb = $_POST['dist'];
         $pp = "";
     }
-    //$doc_id = $district . $_POST['dist'] . $_POST['type'] . $id . $_POST['sheet'] . $_POST['sup'] . $_POST['insert'] . $_POST['block'] . $oc . $fc . $_POST['vol'] . $fb . $_POST['court'] . $_POST['field_b'] . $_POST['subCat'];
-    //$doc_id = "abcdef";
+
     $sd = $_POST['dist'] . $_POST['type'] . $_POST['number'] . $pp . $_POST['block'] . $_POST['sup'] . $_POST['insert'] . $_POST['sheet'];
     $doc_id = $district . $_POST['dist'] . $_POST['type'] . $_POST['number'] . $id . $_POST['sheet'] . $_POST['sup'] . $_POST['insert'] . $_POST['block'] . $oc . $fc . $_POST['vol'] . $fb . $_POST['court'] . $_POST['field_b'] . $_POST['subCat'];
     if (isset($_SESSION['cart'])) {
@@ -122,8 +115,6 @@ if (isset($_GET['action'])) {
         foreach ($_SESSION['cart'] as $keys => $values) {
             if ($values['item_id'] == $_GET['id']) {
                 unset($_SESSION['cart'][$keys]);
-                //echo '<script>alert("Item Removed")</script>';
-                //header("Location: addDoc.php");
                 echo '<script>window.lacation="addDoc.php"</script>';
             }
         }

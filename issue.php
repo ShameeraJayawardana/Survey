@@ -20,45 +20,117 @@ $row = mysqli_fetch_assoc($row_set);
 $issuer = $row['name'];
 $status = 1;
 $receiver = "";
+$date = date("Y-m-d h:i:sa");
 
-$q = "SELECT name,COUNT(name) AS count FROM req WHERE status = 'Approved' GROUP BY name";
-$_row_set = mysqli_query($conn, $q);
+//if (isset($_POST['submit'])) {
 
-$q1 = "SELECT name,COUNT(name) AS count FROM req WHERE availability = 'returned' GROUP BY name";
-$result_set1 = mysqli_query($conn, $q1);
+//
+//    //$sql4 = "SELECT * FROM doc_rtn WHERE ";
+//
+//    $receiver = $_POST['receiver'];
+//    $p = "SELECT * FROM member WHERE name = '$receiver'";
+//    $p_set = mysqli_query($conn, $p);
+//    $r = mysqli_fetch_assoc($p_set);
+//
+//    $insert = "INSERT INTO issue(issue_no,issuer,receiver,doc_id,datetime,status) VALUES('$issue_no', '$email', '$r[email]', '$_POST[number]','$date', '$status')";
+//    mysqli_query($conn, $insert);
+//
+//    $update = "UPDATE doc_rtn SET status = 'locked' WHERE doc_id = '$_POST[number]'";
+//    mysqli_query($conn, $update);
+//}
 
-if (isset($_POST['submit'])) {
-    $date = date("Y-m-d h:i:sa");
-
-    $myNo = date("Y");
-    $int = 1;
-    $sql3 = "SELECT * FROM issue ORDER BY ID DESC LIMIT 1";
-    $result_set1 = mysqli_query($conn, $sql3);
-    $result1 = mysqli_fetch_assoc($result_set1);
-    $year = substr($result1['issue_no'], 0, 4);
-    if ($year == $myNo) {
-        $int = substr($result1['issue_no'], 5, 1);
-        $int = $int + 1;
-    }
-    $issue_no = $myNo . "/" . $int;
-
-    //$sql4 = "SELECT * FROM doc_rtn WHERE ";
+$sql4 = "SELECT * FROM member WHERE name = '$receiver'";
+$result_set13 = mysqli_query($conn, $sql4);
+$result2 = mysqli_fetch_assoc($result_set13);
+?>
+<?php
+$msg = "";
+if (isset($_POST['cart'])) {
 
     $receiver = $_POST['receiver'];
     $p = "SELECT * FROM member WHERE name = '$receiver'";
     $p_set = mysqli_query($conn, $p);
     $r = mysqli_fetch_assoc($p_set);
 
-    $insert = "INSERT INTO issue(issue_no,issuer,receiver,doc_id,datetime,status) VALUES('$issue_no', '$email', '$r[email]', '$_POST[number]','$date', '$status')";
-    mysqli_query($conn, $insert);
+    if (isset($_SESSION['cart'])) {
+        $issue_number = array_column($_SESSION['cart'], "issue_number");
+        $myNo = date("Y");
+        $int = 1;
+        $sql3 = "SELECT * FROM issue ORDER BY ID DESC LIMIT 1";
+        $result_set1 = mysqli_query($conn, $sql3);
+        $result1 = mysqli_fetch_assoc($result_set1);
+        $year = substr($result1['issue_no'], 0, 4);
+        if(empty($_SESSION['cart'])) {
+            if ($year == $myNo) {
+                $int = substr($result1['issue_no'], 5, 1);
+                $int = $int + 1;
+            }
+        }else{
+            $int = substr(end($issue_number), 5, 1);
+            $int = $int + 1;
+        }
+        $issue_no = $myNo . "/" . $int;
 
-    $update = "UPDATE doc_rtn SET status = 'locked' WHERE doc_id = '$_POST[number]'";
-    mysqli_query($conn, $update);
+        $item_array_id = array_column($_SESSION['cart'], "item_number");
+        if (!in_array($_POST['number'], $item_array_id)) {
+            $count = count($_SESSION['cart']);
+            $item_array = array(
+                'name' => $r['email'],
+                'issue_number' => $issue_no,
+                'item_number' => $_POST['number'],
+                'time' => $date
+            );
+            $_SESSION['cart'][$count] = $item_array;
+        } else {
+            echo '<script>alert("Document already added!");</script>';
+            echo '<script>window.location="issue.php"</script>';
+        }
+    } else {
+        $item_array = array(
+            'name' => $r['email'],
+            'issue_number' => $issue_no,
+            'item_number' => $_POST['number'],
+            'time' => $date
+        );
+        $_SESSION['cart'][0] = $item_array;
+    }
 }
 
-$sql4 = "SELECT * FROM member WHERE name = '$receiver'";
-$result_set13 = mysqli_query($conn, $sql4);
-$result2 = mysqli_fetch_assoc($result_set13);
+if (isset($_GET['action'])) {
+    if ($_GET['action'] == 'delete') {
+        foreach ($_SESSION['cart'] as $keys => $values) {
+            if ($values['item_number'] == $_GET['id']) {
+                unset($_SESSION['cart'][$keys]);
+                echo '<script>window.lacation="issue.php.php"</script>';
+            }
+        }
+    }
+}
+
+if (isset($_POST['submit'])) {
+    foreach ($_SESSION['cart'] as $keys => $values) {
+        $sql = "SELECT * FROM doc_rtn WHERE doc_id='$values[item_number]'";
+        $row_set = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($row_set);
+        $condition = $row['status'];
+        if ($condition == 'available') {
+            $insert = "INSERT INTO issue(issue_no,issuer,receiver,doc_id,datetime,status) VALUES('$values[issue_number]', '$email', '$values[name]', '$values[item_number]','$values[time]', '$status')";
+            $submit = mysqli_query($conn, $insert);
+            if ($submit) {
+                unset($_SESSION['cart'][$keys]);
+                $update = "UPDATE doc_rtn SET status = 'locked' WHERE doc_id = '$values[item_number]'";
+                mysqli_query($conn, $update);
+            }
+        } else {
+            $msg = "Following documents are not available";
+        }
+        $error = mysqli_error($conn);
+        //echo $error;
+        if ($error) {
+            $msg = "Some documents can't be issued. Please contact the department.";
+        }
+    }
+}
 ?>
 <html lang="en">
 <head>
@@ -670,13 +742,13 @@ $result2 = mysqli_fetch_assoc($result_set13);
                     <input type="hidden" name="myNo" class="form-control" placeholder="My Number"
                            value="<?php echo $issue_no; ?>"/><br>
                     <label>Designation</label>
-                    <select class="form-control" onchange="selectDes(this.value);" required>
+                    <select class="form-control" onchange="selectDes(this.value);">
                         <option value="">Select...</option>
                         <option value="Surveyor">Surveyor</option>
                         <option value="Supdt. of Surveyor">Supdt. of Surveyor</option>
                     </select><br/>
                     <label>Issued to(name)</label>&nbsp;&nbsp;
-                    <select class="alert" name="receiver" id="nameList" required>
+                    <select class="alert" name="receiver" id="nameList">
                         <option value="">Select...</option>
                     </select><br/>
                 </div>
@@ -688,14 +760,16 @@ $result2 = mysqli_fetch_assoc($result_set13);
                                             showHint(this.value);">
                                 <option value="">Select...</option>
                                 <?php while ($result = mysqli_fetch_assoc($doc_type_set)) { ?>
-                                    <option value="<?php echo $result['type']; ?>"><?php echo $result['type']; ?></option>
+                                    <option
+                                        value="<?php echo $result['type']; ?>"><?php echo $result['type']; ?></option>
                                 <?php } ?>
                             </select>
                             <!--                                    <p>Suggestions: <span id="txtHint"></span></p>-->
                         </div>
                         <div class="col-md-6">
                             <label id="sub_cat_label" style="visibility:hidden;">Sub Category</label>
-                            <select class="form-control" name="subCat" id="sub_cat" style="visibility:hidden;" onchange="selectValue();showHint(this.value);" >
+                            <select class="form-control" name="subCat" id="sub_cat" style="visibility:hidden;"
+                                    onchange="selectValue();showHint(this.value);">
                                 <option value="">Select...</option>
                                 <option value="Flat Copy" id="flatcopy">Flat Copy</option>
                                 <option value="TL" id="tl">TL</option>
@@ -707,7 +781,8 @@ $result2 = mysqli_fetch_assoc($result_set13);
                         <div class="col-md-6"></div>
                         <div class="col-md-6" style="visibility:hidden;" id="field_book">
                             <label>Field books</label>
-                            <select class="form-control" onchange="selectValue();showHint(this.value);" id="field_b" name="field_b">
+                            <select class="form-control" onchange="selectValue();showHint(this.value);" id="field_b"
+                                    name="field_b">
                                 <option value="">Select...</option>
                                 <option value="Level Book" id="level">Level Book</option>
                                 <option value="Old field Book" id="old">Old field Book</option>
@@ -726,7 +801,8 @@ $result2 = mysqli_fetch_assoc($result_set13);
                                     <label>FC</label>
                                 </div>
                                 <div class="col-md-10">
-                                    <input type="checkbox" style="zoom: 2" name="radio" value='fc' onchange="showHint(this.value);" />
+                                    <input type="checkbox" style="zoom: 2" name="radio" value='fc'
+                                           onchange="showHint(this.value);"/>
                                 </div>
                             </div>
                         </div>
@@ -736,7 +812,8 @@ $result2 = mysqli_fetch_assoc($result_set13);
                                     <label>Volume</label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input type="text" name="vol" class="form-control" onchange="showHint(this.value);" />
+                                    <input type="text" name="vol" class="form-control"
+                                           onchange="showHint(this.value);"/>
                                 </div>
                             </div>
                         </div>
@@ -745,7 +822,8 @@ $result2 = mysqli_fetch_assoc($result_set13);
                             <select name="dist" class="form-control" onchange="showHint(this.value);">
                                 <option value="">Select...</option>
                                 <?php while ($_result = mysqli_fetch_assoc($_result_set)) { ?>
-                                    <option value="<?php echo $_result['dist']; ?>"><?php echo $_result['dist']; ?></option>
+                                    <option
+                                        value="<?php echo $_result['dist']; ?>"><?php echo $_result['dist']; ?></option>
                                 <?php } ?>
                             </select>
                         </div>
@@ -756,28 +834,34 @@ $result2 = mysqli_fetch_assoc($result_set13);
                     <div class="row">
                         <div class="col-md-4" id="sup" style="visibility:hidden;">
                             <label>Sup Number</label>
-                            <input type="text" class="form-control" placeholder="Sup No" name="sup" onchange="showHint(this.value);" />
+                            <input type="text" class="form-control" placeholder="Sup No" name="sup"
+                                   onchange="showHint(this.value);"/>
                         </div>
                         <div class="col-md-4" id="insert" style="visibility:hidden;">
                             <label>Insert Number</label>
-                            <input type="text" class="form-control" placeholder="Insert Number" name="insert" onchange="showHint(this.value);" />
+                            <input type="text" class="form-control" placeholder="Insert Number" name="insert"
+                                   onchange="showHint(this.value);"/>
                         </div>
                         <div class="col-md-4" id="sheet" style="visibility:hidden;">
                             <label>Sheet Number</label>
-                            <input type="text" class="form-control" placeholder="Sheet Number" name="sheet" onchange="showHint(this.value);" />
+                            <input type="text" class="form-control" placeholder="Sheet Number" name="sheet"
+                                   onchange="showHint(this.value);"/>
                         </div>
                         <div class="col-md-4" id="block" style="visibility:hidden;">
                             <label>Block Number</label>
-                            <input type="text" class="form-control" placeholder="Block Number" name="block" onchange="showHint(this.value);" />
+                            <input type="text" class="form-control" placeholder="Block Number" name="block"
+                                   onchange="showHint(this.value);"/>
                         </div>
                         <div class="col-md-4" id="court" style="visibility:hidden;">
                             <label>Court Number</label>
-                            <input type="text" class="form-control" placeholder="Court Number" name="court" onchange="showHint(this.value);" />
+                            <input type="text" class="form-control" placeholder="Court Number" name="court"
+                                   onchange="showHint(this.value);"/>
                         </div>
                         <div class="col-md-4" id="court" style="visibility:hidden;">
 
                         </div>
-                    </div><br>
+                    </div>
+                    <br>
                     <div class="row">
                         <div class="col-md-12">
                             <label>Number</label>
@@ -785,14 +869,55 @@ $result2 = mysqli_fetch_assoc($result_set13);
                             <datalist id="browsers">
                             </datalist>
                         </div>
-                    </div><br>
+                    </div>
+                    <br>
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-12">-->
+<!--                            <label>Remarks</label>-->
+<!--                            <input type="text" class="form-control" placeholder="Optional" name="remark"/>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    <br><br><br><br>
                     <div class="row">
                         <div class="col-md-12">
-                            <label>Remarks</label>
-                            <input type="text" class="form-control" placeholder="Optional" name="remark" />
+                            <button type="submit" name="cart" id="cart">
+                                <i class="fa fa-cart-plus" id="cartIcon"></i>
+                            </button>
                         </div>
-                    </div><br/>
-                <input type="submit" class="btn btn-info" name="submit" value="ISSUE"/>
+                    </div>
+                    <br><br><br><br>
+                    <div style="clear: both"></div>
+                    <h3>Document Details</h3>
+                    <div class="table-responsive">
+                        <h6 id="msg"><?php echo $msg; ?></h6>
+                        <table class=" table table-bordered">
+                            <tr>
+                                <th>Issue to</th>
+                                <th>Issue Number</th>
+                                <th>Document ID</th>
+                                <th>Date and Time</th>
+                            </tr>
+                            <?php
+                            if (!empty($_SESSION['cart'])) {
+                                $total = 0;
+                                foreach ($_SESSION['cart'] as $keys => $values) {
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $values['name']; ?></td>
+                                        <td><?php echo $values['issue_number']; ?></td>
+                                        <td><?php echo $values['item_number']; ?></td>
+                                        <td><?php echo $values['time']; ?></td>
+                                        <td>
+                                            <a href="issue.php?action=delete&id=<?php echo $values["item_number"]; ?>"><span
+                                                    class="text-danger">Remove</span></a></td>
+                                    </tr>
+                                    <?php
+                                }
+                            }
+                            ?>
+                        </table>
+                    </div>
+                    <input type="submit" class="btn btn-info" name="submit" value="ISSUE"/>
             </form>
         </div>
         <div class="col-md-2">

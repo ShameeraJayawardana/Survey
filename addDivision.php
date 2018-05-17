@@ -20,7 +20,7 @@ if (isset($_POST['submit'])){
     $land = 0;
     $status = 1;
     //var_dump($maxDis);
-    $insert = "INSERT INTO division(id,div_name,district_id,land_mark_qty1,status) VALUES('$id','$_POST[division]','$_POST[district]','$land','$status')";
+    $insert = "INSERT INTO division(id,div_name,district_id,status) VALUES('$id','$_POST[division]','$_POST[district]','$status')";
     mysqli_query($conn,$insert);
 
 }
