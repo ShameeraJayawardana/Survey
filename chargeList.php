@@ -555,9 +555,9 @@ $r_set2 = mysqli_query($conn, $q2);
 
         </div>
         <div class="col-md-4">
-            <button class="btn btn-light" type="submit" id="print">
+            <a href="chargeListReport.php" class="btn btn-light" id="print">
                 <i class="fa fa-print" id="printIcon"></i>
-            </button>
+            </a>
         </div>
     </div>
     <!-- /.container-fluid-->
