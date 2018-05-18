@@ -12,13 +12,10 @@ $q1 = "SELECT * FROM member WHERE email = '$email'";
 $r_set1 = mysqli_query($conn, $q1);
 $r1 = mysqli_fetch_assoc($r_set1);
 
-$q2 = "SELECT * FROM req WHERE name = '$email' AND status = 'Done' AND availability = 'locked'";
-
-
-$name = $r1['name'];
+$q2 = "SELECT * FROM req WHERE name != '$email' AND status = 'Done' AND availability = 'locked'";
 $r_set2 = mysqli_query($conn, $q2);
+$_file = 'Charge_List_Of_All_Members_' . $date . '.csv';
 
-$_file = $name . '_Charge_List_' . $date . '.csv';
 header('Content-Type: application/csv');
 // tell the browser we want to save it instead of displaying it
 header('Content-Disposition: attachment; filename="' . $_file . '";');

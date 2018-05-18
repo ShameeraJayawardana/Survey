@@ -13,11 +13,14 @@ $email = $_SESSION["email"];
 $q1 = "SELECT * FROM member WHERE email = '$email'";
 $r_set1 = mysqli_query($conn, $q1);
 $r1 = mysqli_fetch_assoc($r_set1);
-if ($r1['role'] == 'ss' || $r1['role'] == 'admin') {
-    $q2 = "SELECT * FROM req WHERE status = 'Done' AND availability = 'locked'";
-} else if ($r1['role'] == 'member') {
-    $q2 = "SELECT * FROM req WHERE name = '$email' AND status = 'Done' AND availability = 'locked'";
-}
+
+$q3 = "SELECT * FROM req WHERE name != '$email' AND status = 'Done' AND availability = 'locked'";
+$r_set3 = mysqli_query($conn, $q3);
+//if ($r1['role'] == 'ss' || $r1['role'] == 'admin') {
+//$q2 = "SELECT * FROM req WHERE status = 'Done' AND availability = 'locked'";
+//} else if ($r1['role'] == 'member') {
+$q2 = "SELECT * FROM req WHERE name = '$email' AND status = 'Done' AND availability = 'locked'";
+//}
 $r_set2 = mysqli_query($conn, $q2);
 ?>
 <html lang="en">
@@ -524,7 +527,7 @@ $r_set2 = mysqli_query($conn, $q2);
         <div class="col-md-8">
             <div class="row">
                 <div class="col-md-12">
-                    <h3>Chargeable list of documents</h3>
+                    <h3>Own Chargeable list of documents</h3>
                 </div>
             </div>
             <br><br>
@@ -560,6 +563,51 @@ $r_set2 = mysqli_query($conn, $q2);
             </a>
         </div>
     </div>
+    <?php if ($r1['role'] == 'ss' || $r1['role'] == 'admin') { ?>
+        <div class="row">
+            <div class="col-md-2">
+
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3>Others' Chargeable list of documents</h3>
+                    </div>
+                </div>
+                <br><br>
+                <table class="table table-responsive-lg table-hover">
+                    <tr>
+                        <th>Username</th>
+                        <th>Document ID</th>
+                        <th>Remarks</th>
+                    </tr>
+                    <?php while ($r3 = mysqli_fetch_assoc($r_set3)) { ?>
+                        <tr>
+                            <td><?php echo $r3['name']; ?></td>
+                            <td><?php echo $r3['number']; ?></td>
+                            <td><?php echo $r3['remarks']; ?></td>
+                        </tr>
+                    <?php } ?>
+                </table>
+            </div>
+            <div class="col-md-2">
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+
+            </div>
+            <div class="col-md-4">
+
+            </div>
+            <div class="col-md-4">
+                <a href="chargeListReportOthers.php" class="btn btn-light" id="print">
+                    <i class="fa fa-print" id="printIcon"></i>
+                </a>
+            </div>
+        </div>
+    <?php } ?>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
     <div>
