@@ -60,13 +60,8 @@ if (isset($_POST['cart'])) {
         $result_set1 = mysqli_query($conn, $sql3);
         $result1 = mysqli_fetch_assoc($result_set1);
         $year = substr($result1['issue_no'], 0, 4);
-        if(empty($_SESSION['cart'])) {
-            if ($year == $myNo) {
-                $int = substr($result1['issue_no'], 5, 1);
-                $int = $int + 1;
-            }
-        }else{
-            $int = substr(end($issue_number), 5, 1);
+        if ($year == $myNo) {
+            $int = substr($result1['issue_no'], 5, 1);
             $int = $int + 1;
         }
         $issue_no = $myNo . "/" . $int;
@@ -871,12 +866,12 @@ if (isset($_POST['submit'])) {
                         </div>
                     </div>
                     <br>
-<!--                    <div class="row">-->
-<!--                        <div class="col-md-12">-->
-<!--                            <label>Remarks</label>-->
-<!--                            <input type="text" class="form-control" placeholder="Optional" name="remark"/>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    <!--                    <div class="row">-->
+                    <!--                        <div class="col-md-12">-->
+                    <!--                            <label>Remarks</label>-->
+                    <!--                            <input type="text" class="form-control" placeholder="Optional" name="remark"/>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
                     <br><br><br><br>
                     <div class="row">
                         <div class="col-md-12">
