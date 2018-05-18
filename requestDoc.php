@@ -12,6 +12,13 @@ $row1 = mysqli_fetch_assoc($row_set);
 $doc_type_query = "SELECT * FROM docTypes";
 $doc_type_set = mysqli_query($conn, $doc_type_query);
 $status = "pending";
+
+if($row1['role'] == "member"){
+    $status = "pending";
+}elseif ($row1['role'] == "ss"){
+    $status = "Approved";
+}
+
 $type = "";
 if (isset($_POST['type'])) {
     $type = $_POST['type'];
