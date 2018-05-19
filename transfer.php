@@ -594,11 +594,9 @@ if (isset($_POST['submit'])) {
                                 </select><br/>
                             </div>
                         </div>
-                        <div class="row">
-                            <button class="btn btn-outline-dark" name="submit">
-                                TRANSFER
-                            </button>
-                        </div>
+                        <button class="btn btn-outline-dark" name="submit">
+                            TRANSFER
+                        </button>
                     </form>
                 </div>
             </div>

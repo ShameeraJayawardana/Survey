@@ -7,6 +7,7 @@ $user = $_SESSION["email"];
 $query = "SELECT * FROM member WHERE email = '$user'";
 $row_set = mysqli_query($conn, $query);
 $row = mysqli_fetch_assoc($row_set);
+$msg = "";
 
 $all_query = "SELECT * FROM member";
 $all_set = mysqli_query($conn, $all_query);
@@ -41,6 +42,20 @@ if (isset($_POST['submit'])) {
     $update = mysqli_query($conn, $update_query);
     if ($update) {
         header("Refresh:0");
+    }
+}
+
+if (isset($_POST['change'])) {
+    $prePwd = $_POST['prePwd'];
+    $en_pre = md5($prePwd);
+
+    $newPwd = $_POST['newPwd'];
+    $en_new = md5($newPwd);
+    if ($en_pre == $row['password']){
+        $change_query = "UPDATE member SET password = '$en_new' WHERE email = '$user'";
+        mysqli_query($conn, $change_query);
+    }else{
+        $msg = "Password doesn't match!";
     }
 }
 ?>
@@ -84,11 +99,13 @@ if (isset($_POST['submit'])) {
                         var des = '<p class="des" data-name="des" data-type="text" data-pk="' + data[0].id + '">' + data[0].des + '</p>';
                         var email = '<p class="email" data-name="email" data-type="text" data-pk="' + data[0].id + '">' + data[0].email + '</p>';
                         var district = '<p class="district" data-name="district" data-type="text" data-pk="' + data[0].id + '">' + dist[data[0].district] + '</p>';
+                        var pwd = '<button type="button" class="btn btn-link" data-toggle="modal" data-target="#changePwd" style="padding-left: 0;">CHANGE PASSWORD</button>';
                         $('#user-data').append(name);
                         $('#user-data').append(emplNo);
                         $('#user-data').append(des);
                         $('#user-data').append(email);
                         $('#user-data').append(district);
+                        $('#user-data').append(pwd);
                         console.log(data[0]);
                     }
                 });
@@ -659,6 +676,40 @@ if (isset($_POST['submit'])) {
             </div>
             <div class="col-md-8" id="user-data">
 
+            </div>
+        </div>
+        <div class="row">
+            <div class="modal fade" id="changePwd">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">CHANGE PASSWORD</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <form class="form-control" action="sadmin.php" method="post">
+                                    <label>Previous Password</label>
+                                    <input type="password" name="prePwd" class="form-control" placeholder="Previous Password" required>
+                                    <span style="color: red;"><?php echo $msg; ?></span><br/>
+                                    <label>New Password</label>
+                                    <input type="password" name="newPwd" class="form-control" placeholder="New Password" required><br/>
+                                    <button type="submit" class="btn btn-outline-dark" name="change">CHANGE</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+                </div>
             </div>
         </div>
         <!-- Area Chart Example-->
