@@ -12,6 +12,9 @@ $r_set = mysqli_query($conn, $q1);
 $email = $_SESSION["email"];
 $msg = "";
 
+$select = "SELECT * FROM member WHERE role = 'snrss'";
+$select_snrss = mysqli_query($conn, $select);
+
 if (isset($_POST['submit'])) {
     $q3 = "SELECT * FROM member WHERE emplNo = '$_POST[empl]'";
     $r_set3 = mysqli_query($conn, $q3);
@@ -49,6 +52,32 @@ if (isset($_POST['submit'])) {
     <!-- Custom styles for this template-->
     <link href="css/sb-admin.css" rel="stylesheet">
     <link href="css/search.css" rel="stylesheet">
+    <script>
+        var res = null;
+        function selectName(str) {
+            //console.log('aswssf', arrayValue);
+            if (str.length == 0) {
+                console.log("Value doesn't come");
+                //document.getElementById("txtHint").value = "";
+                return;
+            } else {
+                //console.log("Value comes");
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        res = eval("(" + this.responseText + ")");
+                        console.log(res);
+
+                        var empl = document.getElementById('empl');
+                        empl.value = res;
+                    }
+                };
+                xmlhttp.open("GET", "getEmpl.php?q=" + str, true);
+                xmlhttp.send();
+
+            }
+        }
+    </script>
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
@@ -530,28 +559,50 @@ if (isset($_POST['submit'])) {
 <div class="content-wrapper" id="background">
     <div class="container">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="form-group">
                     <form action="transfer.php" method="post">
-                        <label>Employee Number</label>
-                        <input type="text" required class="form-control"
-                               placeholder="Enter the employee number" name="empl">
-                        <span style="color: red;"><?php echo $msg; ?></span><br/>
-                        <label>District</label>
-                        <!-- <input type="text" placeholder="District" class="form-control" name="district"/><br/>-->
-                        <select class="form-control" name="district" required>
-                            <option value="">Select...</option>
-                            <?php while ($_row = mysqli_fetch_assoc($_row_set)) { ?>
-                                <option
-                                    value="<?php echo $_row['dist_code']; ?>"><?php echo $_row['dist_nm']; ?></option>
-                            <?php } ?>
-                        </select><br/>
-                        <button class="btn btn-outline-dark" name="submit">TRANSFER
-                        </button>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <label>Name</label>
+                                <select required class="form-control" onchange="selectName(this.value);">
+                                    <option value="">Select...</option>
+                                    <?php while ($snrss = mysqli_fetch_assoc($select_snrss)) { ?>
+                                        <option
+                                            value="<?php echo $snrss['name'] ?>"><?php echo $snrss['name'] ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Employee Number</label>
+                                <input type="text" readonly class="form-control"
+                                       placeholder="XXXX" name="empl" id="empl">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <span style="color: red;"><?php echo $msg; ?></span><br/>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label>District</label>
+                                <select class="form-control" name="district" required>
+                                    <option value="">Select...</option>
+                                    <?php while ($_row = mysqli_fetch_assoc($_row_set)) { ?>
+                                        <option
+                                            value="<?php echo $_row['dist_code']; ?>"><?php echo $_row['dist_nm']; ?></option>
+                                    <?php } ?>
+                                </select><br/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <button class="btn btn-outline-dark" name="submit">
+                                TRANSFER
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
-            <div class="col-md-8"></div>
+            <div class="col-md-6"></div>
         </div>
     </div>
 
