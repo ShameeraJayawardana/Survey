@@ -218,6 +218,12 @@ if (isset($_POST['change'])) {
                             <span class="nav-link-text">Add Division</span>
                         </a>
                     </li>
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Promote">
+                        <a class="nav-link" href="promoteMembers.php">
+                            <i class="fa fa-space-shuttle"></i>
+                            <span class="nav-link-text">Promote Members</span>
+                        </a>
+                    </li>
                     <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Delete">
                         <a class="nav-link" href="deleteUser.php">
                             <i class="fa fa-space-shuttle"></i>
