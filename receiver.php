@@ -139,20 +139,26 @@ $result2 = mysqli_fetch_assoc($result_set13);
                         //var check = '<input type="checkbox" class="form-control" name="return[]">';
                         var div = '<div class="col-md-12"></div>';
 
-                        var sel = document.getElementById('doc_ids');
-                        sel.innerHTML = null;
+                        var table = document.getElementById('doc_ids');
+                        table.innerHTML = null;
                         for (var i = 0; i < res.length; i++) {
-                            var para = document.createElement('p');
+                            //var table = document.createElement('table');
+                            var tr = document.createElement('tr');
+                            var td1 = document.createElement('td');
+                            var td2 = document.createElement('td');
                             var opt = document.createElement('input');
                             var brk = document.createElement('br');
+                            var brk1 = document.createElement('br');
+                            var brk2 = document.createElement('br');
                             opt.type = "checkbox";
                             opt.name = "return[]";
                             opt.value = res[i];
-                            para.innerHTML = res[i];
-
-                            sel.appendChild(para);
-                            sel.appendChild(opt);
-                            sel.appendChild(brk);
+                            td1.innerHTML = res[i];
+                            
+                            tr.appendChild(td1);
+                            tr.appendChild(td2);
+                            td2.appendChild(opt);
+                            table.appendChild(tr);
                         }
                     }
                 };
@@ -671,18 +677,18 @@ $result2 = mysqli_fetch_assoc($result_set13);
                         <option value="">Select...</option>
                     </select><br/>
                     <label>Document Id</label>
-                    <!--                    <input type="text" placeholder="Document" name="doc_id" class="form-control"/>-->
-                    <div class="row" id="doc_ids">
+                    <div class="row">
+                        <div class="col-md-12 table-responsive">
+                            <table id="doc_ids" class="table table-hover">
 
+                            </table>
+                        </div>
                     </div>
                     <br>
                     <label><?php echo $error; ?></label>
                     <label>Remarks</label>
                     <input type="text" placeholder="Remarks" name="remarks" class="form-control"/>
                 </div>
-                <!--                        <button type="submit" name="cart" id="cart">
-                                            <i class="fa fa-cart-plus" id="cartIcon"></i>
-                                        </button><br/><br/><br/><br/><br/><br/>-->
                 <input type="submit" class="btn btn-info" name="submit" value="RECEIVE"/>
             </form>
         </div>
