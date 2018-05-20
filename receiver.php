@@ -154,7 +154,7 @@ $result2 = mysqli_fetch_assoc($result_set13);
                             opt.name = "return[]";
                             opt.value = res[i];
                             td1.innerHTML = res[i];
-                            
+
                             tr.appendChild(td1);
                             tr.appendChild(td2);
                             td2.appendChild(opt);
@@ -676,7 +676,7 @@ $result2 = mysqli_fetch_assoc($result_set13);
                     <select class="alert" name="sender" id="nameList" onchange="selectName(this.value);">
                         <option value="">Select...</option>
                     </select><br/>
-                    <label>Document Id</label>
+                    <label><b>Documents</b></label>
                     <div class="row">
                         <div class="col-md-12 table-responsive">
                             <table id="doc_ids" class="table table-hover">
