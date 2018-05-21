@@ -22,23 +22,6 @@ $status = 1;
 $receiver = "";
 $date = date("Y-m-d h:i:sa");
 
-//if (isset($_POST['submit'])) {
-
-//
-//    //$sql4 = "SELECT * FROM doc_rtn WHERE ";
-//
-//    $receiver = $_POST['receiver'];
-//    $p = "SELECT * FROM member WHERE name = '$receiver'";
-//    $p_set = mysqli_query($conn, $p);
-//    $r = mysqli_fetch_assoc($p_set);
-//
-//    $insert = "INSERT INTO issue(issue_no,issuer,receiver,doc_id,datetime,status) VALUES('$issue_no', '$email', '$r[email]', '$_POST[number]','$date', '$status')";
-//    mysqli_query($conn, $insert);
-//
-//    $update = "UPDATE doc_rtn SET status = 'locked' WHERE doc_id = '$_POST[number]'";
-//    mysqli_query($conn, $update);
-//}
-
 $sql4 = "SELECT * FROM member WHERE name = '$receiver'";
 $result_set13 = mysqli_query($conn, $sql4);
 $result2 = mysqli_fetch_assoc($result_set13);
@@ -923,6 +906,15 @@ if (isset($_POST['submit'])) {
         </div>
         <div class="col-md-2">
 
+        </div>
+        <div class="col-md-12">
+            <h3>Download Report</h3>
+            <form action="issueBackend.php" method="post">
+                <label>Issue Number</label>
+                <input type="text" class="form-control" name="issueNo" placeholder="Issue Number"><br/>
+                <button class="btn btn-outline-dark" name="download"><img src="pics/csv_file.png"/> DOWNLOAD
+                </button>
+            </form>
         </div>
     </div>
     <!-- /.container-fluid-->
