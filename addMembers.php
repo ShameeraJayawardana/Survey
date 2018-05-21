@@ -12,7 +12,12 @@ $r_set = mysqli_query($conn, $q1);
 
 
 if (isset($_POST['submit'])) {
-    $sql = "INSERT INTO addMembers(emplNo, des, email, district,division) VALUES('$_POST[emplNo]','$_POST[des]','$_POST[email]','$_POST[district]','$_POST[division]')";
+
+    $q2 = "SELECT * FROM division WHERE div_name = '$_POST[division]'";
+    $rSet = mysqli_query($conn, $q2);
+    $r = mysqli_fetch_assoc($rSet);
+
+    $sql = "INSERT INTO addMembers(emplNo, des, email, district,division) VALUES('$_POST[emplNo]','$_POST[des]','$_POST[email]','$_POST[district]','$r[id]')";
     $query = mysqli_query($conn, $sql);
 }
 ?>

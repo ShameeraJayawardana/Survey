@@ -11,11 +11,17 @@ $_row_set = mysqli_query($conn, $_query);
 
 $q1 = "SELECT * FROM division";
 $r_set = mysqli_query($conn,$q1);
-
+$msg = "";
 
 if (isset($_POST['submit'])) {
-    $sql = "INSERT INTO addMembers(emplNo, des, email, district,division) VALUES('$_POST[emplNo]','$_POST[des]','$_POST[email]','$_POST[district]','$_POST[division]')";
+
+    $q2 = "SELECT * FROM division WHERE div_name = '$_POST[division]'";
+    $rSet = mysqli_query($conn, $q2);
+    $r = mysqli_fetch_assoc($rSet);
+
+    $sql = "INSERT INTO addMembers(emplNo, des, email, district,division) VALUES('$_POST[emplNo]','$_POST[des]','$_POST[email]','$_POST[district]','$r[id]')";
     $query = mysqli_query($conn, $sql);
+    $msg = mysqli_error($conn);
 }
 ?>
 <html lang="en">
@@ -554,6 +560,7 @@ if (isset($_POST['submit'])) {
                 <div class="col-md-12">
                     <form action="addmem.php" method="post">
                         <div class="form-group">
+                            <?php echo $msg; ?>
                             <label>Employee Number</label>
                             <input type="text" placeholder="Employee Number" class="form-control" name="emplNo" required /><br/>
                             <label>Designation</label>
