@@ -695,6 +695,21 @@ $result2 = mysqli_fetch_assoc($result_set13);
         <div class="col-md-2">
 
         </div>
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-8">
+            <h3>Download Report</h3>
+            <form action="receiveBackend.php" method="post">
+                <label>Receive Number</label>
+                <input type="text" class="form-control" name="receiveNo" placeholder="Receive Number"><br/>
+                <button class="btn btn-outline-dark" name="download"><img src="pics/csv_file.png"/> DOWNLOAD
+                </button>
+            </form>
+        </div>
+        <div class="col-md-2">
+
+        </div>
     </div>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
