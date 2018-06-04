@@ -19,7 +19,7 @@ if (isset($_POST['submit'])) {
     $rSet = mysqli_query($conn, $q2);
     $r = mysqli_fetch_assoc($rSet);
 
-    $sql = "INSERT INTO addMembers(emplNo, des, email, district,division) VALUES('$_POST[emplNo]','$_POST[des]','$_POST[email]','$_POST[district]','$r[id]')";
+    $sql = "INSERT INTO addmembers(emplNo, des, email, district,division) VALUES('$_POST[emplNo]','$_POST[des]','$_POST[email]','$_POST[district]','$r[id]')";
     $query = mysqli_query($conn, $sql);
     $msg = mysqli_error($conn);
 }
@@ -348,6 +348,12 @@ if (isset($_POST['submit'])) {
                     <a class="nav-link" href="home.php">
                         <i class="fa fa-home"></i>
                         <span class="nav-link-text"><b>HOME</b></span>
+                    </a>
+                </li>
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Search">
+                    <a class="nav-link" href="search.php">
+                        <i class="fa fa-search"></i>
+                        <span class="nav-link-text"><b>SEARCH DOCUMENTS</b></span>
                     </a>
                 </li>
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="About Us">

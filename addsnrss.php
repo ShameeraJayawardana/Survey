@@ -320,6 +320,12 @@ if (isset($_POST['submit'])) {
                         <span class="nav-link-text"><b>HOME</b></span>
                     </a>
                 </li>
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Search">
+                    <a class="nav-link" href="search.php">
+                        <i class="fa fa-search"></i>
+                        <span class="nav-link-text"><b>SEARCH DOCUMENTS</b></span>
+                    </a>
+                </li>
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="About Us">
                     <a class="nav-link" href="#">
                         <i class="fa fa-address-book-o"></i>
