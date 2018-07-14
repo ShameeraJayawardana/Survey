@@ -245,7 +245,7 @@ if (isset($_POST['submit'])) {
                 $row = mysqli_fetch_assoc($row_set);
                 if ($row["role"] == "sadmin") {
                     ?>
-                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
                         <a class="nav-link" href="sadmin.php">
                             <i class="fa fa-user-circle"></i>
                             <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
@@ -323,14 +323,14 @@ if (isset($_POST['submit'])) {
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
+                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Menu Levels">
                         <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti"
                            data-parent="#exampleAccordion">
                             <i class="fa fa-exchange"></i>
                             <span class="nav-link-text">Transactions</span>
                         </a>
                         <ul class="sidenav-second-level collapse" id="collapseMulti">
-                            <li>
+                            <li class="active">
                                 <a class="nav-link" href="issue.php">
                                     <i class="fa fa-long-arrow-right"></i>
                                     <span class="nav-link-text">Issues</span>
@@ -431,14 +431,14 @@ if (isset($_POST['submit'])) {
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
+                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Menu Levels">
                         <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti"
                            data-parent="#exampleAccordion">
                             <i class="fa fa-exchange"></i>
                             <span class="nav-link-text">Transactions</span>
                         </a>
                         <ul class="sidenav-second-level collapse" id="collapseMulti">
-                            <li>
+                            <li class="active">
                                 <a class="nav-link" href="issue.php">
                                     <i class="fa fa-long-arrow-right"></i>
                                     <span class="nav-link-text">Issues</span>

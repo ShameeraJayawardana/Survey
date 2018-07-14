@@ -53,7 +53,7 @@ $msg = "";
                 $row = mysqli_fetch_assoc($row_set);
                 if ($row["role"] == "sadmin") {
                     ?>
-                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
                         <a class="nav-link" href="sadmin.php">
                             <i class="fa fa-user-circle"></i>
                             <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
@@ -260,7 +260,7 @@ $msg = "";
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Link">
+                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Link">
                         <a class="nav-link" href="reports.php">
                             <i class="fa fa-list"></i>
                             <span class="nav-link-text">Reports</span>

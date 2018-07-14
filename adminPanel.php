@@ -159,7 +159,7 @@ if (isset($_POST['change'])) {
             if (isset($_SESSION["id"])) {
                 if ($row["role"] == "sadmin") {
                     ?>
-                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
                         <a class="nav-link" href="sadmin.php">
                             <i class="fa fa-user-circle"></i>
                             <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>

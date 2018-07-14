@@ -58,13 +58,13 @@ if (isset($_POST['submit'])) {
                 $row = mysqli_fetch_assoc($row_set);
                 if ($row["role"] == "sadmin") {
                     ?>
-                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
                         <a class="nav-link" href="sadmin.php">
                             <i class="fa fa-user-circle"></i>
                             <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
                         </a>
                     </li>
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
                         <a class="nav-link" href="addsnrss.php">
                             <i class="fa fa-plus"></i>
                             <span class="nav-link-text">Add SNRSS</span>

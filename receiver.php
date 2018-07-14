@@ -188,7 +188,7 @@ $result2 = mysqli_fetch_assoc($result_set13);
                 $row = mysqli_fetch_assoc($row_set);
                 if ($row["role"] == "sadmin") {
                     ?>
-                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
                         <a class="nav-link" href="sadmin.php">
                             <i class="fa fa-user-circle"></i>
                             <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
@@ -266,7 +266,7 @@ $result2 = mysqli_fetch_assoc($result_set13);
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
+                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Menu Levels">
                         <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti"
                            data-parent="#exampleAccordion">
                             <i class="fa fa-exchange"></i>
@@ -279,7 +279,7 @@ $result2 = mysqli_fetch_assoc($result_set13);
                                     <span class="nav-link-text">Issues</span>
                                 </a>
                             </li>
-                            <li>
+                            <li class="active">
                                 <a class="nav-link" href="receiver.php">
                                     <i class="fa fa-long-arrow-left"></i>
                                     <span class="nav-link-text">Receipt</span>
@@ -374,7 +374,7 @@ $result2 = mysqli_fetch_assoc($result_set13);
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Menu Levels">
+                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Menu Levels">
                         <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti"
                            data-parent="#exampleAccordion">
                             <i class="fa fa-exchange"></i>
@@ -387,7 +387,7 @@ $result2 = mysqli_fetch_assoc($result_set13);
                                     <span class="nav-link-text">Issues</span>
                                 </a>
                             </li>
-                            <li>
+                            <li class="active">
                                 <a class="nav-link" href="receiver.php">
                                     <i class="fa fa-long-arrow-left"></i>
                                     <span class="nav-link-text">Receipt</span>

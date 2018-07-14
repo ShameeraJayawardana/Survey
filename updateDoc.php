@@ -111,7 +111,7 @@ if (isset($_POST['submit'])) {
                 $row = mysqli_fetch_assoc($row_set);
                 if ($row["role"] == "sadmin") {
                     ?>
-                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
                         <a class="nav-link" href="sadmin.php">
                             <i class="fa fa-user-circle"></i>
                             <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
@@ -168,7 +168,7 @@ if (isset($_POST['submit'])) {
                             <span class="nav-link-text">Transfer</span>
                         </a>
                     </li>
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
+                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Components">
                         <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse"
                            href="#collapseComponents" data-parent="#exampleAccordion">
                             <i class="fa fa-fw fa-wrench"></i>
@@ -181,7 +181,7 @@ if (isset($_POST['submit'])) {
                                     <span class="nav-link-text">Add document</span>
                                 </a>
                             </li>
-                            <li>
+                            <li class="active">
                                 <a class="nav-link" href="updateDoc.php">
                                     <i class="fa fa-pencil-square-o"></i>
                                     <span class="nav-link-text">Update document</span>
@@ -276,7 +276,7 @@ if (isset($_POST['submit'])) {
                             <span class="nav-link-text">Search documents</span>
                         </a>
                     </li>
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
+                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Components">
                         <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse"
                            href="#collapseComponents" data-parent="#exampleAccordion">
                             <i class="fa fa-fw fa-wrench"></i>
@@ -289,7 +289,7 @@ if (isset($_POST['submit'])) {
                                     <span class="nav-link-text">Add document</span>
                                 </a>
                             </li>
-                            <li>
+                            <li class="active">
                                 <a class="nav-link" href="updateDoc.php">
                                     <i class="fa fa-pencil-square-o"></i>
                                     <span class="nav-link-text">Update document</span>

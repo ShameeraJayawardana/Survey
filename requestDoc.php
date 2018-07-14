@@ -269,7 +269,7 @@ if (isset($_POST['submit'])) {
                     if (isset($_SESSION["id"])) {
                         if ($row1["role"] == "sadmin") {
                             ?>
-                            <li class = "nav-item active" data-toggle = "tooltip" data-placement = "right" title = "Dashboard">
+                            <li class = "nav-item" data-toggle = "tooltip" data-placement = "right" title = "Dashboard">
                                 <a class = "nav-link" href = "sadmin.php">
                                     <i class = "fa fa-user-circle"></i>
                                     <span class = "nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
@@ -393,7 +393,7 @@ if (isset($_POST['submit'])) {
                                     <span class="nav-link-text">Add Members</span>
                                 </a>
                             </li>
-                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
+                            <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Home">
                                 <a class="nav-link" href="requestDoc.php">
                                     <i class="fa fa-exclamation"></i>
                                     <span class="nav-link-text">Request documents</span>
@@ -499,7 +499,7 @@ if (isset($_POST['submit'])) {
                                     <span class="nav-link-text">Search documents</span>
                                 </a>
                             </li>
-                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
+                            <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Home">
                                 <a class="nav-link" href="requestDoc.php">
                                     <i class="fa fa-exclamation"></i>
                                     <span class="nav-link-text">Request documents</span>

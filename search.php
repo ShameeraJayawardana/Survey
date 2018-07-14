@@ -69,7 +69,7 @@ $select_set = mysqli_query($conn, $sql);
                 $row = mysqli_fetch_assoc($row_set);
                 if ($row["role"] == "sadmin") {
                     ?>
-                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
                         <a class="nav-link" href="sadmin.php">
                             <i class="fa fa-user-circle"></i>
                             <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
@@ -183,7 +183,7 @@ $select_set = mysqli_query($conn, $sql);
                             <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
                         </a>
                     </li>
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
+                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Home">
                         <a class="nav-link" href="search.php">
                             <i class="fa fa-search"></i>
                             <span class="nav-link-text">Search documents</span>
@@ -228,7 +228,7 @@ $select_set = mysqli_query($conn, $sql);
                             <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
                         </a>
                     </li>
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
+                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Home">
                         <a class="nav-link" href="search.php">
                             <i class="fa fa-search"></i>
                             <span class="nav-link-text">Search documents</span>
@@ -297,7 +297,7 @@ $select_set = mysqli_query($conn, $sql);
                             <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
                         </a>
                     </li>
-                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
+                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Home">
                         <a class="nav-link" href="search.php">
                             <i class="fa fa-search"></i>
                             <span class="nav-link-text">Search documents</span>
@@ -331,7 +331,7 @@ $select_set = mysqli_query($conn, $sql);
                         <span class="nav-link-text"><b>HOME</b></span>
                     </a>
                 </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Search">
+                <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Search">
                     <a class="nav-link" href="search.php">
                         <i class="fa fa-search"></i>
                         <span class="nav-link-text"><b>SEARCH DOCUMENTS</b></span>
