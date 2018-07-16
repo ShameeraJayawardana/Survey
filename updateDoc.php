@@ -150,7 +150,7 @@ if (isset($_POST['submit'])) {
                     <?php
                 } elseif ($row["role"] == "snrss") {
                     ?>
-                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
                         <a class="nav-link" href="snrss.php">
                             <i class="fa fa-user-circle"></i>
                             <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
@@ -168,7 +168,7 @@ if (isset($_POST['submit'])) {
                             <span class="nav-link-text">Transfer</span>
                         </a>
                     </li>
-                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Components">
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
                         <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse"
                            href="#collapseComponents" data-parent="#exampleAccordion">
                             <i class="fa fa-fw fa-wrench"></i>
@@ -219,7 +219,7 @@ if (isset($_POST['submit'])) {
                     <?php
                 } elseif ($row["role"] == "ss") {
                     ?>
-                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
                         <a class="nav-link" href="ss.php">
                             <i class="fa fa-user-circle"></i>
                             <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
@@ -264,7 +264,7 @@ if (isset($_POST['submit'])) {
                     <?php
                 } elseif ($row["role"] == "admin") {
                     ?>
-                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
                         <a class="nav-link" href="adminPanel.php">
                             <i class="fa fa-user-circle"></i>
                             <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
@@ -276,7 +276,7 @@ if (isset($_POST['submit'])) {
                             <span class="nav-link-text">Search documents</span>
                         </a>
                     </li>
-                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Components">
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Components">
                         <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse"
                            href="#collapseComponents" data-parent="#exampleAccordion">
                             <i class="fa fa-fw fa-wrench"></i>
@@ -333,7 +333,7 @@ if (isset($_POST['submit'])) {
                     <?php
                 } elseif ($row["role"] == "member") {
                     ?>
-                    <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
+                    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
                         <a class="nav-link" href="index.php">
                             <i class="fa fa-user-circle"></i>
                             <span class="nav-link-text"><?php echo htmlentities($_SESSION["email"]); ?></span>
@@ -367,7 +367,7 @@ if (isset($_POST['submit'])) {
                 }
             } else {
                 ?>
-                <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Home">
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
                     <a class="nav-link" href="home.php">
                         <i class="fa fa-home"></i>
                         <span class="nav-link-text"><b>HOME</b></span>
@@ -523,56 +523,6 @@ if (isset($_POST['submit'])) {
                     </div>
                 </li>
             <?php } ?>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle mr-lg-2" id="alertsDropdown" href="#" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
-                    <i class="fa fa-fw fa-bell"></i>
-                    <span class="d-lg-none">Alerts
-                                <span class="badge badge-pill badge-warning">6 New</span>
-                            </span>
-                    <span class="indicator text-warning d-none d-lg-block">
-                                <i class="fa fa-fw fa-circle"></i>
-                            </span>
-                </a>
-                <div class="dropdown-menu" aria-labelledby="alertsDropdown">
-                    <h6 class="dropdown-header">New Alerts:</h6>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">
-                                <span class="text-success">
-                                    <strong>
-                                        <i class="fa fa-long-arrow-up fa-fw"></i>Status Update</strong>
-                                </span>
-                        <span class="small float-right text-muted">11:21 AM</span>
-                        <div class="dropdown-message small">This is an automated server response message. All systems
-                            are online.
-                        </div>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">
-                                <span class="text-danger">
-                                    <strong>
-                                        <i class="fa fa-long-arrow-down fa-fw"></i>Status Update</strong>
-                                </span>
-                        <span class="small float-right text-muted">11:21 AM</span>
-                        <div class="dropdown-message small">This is an automated server response message. All systems
-                            are online.
-                        </div>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">
-                                <span class="text-success">
-                                    <strong>
-                                        <i class="fa fa-long-arrow-up fa-fw"></i>Status Update</strong>
-                                </span>
-                        <span class="small float-right text-muted">11:21 AM</span>
-                        <div class="dropdown-message small">This is an automated server response message. All systems
-                            are online.
-                        </div>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item small" href="#">View all alerts</a>
-                </div>
-            </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
                     <i class="fa fa-fw fa-sign-out"></i>Logout</a>
