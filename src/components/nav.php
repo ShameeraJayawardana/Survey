@@ -447,7 +447,7 @@ $uri_segments = explode('/', $uri_path);
             <?php } ?>
             <?php if (isset($_SESSION["id"])) { ?>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+                    <a href="logout.php" class="nav-link" data-toggle="modal" data-target="#exampleModal">
                         <i class="fa fa-fw fa-sign-out"></i>Logout</a>
                 </li>
             <?php } else { ?>
